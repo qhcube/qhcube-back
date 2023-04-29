@@ -1,27 +1,31 @@
 package es.upm.etsisi.qhcube.controller;
 
+import es.upm.etsisi.qhcube.dto.JugadorDTO;
 import es.upm.etsisi.qhcube.entity.Jugador;
-import es.upm.etsisi.qhcube.repository.JugadorRepository;
+import es.upm.etsisi.qhcube.mapper.JugadorMapper;
+import es.upm.etsisi.qhcube.service.jugador.JugadorService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
+import java.util.List;
 
 @RestController
 public class JugadorController {
-    private final JugadorRepository jugadorRepository;
-
-    public JugadorController(JugadorRepository jugadorRepository) {
-        this.jugadorRepository = jugadorRepository;
+    private final JugadorService jugadorService;
+    private final JugadorMapper jugadorMapper;
+    public JugadorController(JugadorService jugadorService, JugadorMapper jugadorMapper){
+        this.jugadorService = jugadorService;
+        this.jugadorMapper = jugadorMapper;
     }
 
-    @PostMapping(path="/add") // Map ONLY POST Requests
+    // TODO: Sustituir por ResponseEntity y quitar el return
+    @PostMapping(path="/add")
     public @ResponseBody String addNewJugador (@RequestParam String nombre
             , @RequestParam String email, @RequestParam String apellidos) {
-        // @ResponseBody means the returned String is the response, not a view name
-        // @RequestParam means it is a parameter from the GET or POST request
-
+ 
         Jugador jugador = new Jugador();
         jugador.setNombre(nombre);
         jugador.setEmail(email);
@@ -29,9 +33,9 @@ public class JugadorController {
         return "Saved";
     }
 
-    @GetMapping(path="/all")
-    public @ResponseBody Iterable<Jugador> getAllJugadores() {
-        // This returns a JSON or XML with the users
-        return this.jugadorRepository.findAll();
+    @GetMapping(path="/get-all-jugadores")
+    public ResponseEntity<List<JugadorDTO>> getAllJugadores2(){
+        List<JugadorDTO> jugadores = this.jugadorMapper.toDTOs(this.jugadorService.findAll());
+        return ResponseEntity.ok(jugadores);
     }
 }

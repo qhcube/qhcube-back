@@ -1,11 +1,11 @@
 package es.upm.etsisi.qhcube.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
-import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,11 +30,16 @@ public class Jugador {
     private String email;
 
     @Basic
+    @Column(name = "password")
+    private String password;
+
+    @Basic
     @Column(name = "jwttoken")
     private String jwttoken;
 
     @OneToMany(mappedBy = "jugadorByJugadorId")
-    private Collection<Partida> partidasById;
+    @JsonIgnoreProperties("jugadorByJugadorId")
+    private List<Partida> partidasById;
 
     @Override
     public boolean equals(Object o) {
@@ -60,13 +65,5 @@ public class Jugador {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (jwttoken != null ? jwttoken.hashCode() : 0);
         return result;
-    }
-
-    public Collection<Partida> getPartidasById() {
-        return partidasById;
-    }
-
-    public void setPartidasById(Collection<Partida> partidasById) {
-        this.partidasById = partidasById;
     }
 }
