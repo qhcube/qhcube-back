@@ -1,11 +1,13 @@
 package es.upm.etsisi.qhcube.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -18,18 +20,18 @@ public class Partida {
     @Column(name = "id")
     private int id;
 
-    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "timepo_inicial")
-    private Timestamp timepoInicial;
+    private Timestamp tiempoInicial;
 
-    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "tiempo_fin")
-    private Timestamp tiempoFin;
+    private Timestamp tiempoFinal;
 
     @ManyToOne
     @JoinColumn(name = "jugador_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnoreProperties("partidasById")
     private Jugador jugadorByJugadorId;
-
 
     @Override
     public boolean equals(Object o) {
@@ -39,26 +41,16 @@ public class Partida {
         Partida partida = (Partida) o;
 
         if (id != partida.id) return false;
-        if (timepoInicial != null ? !timepoInicial.equals(partida.timepoInicial) : partida.timepoInicial != null)
+        if (!Objects.equals(tiempoInicial, partida.tiempoInicial))
             return false;
-        if (tiempoFin != null ? !tiempoFin.equals(partida.tiempoFin) : partida.tiempoFin != null) return false;
-
-        return true;
+        return Objects.equals(tiempoFinal, partida.tiempoFinal);
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (timepoInicial != null ? timepoInicial.hashCode() : 0);
-        result = 31 * result + (tiempoFin != null ? tiempoFin.hashCode() : 0);
+        result = 31 * result + (tiempoInicial != null ? tiempoInicial.hashCode() : 0);
+        result = 31 * result + (tiempoFinal != null ? tiempoFinal.hashCode() : 0);
         return result;
-    }
-
-    public Jugador getJugadorByJugadorId() {
-        return jugadorByJugadorId;
-    }
-
-    public void setJugadorByJugadorId(Jugador jugadorByJugadorId) {
-        this.jugadorByJugadorId = jugadorByJugadorId;
     }
 }
