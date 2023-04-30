@@ -15,6 +15,11 @@ public class PastidaServiceImpl implements PartidaService {
     }
 
     @Override
+    public Partida findById(int id) {
+        return this.partidaRepository.findById(id);
+    }
+
+    @Override
     public JpaRepository<Partida, Long> getRepository() {
         return this.partidaRepository;
     }

@@ -1,6 +1,5 @@
 package es.upm.etsisi.qhcube.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -16,7 +15,6 @@ public class PartidaDTO {
     private Timestamp tiempoFinal;
     private Timestamp tiempoJuego;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private JugadorDTO jugador;
 
     public Timestamp getTiempoJuego() {

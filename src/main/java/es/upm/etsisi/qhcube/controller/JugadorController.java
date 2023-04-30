@@ -25,7 +25,7 @@ public class JugadorController {
     @PostMapping(path="/add")
     public @ResponseBody String addNewJugador (@RequestParam String nombre
             , @RequestParam String email, @RequestParam String apellidos) {
- 
+
         Jugador jugador = new Jugador();
         jugador.setNombre(nombre);
         jugador.setEmail(email);
@@ -35,7 +35,6 @@ public class JugadorController {
 
     @GetMapping(path="/get-all-jugadores")
     public ResponseEntity<List<JugadorDTO>> getAllJugadores2(){
-        List<JugadorDTO> jugadores = this.jugadorMapper.toDTOs(this.jugadorService.findAll());
-        return ResponseEntity.ok(jugadores);
+        return ResponseEntity.ok(this.jugadorMapper.toDTOs(this.jugadorService.findAll()));
     }
 }
