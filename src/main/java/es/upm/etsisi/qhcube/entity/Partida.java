@@ -1,6 +1,5 @@
 package es.upm.etsisi.qhcube.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import java.util.Objects;
 @Setter
 @RequiredArgsConstructor
 @Entity
+@Table(name = "partida")
 public class Partida {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +29,8 @@ public class Partida {
     private Timestamp tiempoFinal;
 
     @ManyToOne
-    @JoinColumn(name = "jugador_id", referencedColumnName = "id", nullable = false)
-    @JsonIgnoreProperties("partidasById")
-    private Jugador jugadorByJugadorId;
+    @JoinColumn(name = "jugador_id")
+    private Jugador jugador;
 
     @Override
     public boolean equals(Object o) {

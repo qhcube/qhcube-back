@@ -1,6 +1,5 @@
 package es.upm.etsisi.qhcube.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -20,6 +19,5 @@ public class JugadorDTO implements Serializable {
     private String password;
     private String jwttoken;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<PartidaDTO> partidas;
 }

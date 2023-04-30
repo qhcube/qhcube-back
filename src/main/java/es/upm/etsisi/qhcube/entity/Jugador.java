@@ -1,16 +1,18 @@
 package es.upm.etsisi.qhcube.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
 @Entity
+@Table(name = "jugador")
 public class Jugador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -37,9 +39,8 @@ public class Jugador {
     @Column(name = "jwttoken")
     private String jwttoken;
 
-    @OneToMany(mappedBy = "jugadorByJugadorId")
-    @JsonIgnoreProperties("jugadorByJugadorId")
-    private List<Partida> partidasById;
+    @OneToMany(mappedBy = "jugador")
+    private List<Partida> partidas;
 
     @Override
     public boolean equals(Object o) {
@@ -49,12 +50,10 @@ public class Jugador {
         Jugador jugador = (Jugador) o;
 
         if (id != jugador.id) return false;
-        if (nombre != null ? !nombre.equals(jugador.nombre) : jugador.nombre != null) return false;
-        if (apellidos != null ? !apellidos.equals(jugador.apellidos) : jugador.apellidos != null) return false;
-        if (email != null ? !email.equals(jugador.email) : jugador.email != null) return false;
-        if (jwttoken != null ? !jwttoken.equals(jugador.jwttoken) : jugador.jwttoken != null) return false;
-
-        return true;
+        if (!Objects.equals(nombre, jugador.nombre)) return false;
+        if (!Objects.equals(apellidos, jugador.apellidos)) return false;
+        if (!Objects.equals(email, jugador.email)) return false;
+        return Objects.equals(jwttoken, jugador.jwttoken);
     }
 
     @Override
