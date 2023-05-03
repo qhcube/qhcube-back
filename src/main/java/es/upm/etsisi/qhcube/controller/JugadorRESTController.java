@@ -1,7 +1,6 @@
 package es.upm.etsisi.qhcube.controller;
 
 import es.upm.etsisi.qhcube.dto.JugadorDTO;
-import es.upm.etsisi.qhcube.entity.Jugador;
 import es.upm.etsisi.qhcube.mapper.JugadorMapper;
 import es.upm.etsisi.qhcube.service.jugador.JugadorService;
 import org.springframework.http.ResponseEntity;

@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import es.upm.etsisi.qhcube.controller.JugadorRESTController;
 import es.upm.etsisi.qhcube.dto.JugadorRegisterDTO;
-import es.upm.etsisi.qhcube.entity.Jugador;
 import es.upm.etsisi.qhcube.mapper.JugadorMapper;
 import es.upm.etsisi.qhcube.service.jugador.JugadorService;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +32,7 @@ public class JugadorFreeRESTController extends JugadorRESTController {
     public ResponseEntity<JwtResponseDTO> createAuthenticationToken(@RequestBody JwtRequestDTO request) throws Exception {
     */
     @RequestMapping(value = "/registrar", method = RequestMethod.POST)
-    public ResponseEntity<RegistroResponseDTO> registrarJugadorNuevo (@RequestBody JugadorRegisterDTO jugador) throws Exception {
+    public ResponseEntity<RegistroResponseDTO> registrarJugadorNuevo (@RequestBody JugadorRegisterDTO jugador) {
 
         // TODO: Confirmar que el password es igual que el confirm y que es válido.
         log.debug("Registrando jugador nuevo");
@@ -45,7 +44,7 @@ public class JugadorFreeRESTController extends JugadorRESTController {
                 jugador.getEmail(),
                 "Este es tu token que ya se generará");
 
-        log.debug("Respuesta... " + resp.toString());
+        log.debug("Respuesta... " + resp);
         return ResponseEntity.ok(resp);
     }
 
