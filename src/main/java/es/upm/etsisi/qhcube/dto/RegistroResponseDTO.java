@@ -2,8 +2,6 @@ package es.upm.etsisi.qhcube.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-
 import java.io.Serial;
 import java.io.Serializable;
 
