@@ -21,9 +21,4 @@ public class JugadorRegisterDTO implements Serializable {
     private String password;
     private String passwordConfirm;
 
-    // TODO: Borrar este método toString
-    public String toString() {
-        return "JugadorRegisterDTO: " + nombre + " " + apellidos + " " + email + " " + password;
-    }
-
 }

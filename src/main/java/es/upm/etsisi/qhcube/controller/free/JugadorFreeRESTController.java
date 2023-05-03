@@ -18,34 +18,24 @@ public class JugadorFreeRESTController extends JugadorRESTController {
         super(jugadorService, jugadorMapper);
     }
 
-    // TODO: Sustituir por ResponseEntity y quitar el return
-    /*
-    Datos que llegan:
-    user: {
-                email: "",
-                nombre: "",
-                apellidos: "",
-                password: ""
-            }
-
-            @RequestMapping(value = "${apiFreePrefix}/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<JwtResponseDTO> createAuthenticationToken(@RequestBody JwtRequestDTO request) throws Exception {
-    */
     @RequestMapping(value = "/registrar", method = RequestMethod.POST)
     public ResponseEntity<RegistroResponseDTO> registrarJugadorNuevo (@RequestBody JugadorRegisterDTO jugador) {
 
-        // TODO: Confirmar que el password es igual que el confirm y que es válido.
-        log.debug("Registrando jugador nuevo");
-        log.debug(jugador.toString());
+        if (this.passwordIsValid(jugador)) {
+            RegistroResponseDTO resp = new RegistroResponseDTO(
+                    jugador.getNombre(),
+                    jugador.getEmail(),
+                    jugador.getEmail(),
+                    "Este es tu token que ya se generará");
 
-        RegistroResponseDTO resp = new RegistroResponseDTO(
-                jugador.getNombre(),
-                jugador.getEmail(),
-                jugador.getEmail(),
-                "Este es tu token que ya se generará");
-
-        log.debug("Respuesta... " + resp);
-        return ResponseEntity.ok(resp);
+            return ResponseEntity.ok(resp);
+        } else {
+            String msg = "Invalid password";
+            return ResponseEntity.ok(new RegistroResponseDTO(msg, msg, msg, msg));
+        }
     }
 
+    private boolean passwordIsValid(JugadorRegisterDTO jugador) {
+        return (jugador.getPassword().length() > 5 && jugador.getPassword().equals(jugador.getPasswordConfirm()));
+    }
 }

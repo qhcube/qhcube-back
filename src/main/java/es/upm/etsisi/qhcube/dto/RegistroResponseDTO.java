@@ -17,8 +17,4 @@ public class RegistroResponseDTO implements Serializable {
     private final String email;
     private final String jwttoken;
 
-    //TODO: Borrar este método toString
-    public String toString() {
-        return "RegistroResponseDTO: " + nombre + " " + apellidos + " " + email + " " + jwttoken;
-    }
 }
