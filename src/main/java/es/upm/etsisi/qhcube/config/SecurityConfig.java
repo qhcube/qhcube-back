@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .and()
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/free/**").permitAll()
                         // Descomentando la siguiente línea se obvia la autorización y funciona webflux.
                         //.requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
