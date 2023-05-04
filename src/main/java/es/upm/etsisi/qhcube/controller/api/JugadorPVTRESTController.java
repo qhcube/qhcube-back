@@ -5,7 +5,6 @@ import es.upm.etsisi.qhcube.dto.JugadorDTO;
 import es.upm.etsisi.qhcube.entity.Jugador;
 import es.upm.etsisi.qhcube.mapper.JugadorMapper;
 import es.upm.etsisi.qhcube.service.jugador.JugadorService;
-import es.upm.etsisi.qhcube.utils.JwtTokenUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +14,8 @@ import java.util.List;
 @RequestMapping("${apiPrefix}/jugador")
 public class JugadorPVTRESTController extends JugadorRESTController {
 
-    public JugadorPVTRESTController(JugadorService jugadorService, JugadorMapper jugadorMapper, JwtTokenUtil jwtTokenUtil) {
-        super(jugadorService, jugadorMapper, jwtTokenUtil);
+    public JugadorPVTRESTController(JugadorService jugadorService, JugadorMapper jugadorMapper) {
+        super(jugadorService, jugadorMapper);
     }
 
     // TODO: Sustituir por ResponseEntity y quitar el return
