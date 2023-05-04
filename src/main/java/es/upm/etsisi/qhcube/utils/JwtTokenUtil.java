@@ -22,11 +22,11 @@ public class JwtTokenUtil implements Serializable {
     @Serial
     private static final long serialVersionUID = 8459809523059085563L;
 
-    @Value("${jwt.expiration}")
-    public long expiration;
-
     @Value("${jwt.secret}")
     private String secret;
+
+    @Value("${jwt.expiration}")
+    private long expiration;
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
@@ -62,7 +62,7 @@ public class JwtTokenUtil implements Serializable {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + this.expiration))
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(SignatureAlgorithm.HS256, this.secret)
                 .compact();
     }
 
