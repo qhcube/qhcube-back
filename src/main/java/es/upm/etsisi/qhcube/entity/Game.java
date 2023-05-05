@@ -13,7 +13,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "partida")
-public class Partida {
+public class Game {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -30,14 +30,14 @@ public class Partida {
 
     @ManyToOne
     @JoinColumn(name = "jugador_id")
-    private Jugador jugador;
+    private Player jugador;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Partida partida = (Partida) o;
+        Game partida = (Game) o;
 
         if (id != partida.id) return false;
         if (!Objects.equals(tiempoInicial, partida.tiempoInicial))

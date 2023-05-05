@@ -3,7 +3,7 @@ package es.upm.etsisi.qhcube.controller.api;
 import es.upm.etsisi.qhcube.controller.PartidaRESTController;
 import es.upm.etsisi.qhcube.dto.PartidaDTO;
 import es.upm.etsisi.qhcube.mapper.PartidaMapper;
-import es.upm.etsisi.qhcube.service.partida.PartidaService;
+import es.upm.etsisi.qhcube.service.game.GameService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("${apiPrefix}/partida")
 public class PartidaPVTRESTController extends PartidaRESTController {
 
-    public PartidaPVTRESTController(PartidaService partidaService, PartidaMapper partidaMapper) {
+    public PartidaPVTRESTController(GameService partidaService, PartidaMapper partidaMapper) {
         super(partidaService, partidaMapper);
     }
 

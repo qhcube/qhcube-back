@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import es.upm.etsisi.qhcube.controller.JugadorRESTController;
 import es.upm.etsisi.qhcube.dto.JugadorRegisterDTO;
 import es.upm.etsisi.qhcube.mapper.JugadorMapper;
-import es.upm.etsisi.qhcube.service.jugador.JugadorService;
+import es.upm.etsisi.qhcube.service.player.PlayerrService;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("${apiFreePrefix}/jugador")
 public class JugadorFreeRESTController extends JugadorRESTController {
 
-    public JugadorFreeRESTController(JugadorService jugadorService, JugadorMapper jugadorMapper) {
+    public JugadorFreeRESTController(PlayerrService jugadorService, JugadorMapper jugadorMapper) {
         super(jugadorService, jugadorMapper);
     }
 

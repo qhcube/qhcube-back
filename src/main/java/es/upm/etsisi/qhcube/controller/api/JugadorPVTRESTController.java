@@ -2,9 +2,9 @@ package es.upm.etsisi.qhcube.controller.api;
 
 import es.upm.etsisi.qhcube.controller.JugadorRESTController;
 import es.upm.etsisi.qhcube.dto.JugadorDTO;
-import es.upm.etsisi.qhcube.entity.Jugador;
+import es.upm.etsisi.qhcube.entity.Player;
 import es.upm.etsisi.qhcube.mapper.JugadorMapper;
-import es.upm.etsisi.qhcube.service.jugador.JugadorService;
+import es.upm.etsisi.qhcube.service.player.PlayerrService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("${apiPrefix}/jugador")
 public class JugadorPVTRESTController extends JugadorRESTController {
 
-    public JugadorPVTRESTController(JugadorService jugadorService, JugadorMapper jugadorMapper) {
+    public JugadorPVTRESTController(PlayerrService jugadorService, JugadorMapper jugadorMapper) {
         super(jugadorService, jugadorMapper);
     }
 
@@ -23,7 +23,7 @@ public class JugadorPVTRESTController extends JugadorRESTController {
     public @ResponseBody String addNewJugador (@RequestParam String nombre
             , @RequestParam String email, @RequestParam String apellidos) {
 
-        Jugador jugador = new Jugador();
+        Player jugador = new Player();
         jugador.setNombre(nombre);
         jugador.setEmail(email);
         jugador.setApellidos(apellidos);

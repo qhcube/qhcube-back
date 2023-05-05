@@ -1,9 +1,9 @@
-package es.upm.etsisi.qhcube.service.jugador;
+package es.upm.etsisi.qhcube.service.player;
 
 import es.upm.etsisi.qhcube.dto.JugadorRegisterDTO;
 import es.upm.etsisi.qhcube.dto.RegistroResponseDTO;
-import es.upm.etsisi.qhcube.entity.Jugador;
-import es.upm.etsisi.qhcube.repository.JugadorRepository;
+import es.upm.etsisi.qhcube.entity.Player;
+import es.upm.etsisi.qhcube.repository.PlayerRepository;
 import es.upm.etsisi.qhcube.service.security.JwtUserDetailsService;
 import es.upm.etsisi.qhcube.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -14,18 +14,18 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class JugadorServiceImpl implements JugadorService {
+public class PlayerServiceImpl implements PlayerrService {
 
-    private final JugadorRepository jugadorRepository;
+    private final PlayerRepository jugadorRepository;
     private final JwtTokenUtil jwtTokenUtil;
 
-    public JugadorServiceImpl(JugadorRepository jugadorRepository, JwtTokenUtil jwtTokenUtil) {
+    public PlayerServiceImpl(PlayerRepository jugadorRepository, JwtTokenUtil jwtTokenUtil) {
         this.jugadorRepository = jugadorRepository;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
-    public JpaRepository<Jugador, Long> getRepository() {
+    public JpaRepository<Player, Long> getRepository() {
         return this.jugadorRepository;
     }
 
