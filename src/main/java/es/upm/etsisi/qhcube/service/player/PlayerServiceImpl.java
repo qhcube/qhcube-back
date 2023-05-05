@@ -14,19 +14,19 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class PlayerServiceImpl implements PlayerrService {
+public class PlayerServiceImpl implements PlayerService {
 
-    private final PlayerRepository jugadorRepository;
+    private final PlayerRepository playerRepository;
     private final JwtTokenUtil jwtTokenUtil;
 
-    public PlayerServiceImpl(PlayerRepository jugadorRepository, JwtTokenUtil jwtTokenUtil) {
-        this.jugadorRepository = jugadorRepository;
+    public PlayerServiceImpl(PlayerRepository playerRepository, JwtTokenUtil jwtTokenUtil) {
+        this.playerRepository = playerRepository;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
     public JpaRepository<Player, Long> getRepository() {
-        return this.jugadorRepository;
+        return this.playerRepository;
     }
 
     @Override

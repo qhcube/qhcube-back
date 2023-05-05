@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GameRESTController {
 
-    protected final GameService partidaService;
-    protected final GameMapper partidaMapper;
+    protected final GameService gameService;
+    protected final GameMapper gameMapper;
 
-    public GameRESTController(GameService partidaService, GameMapper partidaMapper){
-        this.partidaService = partidaService;
-        this.partidaMapper = partidaMapper;
+    public GameRESTController(GameService gameService, GameMapper gameMapper){
+        this.gameService = gameService;
+        this.gameMapper = gameMapper;
     }
 }

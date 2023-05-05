@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("${apiFreePrefix}/partida")
+@RequestMapping("${apiFreePrefix}/game")
 public class GameFreeRESTController extends GameRESTController {
 
-    public GameFreeRESTController(GameService partidaService, GameMapper partidaMapper) {
-        super(partidaService, partidaMapper);
+    public GameFreeRESTController(GameService gameService, GameMapper gameMapper) {
+        super(gameService, gameMapper);
     }
 }
