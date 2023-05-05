@@ -1,7 +1,7 @@
 package es.upm.etsisi.qhcube.mapper;
 
 import es.upm.etsisi.qhcube.dto.JugadorDTO;
-import es.upm.etsisi.qhcube.entity.Jugador;
+import es.upm.etsisi.qhcube.entity.Player;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,15 +16,15 @@ public interface JugadorMapper {
 
     @Named("sinJugadores")
     @Mapping(target = "partidas", qualifiedByName = "oneLevel")
-    JugadorDTO toDTO(Jugador jugador);
+    JugadorDTO toDTO(Player jugador);
 
-    Jugador toEntity(JugadorDTO jugadorDTO);
+    Player toEntity(JugadorDTO jugadorDTO);
 
     @Named("sinJugadores")
     @IterableMapping(qualifiedByName = "sinJugadores")
-    List<JugadorDTO> toDTOs(List<Jugador> entities);
+    List<JugadorDTO> toDTOs(List<Player> entities);
 
     @Named("oneLevel")
     @Mapping(target = "partidas", ignore = true)
-    JugadorDTO toDTOOneLevel(Jugador jugador);
+    JugadorDTO toDTOOneLevel(Player jugador);
 }
