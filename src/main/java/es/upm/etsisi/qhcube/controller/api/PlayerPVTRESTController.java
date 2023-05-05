@@ -1,9 +1,9 @@
 package es.upm.etsisi.qhcube.controller.api;
 
-import es.upm.etsisi.qhcube.controller.JugadorRESTController;
-import es.upm.etsisi.qhcube.dto.JugadorDTO;
+import es.upm.etsisi.qhcube.controller.PlayerRESTController;
+import es.upm.etsisi.qhcube.dto.PlayerDTO;
 import es.upm.etsisi.qhcube.entity.Player;
-import es.upm.etsisi.qhcube.mapper.JugadorMapper;
+import es.upm.etsisi.qhcube.mapper.PlayerMapper;
 import es.upm.etsisi.qhcube.service.player.PlayerrService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +12,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("${apiPrefix}/jugador")
-public class JugadorPVTRESTController extends JugadorRESTController {
+public class PlayerPVTRESTController extends PlayerRESTController {
 
-    public JugadorPVTRESTController(PlayerrService jugadorService, JugadorMapper jugadorMapper) {
+    public PlayerPVTRESTController(PlayerrService jugadorService, PlayerMapper jugadorMapper) {
         super(jugadorService, jugadorMapper);
     }
 
@@ -31,7 +31,7 @@ public class JugadorPVTRESTController extends JugadorRESTController {
     }
 
     @GetMapping(path="/get-all")
-    public ResponseEntity<List<JugadorDTO>> getAll(){
+    public ResponseEntity<List<PlayerDTO>> getAll(){
         return ResponseEntity.ok(this.jugadorMapper.toDTOs(this.jugadorService.findAll()));
     }
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Getter
 @RequiredArgsConstructor
-public class RegistroResponseDTO implements Serializable {
+public class NewRegisterResponseDTO implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 8602182172951770525L;
@@ -23,7 +23,7 @@ public class RegistroResponseDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "RegistroResponseDTO{" +
+        return "NewRegisterResponseDTO{" +
                 "status='" + status + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", apellidos='" + apellidos + '\'' +

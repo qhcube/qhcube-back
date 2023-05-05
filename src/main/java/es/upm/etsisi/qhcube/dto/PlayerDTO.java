@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class JugadorDTO implements Serializable {
+public class PlayerDTO implements Serializable {
 
     private int id;
     private String nombre;
@@ -19,5 +19,5 @@ public class JugadorDTO implements Serializable {
     private String password;
     private String jwttoken;
 
-    private List<PartidaDTO> partidas;
+    private List<GameDTO> partidas;
 }

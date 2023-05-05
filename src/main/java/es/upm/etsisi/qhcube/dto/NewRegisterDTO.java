@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class JugadorRegisterDTO implements Serializable {
+public class NewRegisterDTO implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 3296638759161568040L;
