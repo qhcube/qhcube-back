@@ -8,14 +8,14 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class PartidaDTO {
+public class GameDTO {
 
     private int id;
     private Timestamp tiempoInicial;
     private Timestamp tiempoFinal;
     private Timestamp tiempoJuego;
 
-    private JugadorDTO jugador;
+    private PlayerDTO jugador;
 
     public Timestamp getTiempoJuego() {
         return new Timestamp(tiempoFinal.getTime() - tiempoInicial.getTime());

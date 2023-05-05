@@ -1,7 +1,7 @@
 package es.upm.etsisi.qhcube.service.player;
 
-import es.upm.etsisi.qhcube.dto.JugadorRegisterDTO;
-import es.upm.etsisi.qhcube.dto.RegistroResponseDTO;
+import es.upm.etsisi.qhcube.dto.NewRegisterDTO;
+import es.upm.etsisi.qhcube.dto.NewRegisterResponseDTO;
 import es.upm.etsisi.qhcube.entity.Player;
 import es.upm.etsisi.qhcube.repository.PlayerRepository;
 import es.upm.etsisi.qhcube.service.security.JwtUserDetailsService;
@@ -30,27 +30,27 @@ public class PlayerServiceImpl implements PlayerrService {
     }
 
     @Override
-    public RegistroResponseDTO register(JugadorRegisterDTO player) {
+    public NewRegisterResponseDTO register(NewRegisterDTO player) {
 
-        RegistroResponseDTO result;
+        NewRegisterResponseDTO result;
         String checkPlayer = checkValidJugadorToRegister(player);
 
         if (checkPlayer.equals("OK")) {
             UserDetails userDetails = new JwtUserDetailsService().loadUserByUsername(player.getEmail());
-            result = new RegistroResponseDTO(
+            result = new NewRegisterResponseDTO(
                     "OK",
                     player.getNombre(),
                     player.getApellidos(),
                     player.getEmail(),
                     this.jwtTokenUtil.generateToken(userDetails));
         } else {
-            result = new RegistroResponseDTO("ERROR", checkPlayer, checkPlayer, checkPlayer, checkPlayer);
+            result = new NewRegisterResponseDTO("ERROR", checkPlayer, checkPlayer, checkPlayer, checkPlayer);
         }
 
         return result;
     }
 
-    private String checkValidJugadorToRegister(JugadorRegisterDTO player) {
+    private String checkValidJugadorToRegister(NewRegisterDTO player) {
         String result = "OK";
         EmailValidator emailValidator = EmailValidator.getInstance();
 
