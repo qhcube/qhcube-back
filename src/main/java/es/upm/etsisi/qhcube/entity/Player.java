@@ -12,7 +12,7 @@ import java.util.Objects;
 @Setter
 @RequiredArgsConstructor
 @Entity
-@Table(name = "jugador")
+@Table(name = "player")
 public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -40,7 +40,7 @@ public class Player {
     private String jwttoken;
 
     @OneToMany(mappedBy = "player")
-    private List<Game> partidas;
+    private List<Game> games;
 
     @Override
     public boolean equals(Object o) {
