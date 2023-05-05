@@ -14,11 +14,11 @@ import java.util.List;
 public interface GameMapper {
 
     @Named("sinPartidas")
-    @Mapping(target = "jugador", qualifiedByName = "oneLevel")
+    @Mapping(target = "player", qualifiedByName = "oneLevel")
     GameDTO toDTO(Game partida);
 
     @Named("oneLevel")
-    @Mapping(target = "jugador", ignore = true)
+    @Mapping(target = "player", ignore = true)
     GameDTO toDTOOneLevel(Game aula);
 
     @Named("sinPartidas")
