@@ -11,13 +11,13 @@ import java.sql.Timestamp;
 public class GameDTO {
 
     private int id;
-    private Timestamp tiempoInicial;
-    private Timestamp tiempoFinal;
+    private Timestamp initialTime;
+    private Timestamp endTime;
     private Timestamp tiempoJuego;
 
-    private PlayerDTO jugador;
+    private PlayerDTO player;
 
     public Timestamp getTiempoJuego() {
-        return new Timestamp(tiempoFinal.getTime() - tiempoInicial.getTime());
+        return new Timestamp(endTime.getTime() - initialTime.getTime());
     }
 }

@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("${apiPrefix}/partida")
+@RequestMapping("${apiPrefix}/game")
 public class GamePVTRESTController extends GameRESTController {
 
-    public GamePVTRESTController(GameService partidaService, GameMapper partidaMapper) {
-        super(partidaService, partidaMapper);
+    public GamePVTRESTController(GameService gameService, GameMapper gameMapper) {
+        super(gameService, gameMapper);
     }
 
     @GetMapping(path="/get-all")
     public ResponseEntity<List<GameDTO>> getAll(){
-        return ResponseEntity.ok(this.partidaMapper.toDTOs(this.partidaService.findAll()));
+        return ResponseEntity.ok(this.gameMapper.toDTOs(this.gameService.findAll()));
     }
 
     @GetMapping(path="/get-by-id/{id}")
     public ResponseEntity<GameDTO> getById(@PathVariable("id") int id){
-        return ResponseEntity.ok(this.partidaMapper.toDTO(this.partidaService.findById(id)));
+        return ResponseEntity.ok(this.gameMapper.toDTO(this.gameService.findById(id)));
     }
 }

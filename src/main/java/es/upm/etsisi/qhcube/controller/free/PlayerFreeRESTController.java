@@ -6,21 +6,21 @@ import org.springframework.http.ResponseEntity;
 import es.upm.etsisi.qhcube.controller.PlayerRESTController;
 import es.upm.etsisi.qhcube.dto.NewRegisterDTO;
 import es.upm.etsisi.qhcube.mapper.PlayerMapper;
-import es.upm.etsisi.qhcube.service.player.PlayerrService;
+import es.upm.etsisi.qhcube.service.player.PlayerService;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("${apiFreePrefix}/jugador")
+@RequestMapping("${apiFreePrefix}/player")
 public class PlayerFreeRESTController extends PlayerRESTController {
 
-    public PlayerFreeRESTController(PlayerrService jugadorService, PlayerMapper jugadorMapper) {
+    public PlayerFreeRESTController(PlayerService jugadorService, PlayerMapper jugadorMapper) {
         super(jugadorService, jugadorMapper);
     }
 
-    @RequestMapping(value = "/registrar", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<NewRegisterResponseDTO> registrarJugadorNuevo (@RequestBody NewRegisterDTO jugador) {
-        NewRegisterResponseDTO response = jugadorService.register(jugador);
+        NewRegisterResponseDTO response = playerService.register(jugador);
         log.debug("Response: " + response.toString());
         return ResponseEntity.ok(response);
     }

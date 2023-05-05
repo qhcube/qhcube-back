@@ -39,7 +39,7 @@ public class Player {
     @Column(name = "jwttoken")
     private String jwttoken;
 
-    @OneToMany(mappedBy = "jugador")
+    @OneToMany(mappedBy = "player")
     private List<Game> partidas;
 
     @Override
