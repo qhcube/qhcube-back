@@ -12,7 +12,7 @@ import java.util.Objects;
 @Setter
 @RequiredArgsConstructor
 @Entity
-@Table(name = "partida")
+@Table(name = "game")
 public class Game {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
