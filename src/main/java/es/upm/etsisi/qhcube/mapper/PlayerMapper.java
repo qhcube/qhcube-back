@@ -15,6 +15,8 @@ import java.util.List;
 public interface PlayerMapper {
 
     @Named("sinJugadores")
+    @Mapping(target = "respStatus", ignore = true)
+    @Mapping(target = "respMessage", ignore = true)
     @Mapping(target = "games", qualifiedByName = "oneLevel")
     PlayerDTO toDTO(Player jugador);
 
@@ -25,6 +27,8 @@ public interface PlayerMapper {
     List<PlayerDTO> toDTOs(List<Player> entities);
 
     @Named("oneLevel")
+    @Mapping(target = "respStatus", ignore = true)
+    @Mapping(target = "respMessage", ignore = true)
     @Mapping(target = "games", ignore = true)
     PlayerDTO toDTOOneLevel(Player jugador);
 }

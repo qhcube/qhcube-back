@@ -40,7 +40,6 @@ public class Game {
     @JoinColumn(name = "player_id")
     private Player player;
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
