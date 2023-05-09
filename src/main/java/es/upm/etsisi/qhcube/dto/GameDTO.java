@@ -13,11 +13,13 @@ public class GameDTO {
     private int id;
     private Timestamp initialTime;
     private Timestamp endTime;
-    private Timestamp tiempoJuego;
+    private Timestamp totalGameTime;
+    private String movsList;
+    private String input;
 
     private PlayerDTO player;
 
-    public Timestamp getTiempoJuego() {
+    public Timestamp getTotalGameTime() {
         return new Timestamp(endTime.getTime() - initialTime.getTime());
     }
 }
