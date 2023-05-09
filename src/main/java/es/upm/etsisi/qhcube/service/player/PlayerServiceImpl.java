@@ -1,7 +1,6 @@
 package es.upm.etsisi.qhcube.service.player;
 
-import es.upm.etsisi.qhcube.dto.NewRegisterDTO;
-import es.upm.etsisi.qhcube.dto.NewRegisterResponseDTO;
+import es.upm.etsisi.qhcube.dto.PlayerDTO;
 import es.upm.etsisi.qhcube.entity.Player;
 import es.upm.etsisi.qhcube.repository.PlayerRepository;
 import es.upm.etsisi.qhcube.service.security.JwtUserDetailsService;
@@ -30,27 +29,34 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public NewRegisterResponseDTO register(NewRegisterDTO player) {
+    public PlayerDTO register(PlayerDTO player) {
 
-        NewRegisterResponseDTO result;
+        PlayerDTO result;
         String checkPlayer = checkValidJugadorToRegister(player);
 
         if (checkPlayer.equals("OK")) {
             UserDetails userDetails = new JwtUserDetailsService().loadUserByUsername(player.getEmail());
-            result = new NewRegisterResponseDTO(
-                    "OK",
-                    player.getNombre(),
-                    player.getApellidos(),
-                    player.getEmail(),
-                    this.jwtTokenUtil.generateToken(userDetails));
+            result = PlayerDTO.builder()
+                    .nombre(player.getNombre())
+                    .apellidos(player.getApellidos())
+                    .email(player.getEmail())
+                    .password(player.getPassword())
+                    .jwttoken(this.jwtTokenUtil.generateToken(userDetails))
+                    .respStatus("OK")
+                    .respMessage("Jugador registrado correctamente.")
+                    .build();
+
         } else {
-            result = new NewRegisterResponseDTO("ERROR", checkPlayer, checkPlayer, checkPlayer, checkPlayer);
+            result = PlayerDTO.builder()
+                    .respStatus("ERROR")
+                    .respMessage(checkPlayer)
+                    .build();
         }
 
         return result;
     }
 
-    private String checkValidJugadorToRegister(NewRegisterDTO player) {
+    private String checkValidJugadorToRegister(PlayerDTO player) {
         String result = "OK";
         EmailValidator emailValidator = EmailValidator.getInstance();
 
@@ -60,9 +66,6 @@ public class PlayerServiceImpl implements PlayerService {
         else if (player.getApellidos().isEmpty()) result = "Los apellidos no pueden estar vacíos.";
         else if (player.getEmail().isEmpty()) result = "El e-mail no puede estar vacío.";
         else if (player.getPassword().isEmpty()) result = "La contraseña no puede estar vacía.";
-        else if (player.getPasswordConfirm().isEmpty())
-            result = "La confirmación de la contraseña no puede estar vacía.";
-        else if (!player.getPassword().equals(player.getPasswordConfirm())) result = "Las contraseñas no coinciden.";
         else if (player.getPassword().length() < 6) result = "La contraseña debe tener al menos 6 caracteres.";
         else if (!emailValidator.isValid(player.getEmail())) {
             log.debug("Email is not valid: " + player.getEmail());
