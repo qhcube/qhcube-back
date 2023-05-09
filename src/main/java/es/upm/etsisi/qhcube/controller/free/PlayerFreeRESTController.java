@@ -1,10 +1,9 @@
 package es.upm.etsisi.qhcube.controller.free;
 
-import es.upm.etsisi.qhcube.dto.NewRegisterResponseDTO;
+import es.upm.etsisi.qhcube.dto.PlayerDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import es.upm.etsisi.qhcube.controller.PlayerRESTController;
-import es.upm.etsisi.qhcube.dto.NewRegisterDTO;
 import es.upm.etsisi.qhcube.mapper.PlayerMapper;
 import es.upm.etsisi.qhcube.service.player.PlayerService;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +18,8 @@ public class PlayerFreeRESTController extends PlayerRESTController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<NewRegisterResponseDTO> registrarJugadorNuevo (@RequestBody NewRegisterDTO jugador) {
-        NewRegisterResponseDTO response = playerService.register(jugador);
+    public ResponseEntity<PlayerDTO> registrarJugadorNuevo (@RequestBody PlayerDTO jugador) {
+        PlayerDTO response = playerService.register(jugador);
         log.debug("Response: " + response.toString());
         return ResponseEntity.ok(response);
     }
