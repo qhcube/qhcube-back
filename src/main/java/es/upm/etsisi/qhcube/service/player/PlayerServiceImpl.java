@@ -32,7 +32,7 @@ public class PlayerServiceImpl implements PlayerService {
     public PlayerDTO register(PlayerDTO player) {
 
         PlayerDTO result;
-        String checkPlayer = checkValidJugadorToRegister(player);
+        String checkPlayer = checkPlayerToRegister(player);
 
         if (checkPlayer.equals("OK")) {
             UserDetails userDetails = new JwtUserDetailsService().loadUserByUsername(player.getEmail());
@@ -40,7 +40,6 @@ public class PlayerServiceImpl implements PlayerService {
                     .nombre(player.getNombre())
                     .apellidos(player.getApellidos())
                     .email(player.getEmail())
-                    .password(player.getPassword())
                     .jwttoken(this.jwtTokenUtil.generateToken(userDetails))
                     .respStatus("OK")
                     .respMessage("Jugador registrado correctamente.")
@@ -56,23 +55,16 @@ public class PlayerServiceImpl implements PlayerService {
         return result;
     }
 
-    private String checkValidJugadorToRegister(PlayerDTO player) {
+    private String checkPlayerToRegister(PlayerDTO player) {
         String result = "OK";
-        EmailValidator emailValidator = EmailValidator.getInstance();
-
-        log.debug("Checking player: " + player.toString());
 
         if (player.getNombre().isEmpty()) result = "El nombre no puede estar vacío.";
         else if (player.getApellidos().isEmpty()) result = "Los apellidos no pueden estar vacíos.";
         else if (player.getEmail().isEmpty()) result = "El e-mail no puede estar vacío.";
         else if (player.getPassword().isEmpty()) result = "La contraseña no puede estar vacía.";
         else if (player.getPassword().length() < 6) result = "La contraseña debe tener al menos 6 caracteres.";
-        else if (!emailValidator.isValid(player.getEmail())) {
-            log.debug("Email is not valid: " + player.getEmail());
-            result = "El e-mail no es válido.";
-        } else {
-            log.debug("Email is valid: " + player.getEmail());
-        }
+        else if (!EmailValidator.getInstance().isValid(player.getEmail())) result = "El e-mail no es válido.";
+        else if (this.playerRepository.findByEmail(player.getEmail()).isPresent()) result = "Ya existe un jugador con ese e-mail.";
 
         return result;
     }
