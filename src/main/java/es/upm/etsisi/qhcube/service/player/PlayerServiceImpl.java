@@ -2,6 +2,7 @@ package es.upm.etsisi.qhcube.service.player;
 
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
 import es.upm.etsisi.qhcube.entity.Player;
+import es.upm.etsisi.qhcube.mapper.PlayerMapper;
 import es.upm.etsisi.qhcube.repository.PlayerRepository;
 import es.upm.etsisi.qhcube.service.security.JwtUserDetailsService;
 import es.upm.etsisi.qhcube.utils.JwtTokenUtil;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -17,10 +19,12 @@ public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerRepository playerRepository;
     private final JwtTokenUtil jwtTokenUtil;
+    private final PlayerMapper playerMapper;
 
-    public PlayerServiceImpl(PlayerRepository playerRepository, JwtTokenUtil jwtTokenUtil) {
+    public PlayerServiceImpl(PlayerRepository playerRepository, JwtTokenUtil jwtTokenUtil, PlayerMapper playerMapper) {
         this.playerRepository = playerRepository;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.playerMapper = playerMapper;
     }
 
     @Override
@@ -44,6 +48,9 @@ public class PlayerServiceImpl implements PlayerService {
                     .respStatus("OK")
                     .respMessage("Jugador registrado correctamente.")
                     .build();
+            Player playerToSave = this.playerMapper.toEntity(result);
+            playerToSave.setPassword(new BCryptPasswordEncoder().encode(player.getPassword()));
+            this.playerRepository.save(playerToSave);
 
         } else {
             result = PlayerDTO.builder()
