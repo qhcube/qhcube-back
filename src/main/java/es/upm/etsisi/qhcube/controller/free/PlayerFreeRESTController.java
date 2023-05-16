@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import es.upm.etsisi.qhcube.controller.PlayerRESTController;
 import es.upm.etsisi.qhcube.mapper.PlayerMapper;
 import es.upm.etsisi.qhcube.service.player.PlayerService;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
