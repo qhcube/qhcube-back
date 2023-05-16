@@ -26,8 +26,7 @@ public class JwtUserDetailsService implements UserDetailsService {
             Optional<Player> user = this.playerRepository.findByEmail(email);
 
             if (user.isPresent()) {
-                return new QHCubeUserDetails(user.get().getEmail(), user.get().getPassword(),
-                        new ArrayList<>());
+                return new QHCubeUserDetails(user.get(), new ArrayList<>());
             } else {
                 throw new UsernameNotFoundException("User not found with username: " + email);
             }
