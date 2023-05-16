@@ -6,17 +6,27 @@ import es.upm.etsisi.qhcube.mapper.PlayerMapper;
 import es.upm.etsisi.qhcube.repository.PlayerRepository;
 import es.upm.etsisi.qhcube.service.security.JwtUserDetailsService;
 import es.upm.etsisi.qhcube.utils.JwtTokenUtil;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.EmailValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.io.UnsupportedEncodingException;
 
 @Slf4j
 @Service
 public class PlayerServiceImpl implements PlayerService {
 
+    @Autowired
+    private JavaMailSender emailSender;
     private final PlayerRepository playerRepository;
     private final JwtTokenUtil jwtTokenUtil;
     private final PlayerMapper playerMapper;
@@ -51,7 +61,12 @@ public class PlayerServiceImpl implements PlayerService {
             Player playerToSave = this.playerMapper.toEntity(result);
             playerToSave.setPassword(new BCryptPasswordEncoder().encode(player.getPassword()));
             this.playerRepository.save(playerToSave);
-
+            try {
+                this.sendVerificationEmail(playerToSave, "http://localhost:8080");
+            } catch (MessagingException | UnsupportedEncodingException e) {
+                log.debug("Error al enviar el correo de verificación.");
+                log.debug(e.getMessage());
+            }
         } else {
             result = PlayerDTO.builder()
                     .respStatus("ERROR")
@@ -91,5 +106,36 @@ public class PlayerServiceImpl implements PlayerService {
                     .build();
         }
         return result;
+    }
+
+    private void sendVerificationEmail(Player user, String siteURL)
+            throws MessagingException, UnsupportedEncodingException {
+
+        String toAddress = user.getEmail();
+        String fromAddress = "juegohipercubocuantico@gmail.com";
+        String senderName = "ETSISI - UPM";
+        String subject = "Por favor, verifica tu registro";
+        // TODO: Poner la direción de la APIREST en el enlace
+        String content = "Estimado " + user.getNombre() + " " + user.getApellidos() + ",<br>"
+                + "Haz click al enlace de abajo para verificar tu registro:<br>"
+                + "<h3><a href='[[URL]]' target='_self'>VIRIFICAR</a></h3>"
+                + "¡GRACIAS!<br />"
+                + "QHCube Juego by Jesús García.";
+
+        MimeMessage message = this.emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
+
+        content = content.replace("[[URL]]", verifyURL);
+
+        helper.setText(content, true);
+
+        this.emailSender.send(message);
+
     }
 }
