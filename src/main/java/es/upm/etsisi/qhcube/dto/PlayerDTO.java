@@ -9,6 +9,7 @@ import java.util.List;
 @Getter @ Setter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Accessors(chain = true)
 public class PlayerDTO implements Serializable {
 

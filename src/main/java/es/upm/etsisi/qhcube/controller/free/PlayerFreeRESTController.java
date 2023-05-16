@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import es.upm.etsisi.qhcube.controller.PlayerRESTController;
 import es.upm.etsisi.qhcube.mapper.PlayerMapper;
 import es.upm.etsisi.qhcube.service.player.PlayerService;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -18,15 +19,7 @@ public class PlayerFreeRESTController extends PlayerRESTController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<PlayerDTO> registrarJugadorNuevo (@RequestBody PlayerDTO jugador) {
-        PlayerDTO response = playerService.register(jugador);
-        return ResponseEntity.ok(response);
-    }
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<PlayerDTO> loginJugador (@RequestBody PlayerDTO jugador) {
-        log.debug("Login jugador: " + jugador.getEmail());
-        PlayerDTO response = playerService.login(jugador);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<PlayerDTO> registrarJugadorNuevo (@RequestBody PlayerDTO player) {
+        return ResponseEntity.ok(playerService.register(player));
     }
 }
