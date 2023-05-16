@@ -28,7 +28,7 @@ public class Player {
     private String apellidos;
 
     @Basic
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Basic

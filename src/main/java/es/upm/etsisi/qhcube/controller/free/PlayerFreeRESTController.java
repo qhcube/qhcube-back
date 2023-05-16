@@ -20,7 +20,13 @@ public class PlayerFreeRESTController extends PlayerRESTController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<PlayerDTO> registrarJugadorNuevo (@RequestBody PlayerDTO jugador) {
         PlayerDTO response = playerService.register(jugador);
-        log.debug("Response: " + response.toString());
+        return ResponseEntity.ok(response);
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<PlayerDTO> loginJugador (@RequestBody PlayerDTO jugador) {
+        log.debug("Login jugador: " + jugador.getEmail());
+        PlayerDTO response = playerService.login(jugador);
         return ResponseEntity.ok(response);
     }
 }

@@ -75,4 +75,18 @@ public class PlayerServiceImpl implements PlayerService {
 
         return result;
     }
+
+    @Override
+    public PlayerDTO login(PlayerDTO player) {
+        PlayerDTO result;
+
+        log.debug("PlayerServiceImpl.login: " + player);
+        result = PlayerDTO.builder()
+                .email(player.getEmail())
+                .respStatus("OK")
+                .respMessage("Jugador logueado correctamente.")
+                .build();
+
+        return result;
+    }
 }

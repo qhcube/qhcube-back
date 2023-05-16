@@ -1,8 +1,6 @@
 package es.upm.etsisi.qhcube.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -10,6 +8,7 @@ import java.util.List;
 
 @Getter @ Setter
 @Builder
+@AllArgsConstructor
 @Accessors(chain = true)
 public class PlayerDTO implements Serializable {
 

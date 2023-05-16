@@ -6,4 +6,5 @@ import es.upm.etsisi.qhcube.service.AbstractService;
 
 public interface PlayerService extends AbstractService<Player> {
     PlayerDTO register(PlayerDTO jugador);
+    PlayerDTO login(PlayerDTO jugador);
 }
