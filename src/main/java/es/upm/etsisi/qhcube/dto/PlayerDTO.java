@@ -19,6 +19,8 @@ public class PlayerDTO implements Serializable {
     private String email;
     private String password;
     private String jwttoken;
+    private boolean enabled;
+    private String verificationCode;
 
     private List<GameDTO> games;
 

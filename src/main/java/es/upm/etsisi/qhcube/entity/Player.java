@@ -39,6 +39,14 @@ public class Player {
     @Column(name = "jwttoken")
     private String jwttoken;
 
+    @Basic
+    @Column(name = "enabled")
+    private boolean enabled;
+
+    @Basic
+    @Column(name = "verification_code")
+    private String verificationCode;
+
     @OneToMany(mappedBy = "player")
     private List<Game> games;
 
@@ -64,5 +72,15 @@ public class Player {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (jwttoken != null ? jwttoken.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "nombre = " + nombre + ", " +
+                "apellidos = " + apellidos + ", " +
+                "email = " + email + ", " +
+                "password = " + password + ", " +
+                "jwttoken = " + jwttoken + ")";
     }
 }
