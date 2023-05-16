@@ -39,7 +39,7 @@ public class PlayerServiceImpl implements PlayerService {
         String checkPlayer = checkPlayerToRegister(player);
 
         if (checkPlayer.equals("OK")) {
-            UserDetails userDetails = new JwtUserDetailsService().loadUserByUsername(player.getEmail());
+            UserDetails userDetails = new JwtUserDetailsService(this.playerRepository).loadUserByUsername(player.getEmail());
             result = PlayerDTO.builder()
                     .nombre(player.getNombre())
                     .apellidos(player.getApellidos())
@@ -77,16 +77,19 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public PlayerDTO login(PlayerDTO player) {
+    public PlayerDTO findByEmail(String email) {
         PlayerDTO result;
-
-        log.debug("PlayerServiceImpl.login: " + player);
-        result = PlayerDTO.builder()
-                .email(player.getEmail())
-                .respStatus("OK")
-                .respMessage("Jugador logueado correctamente.")
-                .build();
-
+        Player player = this.playerRepository.findByEmail(email).orElse(null);
+        if (player != null) {
+            result = this.playerMapper.toDTO(player);
+            result.setRespStatus("OK");
+            result.setRespMessage("Jugador encontrado.");
+        } else {
+            result = PlayerDTO.builder()
+                    .respStatus("ERROR")
+                    .respMessage("No se ha encontrado ningún jugador con ese e-mail.")
+                    .build();
+        }
         return result;
     }
 }
