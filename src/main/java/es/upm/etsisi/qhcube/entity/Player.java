@@ -2,7 +2,6 @@ package es.upm.etsisi.qhcube.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -44,8 +43,8 @@ public class Player {
     private boolean enabled;
 
     @Basic
-    @Column(name = "verification_code")
-    private String verificationCode;
+    @Column(name = "vericode")
+    private String vericode;
 
     @OneToMany(mappedBy = "player")
     private List<Game> games;
@@ -55,13 +54,14 @@ public class Player {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Player jugador = (Player) o;
+        Player player = (Player) o;
 
-        if (id != jugador.id) return false;
-        if (!Objects.equals(nombre, jugador.nombre)) return false;
-        if (!Objects.equals(apellidos, jugador.apellidos)) return false;
-        if (!Objects.equals(email, jugador.email)) return false;
-        return Objects.equals(jwttoken, jugador.jwttoken);
+        if (id != player.id) return false;
+        if (!Objects.equals(nombre, player.nombre)) return false;
+        if (!Objects.equals(apellidos, player.apellidos)) return false;
+        if (!Objects.equals(email, player.email)) return false;
+        if (!Objects.equals(vericode, player.vericode)) return false;
+        return Objects.equals(jwttoken, player.jwttoken);
     }
 
     @Override
@@ -71,6 +71,7 @@ public class Player {
         result = 31 * result + (apellidos != null ? apellidos.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (jwttoken != null ? jwttoken.hashCode() : 0);
+        result = 31 * result + (vericode != null ? vericode.hashCode() : 0);
         return result;
     }
 
@@ -81,6 +82,7 @@ public class Player {
                 "apellidos = " + apellidos + ", " +
                 "email = " + email + ", " +
                 "password = " + password + ", " +
-                "jwttoken = " + jwttoken + ")";
+                "jwttoken = " + jwttoken  + ", " +
+                "vericode = " + vericode + ")";
     }
 }
