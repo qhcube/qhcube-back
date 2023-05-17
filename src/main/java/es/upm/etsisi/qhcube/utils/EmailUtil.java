@@ -33,7 +33,7 @@ public class EmailUtil {
         // TODO: Poner la direción de la APIREST en el enlace
         String content = "Estimado " + player.getNombre() + " " + player.getApellidos() + ",<br>"
                 + "Haz click al enlace de abajo para verificar tu registro:<br>"
-                + "<h3><a href='[[URL]]' target='_self'>VERIFICAR</a></h3>"
+                + "<h3><a href=\"[[URL]]\" target='_self'>VERIFICAR</a></h3>"
                 + "¡GRACIAS!<br />"
                 + "QHCube Juego by Jesús García.";
 
@@ -45,15 +45,13 @@ public class EmailUtil {
         helper.setSubject(subject);
         helper.setReplyTo(fromAddress, senderName);
 
-        log.debug("envUtil.getHost() = " + this.envUtil.getHost());
-        log.debug("envUtil.getPort() = " + this.envUtil.getPort());
-
-        String verifyURL = this.envUtil.getHost() + ":" + this.envUtil.getPort()
+        String verifyURL = "http://" + this.envUtil.getHost() + ":" + this.envUtil.getPort()
                 + "/verify?code=" + player.getVericode();
 
-        log.debug("verifyURL = " + verifyURL);
 
         content = content.replace("[[URL]]", verifyURL);
+
+        log.debug(content);
 
         helper.setText(content, true);
 
