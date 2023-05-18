@@ -1,5 +1,6 @@
 package es.upm.etsisi.qhcube.config;
 
+import es.upm.etsisi.qhcube.utils.EnvUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,19 +11,27 @@ import java.util.Properties;
 @Configuration
 public class MailSenderConfig {
 
+    private final EnvUtil envUtil;
+
+    public MailSenderConfig(EnvUtil envUtil) {
+        this.envUtil = envUtil;
+    }
+
+
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.upm.es");
-        mailSender.setPort(587);
-        mailSender.setUsername("tecnicos.si.etsisi@upm.es");
-        mailSender.setPassword("***REMOVED***");
-        mailSender.setDefaultEncoding("UTF-8");
+
+        mailSender.setHost(envUtil.getMailHost());
+        mailSender.setPort(envUtil.getMailPort());
+        mailSender.setUsername(envUtil.getMailUsername());
+        mailSender.setPassword(envUtil.getMailPassword());
+        mailSender.setDefaultEncoding(envUtil.getMailEncoding());
 
         Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", true);
-        props.put("mail.smtp.starttls.enable", true);
+        props.put("mail.transport.protocol", envUtil.getMailTrasnportProtocol());
+        props.put("mail.smtp.auth", envUtil.isMailSmtpAuth());
+        props.put("mail.smtp.starttls.enable", envUtil.isMailSmtpStarttlsEnable());
         props.put("mail.debug", false);
 
         return mailSender;

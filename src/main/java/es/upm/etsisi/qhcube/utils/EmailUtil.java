@@ -27,10 +27,10 @@ public class EmailUtil {
 
         JavaMailSender emailSender = this.mailSenderConfig.getJavaMailSender();
 
-        String fromAddress = "tecnicos.si.etsisi@upm.es";
-        String senderName = "Juego del Hipercubo Cuántico";
+        String fromAddress = envUtil.getMailFromAddress();
+        String senderName = envUtil.getMailSenderName();
         String subject = "Por favor, verifica tu registro";
-        // TODO: Poner la direción de la APIREST en el enlace
+
         String content = "Estimado " + player.getNombre() + " " + player.getApellidos() + ",<br>"
                 + "Haz click al enlace de abajo para verificar tu registro:<br>"
                 + "<h3><a href=\"[[URL]]\" target='_self'>VERIFICAR</a></h3>"
@@ -45,17 +45,13 @@ public class EmailUtil {
         helper.setSubject(subject);
         helper.setReplyTo(fromAddress, senderName);
 
-        String verifyURL = "http://" + this.envUtil.getHost() + ":" + this.envUtil.getPort()
+        String verifyURL = "http://" + this.envUtil.getServerHost() + ":" + this.envUtil.getServerPort()
                 + "/verify?code=" + player.getVericode();
 
-
         content = content.replace("[[URL]]", verifyURL);
-
-        log.debug(content);
 
         helper.setText(content, true);
 
         emailSender.send(message);
-
     }
 }
