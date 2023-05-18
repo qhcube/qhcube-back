@@ -41,7 +41,6 @@ public class RegistrationService {
 
             try {
                 this.emailUtil.sendVerificationEmail(player);
-                log.debug("Player " + player);
             } catch (MessagingException | UnsupportedEncodingException e) {
                 player.setRespStatus("ERROR");
                 player.setRespMessage("No se ha podido enviar el e-mail de verificación.");
