@@ -27,7 +27,7 @@ public class JwtAuthenticationRESTController {
         return ResponseEntity.ok(this.loginService.login(player));
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = "${apiFreePrefix}/register", method = RequestMethod.POST)
     public ResponseEntity<PlayerDTO> registrarJugadorNuevo (@RequestBody PlayerDTO player) {
         return ResponseEntity.ok(this.registrationService.register(player));
     }
