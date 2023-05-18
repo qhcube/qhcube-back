@@ -16,6 +16,9 @@ public class EnvUtil {
 
     private final String serverPort;
     private final String serverHost;
+    private final String serverUrl;
+    private final String apiPrefix;
+    private final String apiFreePrefix;
     private final String mailHost;
     private final int mailPort;
     private final String mailUsername;
@@ -32,12 +35,16 @@ public class EnvUtil {
 
         this.serverPort = env.getProperty("server.port");
         this.serverHost = env.getProperty("server.host");
+        this.serverUrl = env.getProperty("server.url");
+
+        this.apiPrefix = env.getProperty("apiPrefix");
+        this.apiFreePrefix = env.getProperty("apiFreePrefix");
 
         this.mailHost = env.getProperty("spring.mail.host");
         this.mailPort = Integer.parseInt(Objects.requireNonNull(env.getProperty("spring.mail.port")));
         this.mailUsername = env.getProperty("spring.mail.username");
         this.mailPassword = env.getProperty("spring.mail.password");
-        this.mailEncoding = env.getProperty("spring.mail.encoding");
+        this.mailEncoding = env.getProperty("spring.mail.default-encoding");
         this.mailSenderName = env.getProperty("qhcube.mail.sender.name");
         this.mailFromAddress = env.getProperty("qhcube.mail.from.address");
         this.mailTrasnportProtocol = env.getProperty("spring.mail.transport.protocol");

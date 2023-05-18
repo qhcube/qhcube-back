@@ -45,8 +45,9 @@ public class EmailUtil {
         helper.setSubject(subject);
         helper.setReplyTo(fromAddress, senderName);
 
-        String verifyURL = "http://" + this.envUtil.getServerHost() + ":" + this.envUtil.getServerPort()
-                + "/verify?code=" + player.getVericode();
+        String verifyURL = this.envUtil.getServerUrl()
+                + this.envUtil.getApiFreePrefix()
+                + "/emailvalidation?code=" + player.getVericode();
 
         content = content.replace("[[URL]]", verifyURL);
 
