@@ -47,7 +47,8 @@ public class EmailUtil {
 
         String verifyURL = this.envUtil.getServerUrl()
                 + this.envUtil.getApiFreePrefix()
-                + "/emailvalidation?code=" + player.getVericode();
+                + "/emailvalidation?code=" + player.getVericode()
+                + "&email=" + player.getEmail();
 
         content = content.replace("[[URL]]", verifyURL);
 
