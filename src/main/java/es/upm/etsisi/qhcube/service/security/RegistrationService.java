@@ -1,6 +1,7 @@
 package es.upm.etsisi.qhcube.service.security;
 
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
+import es.upm.etsisi.qhcube.entity.Player;
 import es.upm.etsisi.qhcube.mapper.PlayerMapper;
 import es.upm.etsisi.qhcube.repository.PlayerRepository;
 import es.upm.etsisi.qhcube.utils.EmailUtil;
@@ -63,6 +64,28 @@ public class RegistrationService {
         else if (player.getPassword().length() < 6) result = "La contraseña debe tener al menos 6 caracteres.";
         else if (!EmailValidator.getInstance().isValid(player.getEmail())) result = "El e-mail no es válido.";
         else if (this.playerRepository.findByEmail(player.getEmail()).isPresent()) result = "Ya existe un jugador con ese e-mail.";
+
+        return result;
+    }
+
+    public PlayerDTO validateEmail(String validationCode, String email) {
+        Player player = this.playerRepository.findByEmail(email).orElse(null);
+        PlayerDTO result = new PlayerDTO();
+        if (player != null) {
+            if (player.getVericode().equals(validationCode)) {
+                player.setVericode(null);
+                player.setEnabled(true);
+                this.playerRepository.save(player);
+                result.setRespStatus("OK");
+                result.setRespMessage("Email validado correctamente.");
+            } else {
+                result.setRespStatus("ERROR");
+                result.setRespMessage("El código de validación no es correcto.");
+            }
+        } else {
+            result.setRespStatus("ERROR");
+            result.setRespMessage("No existe ningún jugador con ese e-mail.");
+        }
 
         return result;
     }

@@ -17,6 +17,7 @@ public class EnvUtil {
     private final String serverPort;
     private final String serverHost;
     private final String serverUrl;
+    private final String frontendUrl;
     private final String apiPrefix;
     private final String apiFreePrefix;
     private final String mailHost;
@@ -36,6 +37,7 @@ public class EnvUtil {
         this.serverPort = env.getProperty("server.port");
         this.serverHost = env.getProperty("server.host");
         this.serverUrl = env.getProperty("server.url");
+        this.frontendUrl = env.getProperty("frontend.url");
 
         this.apiPrefix = env.getProperty("apiPrefix");
         this.apiFreePrefix = env.getProperty("apiFreePrefix");
