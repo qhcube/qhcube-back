@@ -18,6 +18,7 @@ along with Gadis.  If not, see <http://www.gnu.org/licenses/>.
 package es.upm.etsisi.qhcube.service.security;
 
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
+import es.upm.etsisi.qhcube.mapper.PlayerMapper;
 import es.upm.etsisi.qhcube.service.player.PlayerService;
 import es.upm.etsisi.qhcube.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -35,15 +36,18 @@ public class LoginService {
     private final JwtTokenUtil jwtTokenUtil;
     private final JwtUserDetailsService userDetailsService;
     private final PlayerService playerService;
+    private final PlayerMapper playerMapper;
 
     public LoginService(AuthenticationManager authenticationManager,
                         JwtTokenUtil jwtTokenUtil,
                         JwtUserDetailsService userDetailsService,
-                        PlayerService playerService) {
+                        PlayerService playerService,
+                        PlayerMapper playerMapper) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.playerService = playerService;
+        this.playerMapper = playerMapper;
     }
 
     public PlayerDTO login(PlayerDTO player) {
@@ -55,9 +59,12 @@ public class LoginService {
                     player.getEmail(), player.getPassword()));
             final UserDetails userDetails = this.userDetailsService.loadUserByUsername(player.getEmail());
             final String token = this.jwtTokenUtil.generateToken(userDetails);
-            this.playerService.findByEmail(player.getEmail())
+            result = this.playerService.findByEmail(player.getEmail())
                     .setJwttoken(token);
+            this.playerService.save(this.playerMapper.toEntity(result));
             authStatus = "OK";
+            result = this.playerService.findByEmail(player.getEmail());
+            result.setJwttoken(token).setPassword(null);
         } catch (DisabledException e) {
             authMessage = "Usuario no activado.";
         } catch (BadCredentialsException e) {
