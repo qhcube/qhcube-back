@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 public class GameDTO {
 
-    private int id;
+    private long id;
     private Timestamp initialTime;
     private Timestamp endTime;
     private Timestamp totalGameTime;
