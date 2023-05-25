@@ -18,7 +18,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "initial_time")

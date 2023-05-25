@@ -13,7 +13,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class PlayerDTO implements Serializable {
 
-    private int id;
+    private long id;
     private String nombre;
     private String apellidos;
     private String email;
