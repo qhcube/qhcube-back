@@ -1,0 +1,47 @@
+package es.upm.etsisi.qhcube.service.player;
+
+import es.upm.etsisi.qhcube.dto.PlayerDTO;
+import es.upm.etsisi.qhcube.entity.Player;
+import es.upm.etsisi.qhcube.mapper.PlayerMapper;
+import es.upm.etsisi.qhcube.repository.PlayerRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
+
+@Slf4j
+@Service
+public class PlayerServiceImpl implements PlayerService {
+
+    private final PlayerRepository playerRepository;
+    private final PlayerMapper playerMapper;
+
+    public PlayerServiceImpl(PlayerRepository playerRepository, PlayerMapper playerMapper) {
+        this.playerRepository = playerRepository;
+        this.playerMapper = playerMapper;
+    }
+
+    @Override
+    public JpaRepository<Player, Long> getRepository() {
+        return this.playerRepository;
+    }
+
+
+    @Override
+    public PlayerDTO findByEmail(String email) {
+        PlayerDTO result;
+        Player player = this.playerRepository.findByEmail(email).orElse(null);
+        if (player != null) {
+            result = this.playerMapper.toDTO(player);
+            result.setRespStatus("OK");
+            result.setRespMessage("Jugador encontrado.");
+        } else {
+            result = PlayerDTO.builder()
+                    .respStatus("ERROR")
+                    .respMessage("No se ha encontrado ningún jugador con ese e-mail.")
+                    .build();
+        }
+        return result;
+    }
+
+
+}
