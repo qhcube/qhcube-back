@@ -15,9 +15,4 @@ public class PlayerFreeRESTController extends PlayerRESTController {
     public PlayerFreeRESTController(PlayerService jugadorService, PlayerMapper jugadorMapper) {
         super(jugadorService, jugadorMapper);
     }
-
-    @RequestMapping(value = "/testing", method = RequestMethod.GET)
-    public ResponseEntity<String> testing () {
-        return ResponseEntity.ok("hola");
-    }
 }
