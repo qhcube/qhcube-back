@@ -31,11 +31,13 @@ public class EmailUtil {
         String senderName = envUtil.getMailSenderName();
         String subject = "Por favor, verifica tu registro";
 
-        String content = "Estimado " + player.getNombre() + " " + player.getApellidos() + ",<br>"
-                + "Haz click al enlace de abajo para verificar tu registro:<br>"
-                + "<h3><a href=\"[[URL]]\" target='_self'>VERIFICAR</a></h3>"
-                + "¡GRACIAS!<br />"
-                + "QHCube Juego by Jesús García.";
+        String content = "Estimado <b>" + player.getNombre() + " " + player.getApellidos() + "</b>,<br/><br/>"
+                + "Haz click en el enlace de abajo para verificar tu registro:<br>"
+                + "<h3><a href=\"[[URL]]\" target='_self'>VERIFICAR</a></h3><br/>"
+                + "También puedes copiar y pegar el siguiente enlace en tu navegador:<br/><br/>"
+                + "[[URL]]<br/><br/><br/>"
+                + "¡GRACIAS!<br/><br/>"
+                + "QHCube by Jesús Lacalle.";
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
