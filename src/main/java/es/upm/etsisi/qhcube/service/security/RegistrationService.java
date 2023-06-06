@@ -29,7 +29,6 @@ public class RegistrationService {
         this.emailUtil = emailUtil;
     }
 
-
     public PlayerDTO register(PlayerDTO player) {
         String checkPlayer = checkPlayerToRegister(player);
 
