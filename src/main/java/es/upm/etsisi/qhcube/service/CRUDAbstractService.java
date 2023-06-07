@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface AbstractService<E> {
+public interface CRUDAbstractService<E> {
 
     JpaRepository<E, Long> getRepository();
 
