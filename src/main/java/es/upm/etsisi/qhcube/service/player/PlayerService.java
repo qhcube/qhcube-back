@@ -6,4 +6,6 @@ import es.upm.etsisi.qhcube.service.CRUDAbstractService;
 
 public interface PlayerService extends CRUDAbstractService<Player> {
     PlayerDTO findByEmail(String email);
+
+    // TODO Implement find by token
 }
