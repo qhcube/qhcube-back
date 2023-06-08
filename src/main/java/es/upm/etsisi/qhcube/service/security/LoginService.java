@@ -27,6 +27,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -65,12 +66,20 @@ public class LoginService {
             authStatus = "OK";
             result = this.playerService.findByEmail(player.getEmail());
             result.setJwttoken(token).setPassword(null);
-        } catch (DisabledException e) {
-            authMessage = "Usuario no activado.";
         } catch (BadCredentialsException e) {
             authMessage = "Credenciales incorrectas.";
+        } catch (DisabledException e) {
+            if (this.passwordIsCorrect(player))
+                authMessage = "Usuario no activado.";
+            else
+                authMessage = "Credenciales incorrectas.";
         }
-
         return result.setRespStatus(authStatus).setRespMessage(authMessage);
+    }
+
+    private boolean passwordIsCorrect(PlayerDTO player) {
+        String hashedPassword = this.playerService.findByEmail(player.getEmail()).getPassword();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.matches(player.getPassword(), hashedPassword);
     }
 }
