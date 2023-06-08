@@ -55,6 +55,7 @@ public class SecurityConfig {
                     cors.setAllowedOrigins(List.of("*"));
                     cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     cors.setAllowedHeaders(List.of("*"));
+                    cors.addExposedHeader("authorization");
                     return cors;
                 })
                 .and()
