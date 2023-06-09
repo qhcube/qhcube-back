@@ -27,6 +27,15 @@ public class PlayerDTO implements Serializable {
     private String respStatus;
     private String respMessage;
 
+    public PlayerDTO softClean() {
+        this.id = 0;
+        this.password = "";
+        this.jwttoken = "";
+        this.enabled = false;
+        this.vericode = "";
+        return this;
+    }
+
     @Override
     public String toString() {
         return "PlayerDTO{" +

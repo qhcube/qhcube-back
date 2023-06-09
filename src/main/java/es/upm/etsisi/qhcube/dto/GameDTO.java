@@ -1,5 +1,6 @@
 package es.upm.etsisi.qhcube.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -7,17 +8,31 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
+@Builder
 @Accessors(chain = true)
 public class GameDTO {
 
     private long id;
-    private Timestamp initialTime;
-    private Timestamp endTime;
-    private Timestamp totalGameTime;
+    @Builder.Default
+    private Timestamp initialTime = Timestamp.valueOf("2000-01-01 00:00:00");
+    @Builder.Default
+    private Timestamp endTime = Timestamp.valueOf("2000-01-01 00:00:00");
+    @Builder.Default
+    private Timestamp totalGameTime = Timestamp.valueOf("2000-01-01 00:00:00");
     private String movsList;
     private String input;
 
     private PlayerDTO player;
+
+    public GameDTO softClean() {
+        this.id = 0;
+        this.initialTime = Timestamp.valueOf("2000-01-01 00:00:00");
+        this.endTime = Timestamp.valueOf("2000-01-01 00:00:00");
+        this.totalGameTime = Timestamp.valueOf("2000-01-01 00:00:00");
+        this.movsList = "";
+        this.input = "";
+        return this;
+    }
 
     public Timestamp getTotalGameTime() {
         return new Timestamp(endTime.getTime() - initialTime.getTime());
