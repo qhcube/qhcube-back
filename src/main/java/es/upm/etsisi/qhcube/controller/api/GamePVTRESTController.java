@@ -2,12 +2,13 @@ package es.upm.etsisi.qhcube.controller.api;
 
 import es.upm.etsisi.qhcube.controller.GameRESTController;
 import es.upm.etsisi.qhcube.dto.GameDTO;
+import es.upm.etsisi.qhcube.dto.PlayerDTO;
 import es.upm.etsisi.qhcube.mapper.GameMapper;
 import es.upm.etsisi.qhcube.service.game.GameService;
+import es.upm.etsisi.qhcube.service.game.InputService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Slf4j
@@ -15,8 +16,11 @@ import java.util.List;
 @RequestMapping("${apiPrefix}/game")
 public class GamePVTRESTController extends GameRESTController {
 
-    public GamePVTRESTController(GameService gameService, GameMapper gameMapper) {
+    private final InputService inputService;
+
+    public GamePVTRESTController(GameService gameService, GameMapper gameMapper, InputService inputService) {
         super(gameService, gameMapper);
+        this.inputService = inputService;
     }
 
     @GetMapping(path="/get-all")
@@ -33,5 +37,10 @@ public class GamePVTRESTController extends GameRESTController {
     public ResponseEntity<String> testGame(@RequestBody String input) {
         log.info("testGame PVT: {}", input);
         return ResponseEntity.ok("OK");
+    }
+
+    @PostMapping(path="/init-registered-game")
+    public ResponseEntity<GameDTO> initGame(@RequestBody PlayerDTO playerDTO) {
+        return ResponseEntity.ok(this.inputService.initRegisteredGame(playerDTO));
     }
 }
