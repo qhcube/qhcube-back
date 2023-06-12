@@ -53,4 +53,15 @@ public class InputDTO {
         rowB[3] = new CoordinateDTO(0, -1, 3, 4);
         return this;
     }
+
+    public void exchange(int j, int k) {
+        CoordinateDTO aux = this.getRowA()[j];
+        this.getRowA()[j] = this.getRowA()[k];
+        rowA[k] = aux;
+
+        aux = this.getRowB()[j];
+        this.getRowB()[k] = this.getRowB()[j];
+        this.getRowB()[j] = aux;
+
+    }
 }

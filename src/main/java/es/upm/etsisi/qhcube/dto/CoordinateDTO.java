@@ -15,6 +15,8 @@ public class CoordinateDTO {
     private int z;
     private int i;
 
+
+
     // return "[x,y,z,i]"
     @Override
     public String toString() {
