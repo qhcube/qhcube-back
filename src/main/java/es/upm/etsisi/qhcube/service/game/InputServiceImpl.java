@@ -1,12 +1,12 @@
 package es.upm.etsisi.qhcube.service.game;
 
 import es.upm.etsisi.qhcube.dto.GameDTO;
+import es.upm.etsisi.qhcube.dto.InputDTO;
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
 import es.upm.etsisi.qhcube.service.player.PlayerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.Objects;
-import java.util.stream.IntStream;
 
 @Slf4j
 @Service
@@ -25,7 +25,7 @@ public class InputServiceImpl implements InputService {
 
         GameDTO newGameDTO = GameDTO.builder()
                 .initialTime(new java.sql.Timestamp(System.currentTimeMillis()))
-                .input(this.generateRandomInput())
+                .input(new InputDTO().setInitialPracticeInput().toString())
                 .player(playerDTO)
                 .build();
         PlayerDTO playerInDB = this.playerService.findByEmail(playerDTO.getEmail());
@@ -36,32 +36,8 @@ public class InputServiceImpl implements InputService {
 
         newGameDTO.getPlayer().softClean();
 
+        log.debug("Generated2: " + newGameDTO.getInput());
+
         return newGameDTO;
-    }
-
-    private String generateRandomInput() {
-        int[] number = IntStream.range(0, 32)
-                .mapToObj(i -> String.valueOf((int) (Math.random() * 100)))
-                .mapToInt(Integer::parseInt)
-                .toArray();
-
-        StringBuilder result = new StringBuilder("[");
-        for (int i = 0; i < number.length; i++) {
-            if (i%16 == 0)
-                result.append("[");
-            if (i%4 == 0)
-                result.append("[");
-            result.append(number[i]);
-            if (i%4 == 3)
-                result.append("]");
-            if (i%16 == 15)
-                result.append("]");
-            if (i<31)
-                result.append(",");
-        }
-
-        return result + "]";
-
-
     }
 }
