@@ -1,10 +1,10 @@
 package es.upm.etsisi.qhcube.service.game;
 
 import es.upm.etsisi.qhcube.dto.GameDTO;
-import es.upm.etsisi.qhcube.dto.InputDTO;
+import es.upm.etsisi.qhcube.utils.input.Input;
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
 import es.upm.etsisi.qhcube.service.player.PlayerService;
-import es.upm.etsisi.qhcube.utils.InputManager;
+import es.upm.etsisi.qhcube.utils.input.InputManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.Objects;
@@ -24,11 +24,11 @@ public class InputServiceImpl implements InputService {
         playerDTO.setRespStatus("OK");
         playerDTO.setRespMessage("Juego iniciado correctamente.");
 
-        InputManager inputManager = new InputManager();
-        InputDTO initialInput = new InputDTO().setInitialPracticeInput();
+        Input initialInput = new Input().setInitialPracticeInput();
 
         for (int i = 0; i < 9; i++) {
-            inputManager.randomExchange(initialInput);
+            InputManager.randomPermute(initialInput);
+            InputManager.randomExchange(initialInput);
         }
 
         GameDTO newGameDTO = GameDTO.builder()

@@ -1,4 +1,4 @@
-package es.upm.etsisi.qhcube.dto;
+package es.upm.etsisi.qhcube.utils.input;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CoordinateDTO {
+public class Coordinate {
     // Coorndenadas en formato (x,y,z,i)
     private int[] coordinates = new int[4];
 
@@ -18,16 +18,9 @@ public class CoordinateDTO {
         return "[" + coordinates[0] + "," + coordinates[1] + "," + coordinates[2] + "," + coordinates[3] + "]";
     }
 
-    public CoordinateDTO setRandomCoordinate() {
+    public void setRandomCoordinate() {
         for (int i = 0; i < 4; i++) {
             this.coordinates[i] = (int) (Math.random() * 8);
         }
-        return this;
-    }
-
-    public void exchange(int j, int k) {
-        int aux = this.coordinates[j];
-        this.coordinates[j] = this.coordinates[k];
-        this.coordinates[k] = aux;
     }
 }
