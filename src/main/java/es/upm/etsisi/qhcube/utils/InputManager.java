@@ -11,11 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class InputManager {
     public void randomExchange(InputDTO inputDTO) {
+        int elem = (int) (Math.random() * 2);
         int j = (int) (Math.random() * 4);
         int k = (int) (Math.random() * 4);
 
         if (j != k) {
-            inputDTO.exchange(j, k);
+            inputDTO.exchange(elem, j, k);
         }
     }
 }

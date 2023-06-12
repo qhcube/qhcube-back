@@ -26,7 +26,8 @@ public class InputServiceImpl implements InputService {
 
         InputManager inputManager = new InputManager();
         InputDTO initialInput = new InputDTO().setInitialPracticeInput();
-        for (int i = 0; i < (int) (Math.random() * 8); i++) {
+
+        for (int i = 0; i < 9; i++) {
             inputManager.randomExchange(initialInput);
         }
 
