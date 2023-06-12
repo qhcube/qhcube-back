@@ -43,25 +43,30 @@ public class InputDTO {
 
         // [[7, -2, 1, 0], [3, 6, 1, 0], [-1, -1, 7, -1], [0, 1, -1, 6]],[[2, -2, -1, 1], [0, 4, 1, -1], [-1, 1, 1, 3], [0, -1, 3, 4]]        ]
 
-        rowA[0] = new CoordinateDTO(7, -2, 1, 0);
-        rowA[1] = new CoordinateDTO(3, 6, 1, 0);
-        rowA[2] = new CoordinateDTO(-1, -1, 7, -1);
-        rowA[3] = new CoordinateDTO(0, 1, -1, 6);
-        rowB[0] = new CoordinateDTO(2, -2, -1, 1);
-        rowB[1] = new CoordinateDTO(0, 4, 1, -1);
-        rowB[2] = new CoordinateDTO(-1, 1, 1, 3);
-        rowB[3] = new CoordinateDTO(0, -1, 3, 4);
+        rowA[0] = new CoordinateDTO(new int[]{7, -2, 1, 0});
+        rowA[1] = new CoordinateDTO(new int[]{3, 6, 1, 0});
+        rowA[2] = new CoordinateDTO(new int[]{-1, -1, 7, -1});
+        rowA[3] = new CoordinateDTO(new int[]{0, 1, -1, 6});
+        rowB[0] = new CoordinateDTO(new int[]{2, -2, -1, 1});
+        rowB[1] = new CoordinateDTO(new int[]{0, 4, 1, -1});
+        rowB[2] = new CoordinateDTO(new int[]{-1, 1, 1, 3});
+        rowB[3] = new CoordinateDTO(new int[]{0, -1, 3, 4});
         return this;
     }
 
-    public void exchange(int j, int k) {
-        CoordinateDTO aux = this.getRowA()[j];
-        this.getRowA()[j] = this.getRowA()[k];
-        rowA[k] = aux;
-
-        aux = this.getRowB()[j];
-        this.getRowB()[k] = this.getRowB()[j];
-        this.getRowB()[j] = aux;
-
+    public void exchange(int elem, int j, int k) {
+        if (elem == 0) {
+            for (int i = 0; i < 4; i++) {
+                this.getRowA()[i].exchange(j, k);
+                this.getRowB()[i].exchange(j, k);
+            }
+        } else {
+            CoordinateDTO aux = this.getRowA()[j];
+            this.getRowA()[j] = this.getRowA()[k];
+            rowA[k] = aux;
+            aux = this.getRowB()[j];
+            this.getRowB()[j] = this.getRowB()[k];
+            rowB[k] = aux;
+        }
     }
 }

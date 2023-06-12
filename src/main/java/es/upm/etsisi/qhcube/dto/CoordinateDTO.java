@@ -10,24 +10,24 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CoordinateDTO {
     // Coorndenadas en formato (x,y,z,i)
-    private int x;
-    private int y;
-    private int z;
-    private int i;
-
-
+    private int[] coordinates = new int[4];
 
     // return "[x,y,z,i]"
     @Override
     public String toString() {
-        return "[" + x + "," + y + "," + z + "," + i + "]";
+        return "[" + coordinates[0] + "," + coordinates[1] + "," + coordinates[2] + "," + coordinates[3] + "]";
     }
 
     public CoordinateDTO setRandomCoordinate() {
-        this.x = (int) (Math.random() * 8);
-        this.y = (int) (Math.random() * 8);
-        this.z = (int) (Math.random() * 8);
-        this.i = (int) (Math.random() * 8);
+        for (int i = 0; i < 4; i++) {
+            this.coordinates[i] = (int) (Math.random() * 8);
+        }
         return this;
+    }
+
+    public void exchange(int j, int k) {
+        int aux = this.coordinates[j];
+        this.coordinates[j] = this.coordinates[k];
+        this.coordinates[k] = aux;
     }
 }
