@@ -14,7 +14,7 @@ public class GameDTO {
 
     private long id;
     @Builder.Default
-    private Timestamp initialTime = Timestamp.valueOf("2000-01-01 00:00:00");
+    private Timestamp initialTime = Timestamp.valueOf("2001-01-01 00:00:00");
     @Builder.Default
     private Timestamp endTime = Timestamp.valueOf("2000-01-01 00:00:00");
     @Builder.Default
@@ -26,7 +26,7 @@ public class GameDTO {
 
     public GameDTO softClean() {
         this.id = 0;
-        this.initialTime = Timestamp.valueOf("2000-01-01 00:00:00");
+        this.initialTime = Timestamp.valueOf("2001-01-01 00:00:00");
         this.endTime = Timestamp.valueOf("2000-01-01 00:00:00");
         this.totalGameTime = Timestamp.valueOf("2000-01-01 00:00:00");
         this.movsList = "";
