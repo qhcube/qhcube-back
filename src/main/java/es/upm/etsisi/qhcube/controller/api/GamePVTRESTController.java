@@ -7,6 +7,7 @@ import es.upm.etsisi.qhcube.mapper.GameMapper;
 import es.upm.etsisi.qhcube.service.game.GameService;
 import es.upm.etsisi.qhcube.service.game.InputService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -42,5 +43,10 @@ public class GamePVTRESTController extends GameRESTController {
     @PostMapping(path="/init-registered-game")
     public ResponseEntity<GameDTO> initGame(@RequestBody PlayerDTO playerDTO) {
         return ResponseEntity.ok(this.inputService.initRegisteredGame(playerDTO));
+    }
+
+    @PostMapping(path="/add-move")
+    public ResponseEntity<GameDTO> addMove(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken, @RequestBody String move) {
+        return ResponseEntity.ok(this.inputService.addMove(jwttoken, move));
     }
 }

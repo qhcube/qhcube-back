@@ -34,6 +34,19 @@ public class GameDTO {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "id: " + id +
+                ", initialTime: '" + this.getInitialTime() + '\'' +
+                ", endTime: '" + this.getEndTime() + '\'' +
+                ", totalGameTime: '" + this.getTotalGameTime() + '\'' +
+                ", movsList: '" + this.getMovsList() + '\'' +
+                ", input: '" + this.getInput() + '\'' +
+                ", player: " + player.getId() +
+                '}';
+    }
+
     public Timestamp getTotalGameTime() {
         return new Timestamp(endTime.getTime() - initialTime.getTime());
     }

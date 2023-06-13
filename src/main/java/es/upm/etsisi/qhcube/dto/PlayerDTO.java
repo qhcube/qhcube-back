@@ -2,9 +2,10 @@ package es.upm.etsisi.qhcube.dto;
 
 import lombok.*;
 import lombok.experimental.Accessors;
-
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter @ Setter
 @Builder
@@ -38,16 +39,16 @@ public class PlayerDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "PlayerDTO{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", apellidos='" + apellidos + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", jwttoken='" + jwttoken + '\'' +
-                ", games=" + games +
-                ", respStatus='" + respStatus + '\'' +
-                ", respMessage='" + respMessage + '\'' +
+        return "PlayerDTO {" +
+                "id: " + id +
+                ", nombre: '" + nombre + '\'' +
+                ", apellidos: '" + apellidos + '\'' +
+                ", email: '" + email + '\'' +
+                ", password: '" + password + '\'' +
+                ", jwttoken: '" + jwttoken + '\'' +
+                ", games: " + games.stream().map(GameDTO::toString).collect(Collectors.joining(", ", "{", "}")) +
+                ", respStatus: '" + respStatus + '\'' +
+                ", respMessage: '" + respMessage + '\'' +
                 '}';
     }
 }
