@@ -295,5 +295,34 @@ public class Input {
         this.setVarCoordinates(var_coor);
         return (nivel);
     }
+
+
+    public int getReducedLevel() {
+        int i, level = 0;
+        int[][][] var_coor = this.getVarCoordinates();
+
+        for(i=0; i<4; ++i) {
+            level += var_coor[0][0][i]*var_coor[0][0][i] + var_coor[1][0][i]*var_coor[1][0][i];
+        }
+        return (int) Math.round(Math.log(level) / Math.log(2));
+    }
+
+    public boolean isSolved() {
+        int j, k;
+        boolean fin = true;
+        int[][][] var_coor = this.getVarCoordinates();
+
+        for (j = 0; j < 4; ++j) {
+            for (k = 0; k < 4; ++k) {
+                if (j == k && fin) {
+                    fin = (var_coor[0][j][k] == 1) && (var_coor[1][j][k] == 0);
+                } else if (fin) {
+                    fin = (var_coor[0][j][k] == 0) && (var_coor[1][j][k] == 0);
+                }
+            }
+        }
+
+        return fin;
+    }
 }
 
