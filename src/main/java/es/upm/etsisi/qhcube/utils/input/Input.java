@@ -48,7 +48,7 @@ public class Input {
         }
     }
 
-    public Input setInitialPracticeInput() {
+    public void setInitialPracticeInput() {
 
         // [[7, -2, 1, 0], [3, 6, 1, 0], [-1, -1, 7, -1], [0, 1, -1, 6]],[[2, -2, -1, 1], [0, 4, 1, -1], [-1, 1, 1, 3], [0, -1, 3, 4]]        ]
 
@@ -60,7 +60,6 @@ public class Input {
         rowB[1] = new Coordinate(new int[]{0, 4, 1, -1});
         rowB[2] = new Coordinate(new int[]{-1, 1, 1, 3});
         rowB[3] = new Coordinate(new int[]{0, -1, 3, 4});
-        return this;
     }
 
     public void permute(int elem, int j, int k) {
