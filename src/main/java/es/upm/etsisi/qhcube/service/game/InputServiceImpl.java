@@ -24,7 +24,8 @@ public class InputServiceImpl implements InputService {
         playerDTO.setRespStatus("OK");
         playerDTO.setRespMessage("Juego iniciado correctamente.");
 
-        Input initialInput = new Input().setInitialPracticeInput();
+        Input initialInput = new Input();
+        initialInput.setInitialPracticeInput();
 
         for (int i = 0; i < 9; i++) {
             InputManager.randomPermute(initialInput);
