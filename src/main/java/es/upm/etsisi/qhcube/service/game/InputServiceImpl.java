@@ -71,7 +71,7 @@ public class InputServiceImpl implements InputService {
 
         GameDTO gameDTO = playerDTO.getGames().get(0);
         gameDTO.setMovsList(gameDTO.getMovsList() + move);
-        gameDTO.setPlayer(playerDTO);
+        gameDTO.setPlayer(PlayerDTO.builder().build().setId(82));
         log.debug("addMove.gameDTO: {}", gameDTO);
 
         this.gameService.save(this.gameMapper.toEntity(gameDTO));
