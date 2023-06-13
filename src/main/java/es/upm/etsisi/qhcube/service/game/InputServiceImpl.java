@@ -1,6 +1,7 @@
 package es.upm.etsisi.qhcube.service.game;
 
 import es.upm.etsisi.qhcube.dto.GameDTO;
+import es.upm.etsisi.qhcube.mapper.GameMapper;
 import es.upm.etsisi.qhcube.utils.input.Input;
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
 import es.upm.etsisi.qhcube.service.player.PlayerService;
@@ -14,16 +15,17 @@ import java.util.Objects;
 public class InputServiceImpl implements InputService {
 
     private final PlayerService playerService;
+    private final GameService gameService;
+    private final GameMapper gameMapper;
 
-    public InputServiceImpl(PlayerService playerService) {
+    public InputServiceImpl(PlayerService playerService, GameService gameService, GameMapper gameMapper) {
         this.playerService = playerService;
+        this.gameService = gameService;
+        this.gameMapper = gameMapper;
     }
 
     @Override
     public GameDTO initRegisteredGame(PlayerDTO playerDTO) {
-        playerDTO.setRespStatus("OK");
-        playerDTO.setRespMessage("Juego iniciado correctamente.");
-
         Input initialInput = new Input();
         initialInput.setInitialPracticeInput();
 
@@ -42,6 +44,11 @@ public class InputServiceImpl implements InputService {
 
         if (playerInDB == null || !Objects.equals(playerInDB.getJwttoken(), playerDTO.getJwttoken())) {
             newGameDTO.softClean().getPlayer().setRespStatus("ERROR").setRespMessage("El usuario no existe.");
+        } else {
+            newGameDTO.setPlayer(playerInDB);
+            newGameDTO.getPlayer().setRespStatus("OK");
+            newGameDTO.getPlayer().setRespMessage("Juego iniciado correctamente.");
+            this.gameService.save(this.gameMapper.toEntity(newGameDTO));
         }
 
         newGameDTO.getPlayer().softClean();
