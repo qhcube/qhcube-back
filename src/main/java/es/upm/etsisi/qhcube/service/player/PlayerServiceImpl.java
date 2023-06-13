@@ -43,5 +43,20 @@ public class PlayerServiceImpl implements PlayerService {
         return result;
     }
 
-
+    @Override
+    public PlayerDTO findByJwttoken(String jwttoken) {
+        PlayerDTO result;
+        Player player = this.playerRepository.findByJwttoken(jwttoken).orElse(null);
+        if (player != null) {
+            result = this.playerMapper.toDTO(player);
+            result.setRespStatus("OK");
+            result.setRespMessage("Jugador encontrado.");
+        } else {
+            result = PlayerDTO.builder()
+                    .respStatus("ERROR")
+                    .respMessage("No se ha encontrado ningún jugador con ese token.")
+                    .build();
+        }
+        return result;
+    }
 }
