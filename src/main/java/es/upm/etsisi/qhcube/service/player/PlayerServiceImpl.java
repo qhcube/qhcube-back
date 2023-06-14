@@ -28,25 +28,18 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public PlayerDTO findByEmail(String email) {
-        PlayerDTO result;
         Player player = this.playerRepository.findByEmail(email).orElse(null);
-        if (player != null) {
-            result = this.playerMapper.toDTO(player);
-            result.setRespStatus("OK");
-            result.setRespMessage("Jugador encontrado.");
-        } else {
-            result = PlayerDTO.builder()
-                    .respStatus("ERROR")
-                    .respMessage("No se ha encontrado ningún jugador con ese e-mail.")
-                    .build();
-        }
-        return result;
+        return this.setRespToPlayerFound(player);
     }
 
     @Override
     public PlayerDTO findByJwttoken(String jwttoken) {
-        PlayerDTO result;
         Player player = this.playerRepository.findByJwttoken(jwttoken).orElse(null);
+        return this.setRespToPlayerFound(player);
+    }
+
+    private PlayerDTO setRespToPlayerFound(Player player) {
+        PlayerDTO result;
         if (player != null) {
             result = this.playerMapper.toDTO(player);
             result.setRespStatus("OK");
