@@ -61,22 +61,25 @@ public class Move {
      * @param move String representing the move in the format [m, p1, p2, p3]
      */
     public Move(String move) {
-        if (move.charAt(0) == '[') {
+        move = move.trim();
+
+        if (move.charAt(0) == '[' && move.endsWith("]")) {
             move = move.substring(1, move.length() - 1);
         } else {
-            log.error("Move string does not start with '['");
-        }
-
-        if (move.endsWith("]")) {
-            move = move.substring(0, move.length() - 1);
-        } else {
-            log.error("Move string does not end with ']'");
+            log.error("Move string does not start with '[' or end with ']'. MOVE is: ---" + move + "---");
         }
 
         String[] moveArray = move.split(",");
         for (int i = 0; i < moveArray.length; i++) {
             this.move[i] = Double.parseDouble(moveArray[i]);
         }
+    }
+
+    public Move(double m1, double m2, double m3, double m4) {
+        this.move[0] = m1;
+        this.move[1] = m2;
+        this.move[2] = m3;
+        this.move[3] = m4;
     }
 
     @Override

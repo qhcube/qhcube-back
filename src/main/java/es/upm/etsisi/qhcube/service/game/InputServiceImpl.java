@@ -1,11 +1,15 @@
 package es.upm.etsisi.qhcube.service.game;
 
 import es.upm.etsisi.qhcube.dto.GameDTO;
+import es.upm.etsisi.qhcube.entity.Game;
+import es.upm.etsisi.qhcube.entity.Player;
 import es.upm.etsisi.qhcube.mapper.GameMapper;
+import es.upm.etsisi.qhcube.utils.input.GameMoves;
 import es.upm.etsisi.qhcube.utils.input.Input;
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
 import es.upm.etsisi.qhcube.service.player.PlayerService;
 import es.upm.etsisi.qhcube.utils.input.InputManager;
+import es.upm.etsisi.qhcube.utils.input.Move;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +39,18 @@ public class InputServiceImpl implements InputService {
             playerDTO.softClean().setRespStatus("ERROR").setRespMessage("El usuario no existe.");
             newGameDTO = GameDTO.builder().build().softClean().setPlayer(playerDTO);
         } else {
-            log.debug("initRegisteredGame.playerInDB: {}", playerInDB);
             List<GameDTO> games = playerInDB.getGames();
+            // chack if exist started game
+            if (games != null && games.size() > 0) {
+                for (GameDTO game : games) {
+                    GameMoves gameMoves = new GameMoves(game.getMovsList());
+                    if (gameMoves.isGameOpen()) {
+                        log.debug("Juego " + game.getId() + " abierto.");
+                    } else {
+                        log.debug("Juego " + game.getId() + " cerrado.");
+                    }
+                }
+            }
 
             Input initialInput = new Input();
             initialInput.setInitialPracticeInput();
@@ -49,6 +63,7 @@ public class InputServiceImpl implements InputService {
             newGameDTO = GameDTO.builder()
                     .initialTime(new java.sql.Timestamp(System.currentTimeMillis()))
                     .input(initialInput.toString())
+                    .movsList("[4,-0.7182091216365892,0.6891022880589591,0.09650748255916076]")
                     .player(playerDTO)
                     .build();
 
@@ -65,18 +80,25 @@ public class InputServiceImpl implements InputService {
 
     @Override
     public GameDTO addMove(String jwttoken, String move) {
-        log.debug("addMove.move: {}", move);
-        log.debug("addMove.token: {}", jwttoken.substring(7));
         PlayerDTO playerDTO = this.playerService.findByJwttoken(jwttoken.substring(7));
 
+        List<GameDTO> games = playerDTO.getGames();
+        for (GameDTO game : games) {
+            GameMoves gameMoves = new GameMoves(game.getMovsList());
+        }
+
+
         GameDTO gameDTO = playerDTO.getGames().get(0);
-        gameDTO.setMovsList(gameDTO.getMovsList() + move);
-        gameDTO.setPlayer(PlayerDTO.builder().build().setId(82));
-        log.debug("addMove.gameDTO: {}", gameDTO);
+        gameDTO.setMovsList(gameDTO.getMovsList() + "," + move);
+        playerDTO.setGames(null);
+        gameDTO.setPlayer(playerDTO);
+        log.debug("addMove.gameDTO: {}", gameDTO.toJSON());
 
-        this.gameService.save(this.gameMapper.toEntity(gameDTO));
+        Game gameEntity = this.gameMapper.toEntity(gameDTO);
+        log.debug("addMove.gameEntity: {}", gameEntity);
+        this.gameService.save(gameEntity);
 
-        return null;
+        return gameDTO;
     }
 
 }

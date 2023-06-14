@@ -15,15 +15,13 @@ public interface GameMapper {
 
     @Named("sinPartidas")
     @Mapping(target = "player", qualifiedByName = "oneLevel")
-    GameDTO toDTO(Game partida);
+    GameDTO toDTO(Game game);
 
     @Named("oneLevel")
     @Mapping(target = "player", ignore = true)
-    GameDTO toDTOOneLevel(Game aula);
+    GameDTO toDTOOneLevel(Game game);
 
-    @Named("sinPartidas")
-    @IterableMapping(qualifiedByName = "sinPartidas")
-    Game toEntity(GameDTO partidaDTO);
+    Game toEntity(GameDTO gameDTO);
 
     @Named("sinPartidas")
     @IterableMapping(qualifiedByName = "sinPartidas")
