@@ -3,7 +3,6 @@ package es.upm.etsisi.qhcube.dto;
 import lombok.*;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,18 +36,35 @@ public class PlayerDTO implements Serializable {
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "PlayerDTO {" +
+    public String toJSON() {
+        return "{" +
+                "\"id\": " + id +
+                ", \"nombre\": \"" + nombre + "\"" +
+                ", \"apellidos\": \"" + apellidos + "\"" +
+                ", \"email\": \"" + email + "\"" +
+                ", \"password\": \"" + password + "\"" +
+                ", \"jwttoken\": \"" + jwttoken + "\"" +
+                ", \"enabled\": " + enabled +
+                ", \"vericode\": \"" + vericode + "\"" +
+                ", \"games\": " + ((games ==null) ? "\"\"" : games.stream().map(GameDTO::toJSON).collect(Collectors.joining(", ", "[", "]")).replaceAll("\"player\": \"\"", "\"player\": " + this.id)) +
+                ", \"respStatus\": \"" + respStatus + "\"" +
+                ", \"respMessage\": \"" + respMessage + "\"" +
+                "}";
+    }
+
+    public String toJavaScript() {
+        return "{" +
                 "id: " + id +
-                ", nombre: '" + nombre + '\'' +
-                ", apellidos: '" + apellidos + '\'' +
-                ", email: '" + email + '\'' +
-                ", password: '" + password + '\'' +
-                ", jwttoken: '" + jwttoken + '\'' +
-                ", games: " + games.stream().map(GameDTO::toString).collect(Collectors.joining(", ", "{", "}")) +
-                ", respStatus: '" + respStatus + '\'' +
-                ", respMessage: '" + respMessage + '\'' +
-                '}';
+                ", nombre: '" + nombre + "'" +
+                ", apellidos: '" + apellidos + "'" +
+                ", email: '" + email + "'" +
+                ", password: '" + password + "'" +
+                ", jwttoken: '" + jwttoken + "'" +
+                ", enabled: " + enabled +
+                ", vericode: '" + vericode + "'" +
+                ", games: " + ((games ==null) ? "''" : games.stream().map(GameDTO::toJavaScript).collect(Collectors.joining(", ", "{", "}")).replaceAll("player: ''", "player: " + this.id)) +
+                ", respStatus: '" + respStatus + "'" +
+                ", respMessage: '" + respMessage + "'" +
+                "}";
     }
 }

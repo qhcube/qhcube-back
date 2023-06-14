@@ -34,18 +34,29 @@ public class GameDTO {
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "id: " + id +
-                ", initialTime: '" + this.getInitialTime() + '\'' +
-                ", endTime: '" + this.getEndTime() + '\'' +
-                ", totalGameTime: '" + this.getTotalGameTime() + '\'' +
-                ", movsList: '" + this.getMovsList() + '\'' +
-                ", input: '" + this.getInput() + '\'' +
-                ", player: " + player.getId() +
-                '}';
-    }
+   public String toJSON() {
+               return "{" +
+               "\"id\": " + id +
+               ", \"initialTime\": \"" + initialTime + "\"" +
+               ", \"endTime\": \"" + endTime + "\"" +
+               ", \"totalGameTime\": \"" + totalGameTime + "\"" +
+               ", \"movsList\": \"" + movsList + "\"" +
+               ", \"input\": \"" + input + "\"" +
+               ", \"player\": " + (player == null ? "\"\"" : player.getId()) +
+               "}";
+   }
+
+   public String toJavaScript() {
+               return "{" +
+               "id: " + id +
+               ", initialTime: '" + initialTime + "'" +
+               ", endTime: '" + endTime + "'" +
+               ", totalGameTime: '" + totalGameTime + "'" +
+               ", movsList: '" + movsList + "'" +
+               ", input: '" + input + "'" +
+               ", player: " + (player == null ? "''" : player.getId()) +
+               "}";
+   }
 
     public Timestamp getTotalGameTime() {
         return new Timestamp(endTime.getTime() - initialTime.getTime());
