@@ -296,14 +296,17 @@ public class Input {
         return (nivel);
     }
 
-
-    public int getReducedLevel() {
+    public int getLevel() {
         int i, level = 0;
         int[][][] var_coor = this.getVarCoordinates();
 
         for(i=0; i<4; ++i) {
             level += var_coor[0][0][i]*var_coor[0][0][i] + var_coor[1][0][i]*var_coor[1][0][i];
         }
+        return level;
+    }
+
+    public int getReducedLevel(int level) {
         return (int) Math.round(Math.log(level) / Math.log(2));
     }
 
@@ -323,6 +326,125 @@ public class Input {
         }
 
         return fin;
+    }
+
+    public void Ajustar_nivel() {
+        boolean reducible = this.isReductible();
+        if (reducible) {
+            this.reduceLevel();
+        }
+    }
+
+    public boolean Comprobacion_QHCube() {
+
+        String error = "";
+        int var_j, var_k, nivel, impares, producto;
+        int var_nivel = this.getLevel();
+        int[][][] var_coor = this.getVarCoordinates();
+
+        // Nivel por filas
+
+        nivel = 0;
+        for (var_k = 0; var_k < 4; ++var_k) {
+            nivel += var_coor[0][0][var_k] * var_coor[0][0][var_k] + var_coor[1][0][var_k] * var_coor[1][0][var_k];
+        }
+        if (var_nivel != nivel) {
+            error = "Error en el nivel del QHCube: fila 1";
+        }
+
+        nivel = 0;
+        for (var_k = 0; var_k < 4; ++var_k) {
+            nivel += var_coor[0][1][var_k] * var_coor[0][1][var_k] + var_coor[1][1][var_k] * var_coor[1][1][var_k];
+        }
+        if (var_nivel != nivel) {
+            error = "Error en el nivel del QHCube: fila 2";
+        }
+
+        nivel = 0;
+        for (var_k = 0; var_k < 4; ++var_k) {
+            nivel += var_coor[0][2][var_k] * var_coor[0][2][var_k] + var_coor[1][2][var_k] * var_coor[1][2][var_k];
+        }
+        if (var_nivel != nivel) {
+            error = "Error en el nivel del QHCube: fila 3";
+        }
+
+        nivel = 0;
+        for (var_k = 0; var_k < 4; ++var_k) {
+            nivel += var_coor[0][3][var_k] * var_coor[0][3][var_k] + var_coor[1][3][var_k] * var_coor[1][3][var_k];
+        }
+        if (var_nivel != nivel) {
+            error = "Error en el nivel del QHCube: fila 4";
+        }
+
+        // Nivel por columnas
+
+        nivel = 0;
+        for (var_k = 0; var_k < 4; ++var_k) {
+            nivel += var_coor[0][var_k][0] * var_coor[0][var_k][0] + var_coor[1][var_k][0] * var_coor[1][var_k][0];
+        }
+        if (var_nivel != nivel) {
+            error = "Error en el nivel del QHCube: columna 1";
+        }
+
+        nivel = 0;
+        for (var_k = 0; var_k < 4; ++var_k) {
+            nivel += var_coor[0][var_k][1] * var_coor[0][var_k][1] + var_coor[1][var_k][1] * var_coor[1][var_k][1];
+        }
+        if (var_nivel != nivel) {
+            error = "Error en el nivel del QHCube: columna 2";
+        }
+
+        nivel = 0;
+        for (var_k = 0; var_k < 4; ++var_k) {
+            nivel += var_coor[0][var_k][2] * var_coor[0][var_k][2] + var_coor[1][var_k][2] * var_coor[1][var_k][2];
+        }
+        if (var_nivel != nivel) {
+            error = "Error en el nivel del QHCube: columna 3";
+        }
+
+        nivel = 0;
+        for (var_k = 0; var_k < 4; ++var_k) {
+            nivel += var_coor[0][var_k][3] * var_coor[0][var_k][3] + var_coor[1][var_k][3] * var_coor[1][var_k][3];
+        }
+        if (var_nivel != nivel) {
+            error = "Error en el nivel del QHCube: columna 4";
+        }
+
+        // QHCube no reducible
+
+        impares = 0;
+        for (var_j = 0; var_j < 4; ++var_j) {
+            for (var_k = 0; var_k < 4; ++var_k) {
+                if ((var_coor[0][var_j][var_k] % 2) == 1) ++impares;
+                if ((var_coor[1][var_j][var_k] % 2) == 1) ++impares;
+            }
+        }
+        if (impares == 0) {
+            error = "Error en el QHCube: es reducible";
+        }
+
+        // QHCube unitario
+
+        // nivel = 0;
+        for (var_j = 0; var_j < 3; ++var_j) {
+            for (var_k = var_j + 1; var_k < 4; ++var_k) {
+                producto = 0;
+                for (int i = 0; i < 4; ++i) {
+                    producto += var_coor[0][var_j][i] * var_coor[0][var_k][i] + var_coor[1][var_j][i] * var_coor[1][var_k][i];
+                }
+                if (producto != 0) {
+                    error = "Error en la unitariedad el QHCube (parte real): filas " + var_j + " y " + var_k;
+                }
+
+                producto = 0;
+                for (int i = 0; i < 4; ++i) {
+                    producto += var_coor[0][var_j][i] * var_coor[1][var_k][i] - var_coor[1][var_j][i] * var_coor[0][var_k][i];
+                }
+                if (producto != 0) {
+                    error = "Error en la unitariedad el QHCube (parte imaginaria): filas " + var_j + " y " + var_k;
+                }
+            }
+        }
     }
 }
 
