@@ -20,9 +20,7 @@ public class ActionsOfTheGame {
         Arrays.stream(moves
                 .replaceAll("],", "];")
                 .split(";"))
-                .forEach(move -> {
-                    this.actions.add(new Action(move));
-        });
+                .forEach(move -> this.actions.add(new Action(move)));
     }
 
     public boolean isGameOpen() {
