@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Move {
+public class Action {
 
     /**
      * This array represents the action taken by the player during a game.
@@ -55,42 +55,42 @@ public class Move {
      *     params have to be casted to integers.
      * </p>
      */
-    private double[] move = new double[4];
+    private double[] action = new double[4];
 
     /** This constructor is used to create a Move object from a string.
-     * @param move String representing the move in the format [m, p1, p2, p3]
+     * @param action String representing the move in the format [m, p1, p2, p3]
      */
-    public Move(String move) {
-        move = move.trim();
+    public Action(String action) {
+        action = action.trim();
 
-        if (move.charAt(0) == '[' && move.endsWith("]")) {
-            move = move.substring(1, move.length() - 1);
+        if (action.charAt(0) == '[' && action.endsWith("]")) {
+            action = action.substring(1, action.length() - 1);
         } else {
-            log.error("Move string does not start with '[' or end with ']'. MOVE is: ---" + move + "---");
+            log.error("Move string does not start with '[' or end with ']'. MOVE is: ---" + action + "---");
         }
 
-        String[] moveArray = move.split(",");
-        for (int i = 0; i < moveArray.length; i++) {
-            this.move[i] = Double.parseDouble(moveArray[i]);
+        String[] acctionArray = action.split(",");
+        for (int i = 0; i < acctionArray.length; i++) {
+            this.action[i] = Double.parseDouble(acctionArray[i]);
         }
     }
 
-    public Move(double m1, double m2, double m3, double m4) {
-        this.move[0] = m1;
-        this.move[1] = m2;
-        this.move[2] = m3;
-        this.move[3] = m4;
+    public Action(double actionDesc, double param1, double param2, double param3) {
+        this.action[0] = actionDesc;
+        this.action[1] = param1;
+        this.action[2] = param2;
+        this.action[3] = param3;
     }
 
     @Override
     public String toString() {
         if (this.getKindOfAction() == 4)
-            return "[" + (int)move[0] + "," + move[1] + "," + move[2] + "," + move[3] + ']';
+            return "[" + (int) action[0] + "," + action[1] + "," + action[2] + "," + action[3] + ']';
         else
-            return "[" + (int)move[0] + "," + (int)move[1] + "," + (int)move[2] + "," + (int)move[3] + ']';
+            return "[" + (int) action[0] + "," + (int) action[1] + "," + (int) action[2] + "," + (int) action[3] + ']';
     }
 
     public int getKindOfAction() {
-        return (int)move[0];
+        return (int) action[0];
     }
 }
