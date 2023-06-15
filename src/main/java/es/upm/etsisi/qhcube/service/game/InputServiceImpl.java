@@ -6,7 +6,7 @@ import es.upm.etsisi.qhcube.mapper.GameMapper;
 import es.upm.etsisi.qhcube.utils.action.GameMoves;
 import es.upm.etsisi.qhcube.utils.input.Input;
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
-import es.upm.etsisi.qhcube.service.player.PlayerService;
+import es.upm.etsisi.qhcube.service.player.PlayerCRUDService;
 import es.upm.etsisi.qhcube.utils.input.InputManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,19 +18,19 @@ import java.util.Objects;
 @Service
 public class InputServiceImpl implements InputService {
 
-    private final PlayerService playerService;
-    private final GameService gameService;
+    private final PlayerCRUDService playerCRUDService;
+    private final GameCRUDService gameCRUDService;
     private final GameMapper gameMapper;
 
-    public InputServiceImpl(PlayerService playerService, GameService gameService, GameMapper gameMapper) {
-        this.playerService = playerService;
-        this.gameService = gameService;
+    public InputServiceImpl(PlayerCRUDService playerCRUDService, GameCRUDService gameCRUDService, GameMapper gameMapper) {
+        this.playerCRUDService = playerCRUDService;
+        this.gameCRUDService = gameCRUDService;
         this.gameMapper = gameMapper;
     }
 
     @Override
     public GameDTO initRegisteredGame(PlayerDTO playerDTO) {
-        PlayerDTO playerInDB = this.playerService.findByEmail(playerDTO.getEmail());
+        PlayerDTO playerInDB = this.playerCRUDService.findByEmail(playerDTO.getEmail());
         GameDTO newGameDTO;
 
         if (playerInDB == null || !Objects.equals(playerInDB.getJwttoken(), playerDTO.getJwttoken())) {
@@ -69,7 +69,7 @@ public class InputServiceImpl implements InputService {
                 newGameDTO.setPlayer(playerInDB);
                 newGameDTO.getPlayer().setRespStatus("OK");
                 newGameDTO.getPlayer().setRespMessage("Juego iniciado correctamente.");
-                this.gameService.save(this.gameMapper.toEntity(newGameDTO));
+                this.gameCRUDService.save(this.gameMapper.toEntity(newGameDTO));
                 newGameDTO.getPlayer().softClean();
             }
 
@@ -78,7 +78,7 @@ public class InputServiceImpl implements InputService {
 
     @Override
     public GameDTO addMove(String jwttoken, String move) {
-        PlayerDTO playerDTO = this.playerService.findByJwttoken(jwttoken.substring(7));
+        PlayerDTO playerDTO = this.playerCRUDService.findByJwttoken(jwttoken.substring(7));
 
         List<GameDTO> games = playerDTO.getGames();
         for (GameDTO game : games) {
@@ -94,7 +94,7 @@ public class InputServiceImpl implements InputService {
 
         Game gameEntity = this.gameMapper.toEntity(gameDTO);
         log.debug("addMove.gameEntity: {}", gameEntity);
-        this.gameService.save(gameEntity);
+        this.gameCRUDService.save(gameEntity);
 
         return gameDTO;
     }
