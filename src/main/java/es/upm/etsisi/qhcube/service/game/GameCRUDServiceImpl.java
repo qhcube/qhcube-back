@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GameServiceImpl implements GameService {
+public class GameCRUDServiceImpl implements GameCRUDService {
 
     private final GameRepository partidaRepository;
 
-    public GameServiceImpl(GameRepository partidaRepository) {
+    public GameCRUDServiceImpl(GameRepository partidaRepository) {
         this.partidaRepository = partidaRepository;
     }
 

@@ -2,7 +2,7 @@ package es.upm.etsisi.qhcube.controller.free;
 
 import es.upm.etsisi.qhcube.controller.GameRESTController;
 import es.upm.etsisi.qhcube.mapper.GameMapper;
-import es.upm.etsisi.qhcube.service.game.GameService;
+import es.upm.etsisi.qhcube.service.game.GameCRUDService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("${apiFreePrefix}/game")
 public class GameFreeRESTController extends GameRESTController {
 
-    public GameFreeRESTController(GameService gameService, GameMapper gameMapper) {
-        super(gameService, gameMapper);
+    public GameFreeRESTController(GameCRUDService gameCRUDService, GameMapper gameMapper) {
+        super(gameCRUDService, gameMapper);
     }
 
     @PostMapping(path="/test-game")

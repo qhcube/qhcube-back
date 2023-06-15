@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class PlayerServiceImpl implements PlayerService {
+public class PlayerCRUDServiceImpl implements PlayerCRUDService {
 
     private final PlayerRepository playerRepository;
     private final PlayerMapper playerMapper;
 
-    public PlayerServiceImpl(PlayerRepository playerRepository, PlayerMapper playerMapper) {
+    public PlayerCRUDServiceImpl(PlayerRepository playerRepository, PlayerMapper playerMapper) {
         this.playerRepository = playerRepository;
         this.playerMapper = playerMapper;
     }
