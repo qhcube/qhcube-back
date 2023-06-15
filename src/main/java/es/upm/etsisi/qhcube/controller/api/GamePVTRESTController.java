@@ -6,6 +6,7 @@ import es.upm.etsisi.qhcube.dto.PlayerDTO;
 import es.upm.etsisi.qhcube.mapper.GameMapper;
 import es.upm.etsisi.qhcube.service.game.GameCRUDService;
 import es.upm.etsisi.qhcube.service.game.InputService;
+import es.upm.etsisi.qhcube.service.game.MoveService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,12 @@ import java.util.List;
 public class GamePVTRESTController extends GameRESTController {
 
     private final InputService inputService;
+    private final MoveService moveService;
 
-    public GamePVTRESTController(GameCRUDService gameCRUDService, GameMapper gameMapper, InputService inputService) {
+    public GamePVTRESTController(GameCRUDService gameCRUDService, GameMapper gameMapper, InputService inputService, MoveService moveService) {
         super(gameCRUDService, gameMapper);
         this.inputService = inputService;
+        this.moveService = moveService;
     }
 
     @GetMapping(path="/get-all")
@@ -47,6 +50,6 @@ public class GamePVTRESTController extends GameRESTController {
 
     @PostMapping(path="/add-move")
     public ResponseEntity<GameDTO> addMove(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken, @RequestBody String move) {
-        return ResponseEntity.ok(this.inputService.addMove(jwttoken, move));
+        return ResponseEntity.ok(this.moveService.addMove(jwttoken, move));
     }
 }
