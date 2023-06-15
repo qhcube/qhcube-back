@@ -1,5 +1,6 @@
-package es.upm.etsisi.qhcube.utils.input;
+package es.upm.etsisi.qhcube.utils.action;
 
+import es.upm.etsisi.qhcube.utils.action.Move;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

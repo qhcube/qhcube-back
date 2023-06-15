@@ -2,14 +2,12 @@ package es.upm.etsisi.qhcube.service.game;
 
 import es.upm.etsisi.qhcube.dto.GameDTO;
 import es.upm.etsisi.qhcube.entity.Game;
-import es.upm.etsisi.qhcube.entity.Player;
 import es.upm.etsisi.qhcube.mapper.GameMapper;
-import es.upm.etsisi.qhcube.utils.input.GameMoves;
+import es.upm.etsisi.qhcube.utils.action.GameMoves;
 import es.upm.etsisi.qhcube.utils.input.Input;
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
 import es.upm.etsisi.qhcube.service.player.PlayerService;
 import es.upm.etsisi.qhcube.utils.input.InputManager;
-import es.upm.etsisi.qhcube.utils.input.Move;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
