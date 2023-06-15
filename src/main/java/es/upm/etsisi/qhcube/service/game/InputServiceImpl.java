@@ -9,7 +9,6 @@ import es.upm.etsisi.qhcube.service.player.PlayerCRUDService;
 import es.upm.etsisi.qhcube.utils.input.InputManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -29,49 +28,59 @@ public class InputServiceImpl implements InputService {
 
     @Override
     public GameDTO initRegisteredGame(PlayerDTO playerDTO) {
+        log.debug("initRegisteredGame: {}", playerDTO);
+
         PlayerDTO playerInDB = this.playerCRUDService.findByEmail(playerDTO.getEmail());
-        GameDTO newGameDTO;
 
         if (playerInDB == null || !Objects.equals(playerInDB.getJwttoken(), playerDTO.getJwttoken())) {
             playerDTO.softClean().setRespStatus("ERROR").setRespMessage("El usuario no existe.");
-            newGameDTO = GameDTO.builder().build().softClean().setPlayer(playerDTO);
+            return GameDTO.builder().build().softClean().setPlayer(playerDTO);
         } else {
-            List<GameDTO> games = playerInDB.getGames();
-            // chack if exist started game
-            if (games != null && games.size() > 0) {
-                for (GameDTO game : games) {
-                    ActionsOfTheGame actionsOfTheGame = new ActionsOfTheGame(game.getMovsList());
-                    if (actionsOfTheGame.isGameOpen()) {
-                        log.debug("Juego " + game.getId() + " abierto.");
-                    } else {
-                        log.debug("Juego " + game.getId() + " cerrado.");
-                    }
-                }
+
+            List<GameDTO> games = playerInDB.getGames().stream()
+                    .filter(game -> new ActionsOfTheGame(game.getMovsList()).isGameOpen()).toList();
+
+            if (games.size() == 0) {
+                log.debug("No hay juegos.");
+                return this.createNewGame(playerInDB);
+            } else {
+                log.debug("Juego abierto.");
+                return this.gameOpenExist(playerInDB, games.get(0));
             }
+        }
+    }
 
-            Input initialInput = new Input();
-            initialInput.setInitialPracticeInput();
+    private GameDTO createNewGame (PlayerDTO playerInDB) {
+        Input initialInput = new Input();
+        initialInput.setInitialPracticeInput();
 
-            for (int i = 0; i < 9; i++) {
-                InputManager.randomPermute(initialInput);
-                InputManager.randomExchange(initialInput);
-            }
+        for (int i = 0; i < 9; i++) {
+            InputManager.randomPermute(initialInput);
+            InputManager.randomExchange(initialInput);
+        }
 
-            newGameDTO = GameDTO.builder()
-                    .initialTime(new java.sql.Timestamp(System.currentTimeMillis()))
-                    .input(initialInput.toString())
-                    .movsList("[4,-0.7182091216365892,0.6891022880589591,0.09650748255916076]")
-                    .player(playerDTO)
-                    .build();
+        playerInDB.setRespStatus("OK");
+        playerInDB.setRespMessage("Juego iniciado correctamente.");
+
+        GameDTO newGameDTO = GameDTO.builder()
+                .initialTime(new java.sql.Timestamp(System.currentTimeMillis()))
+                .input(initialInput.toString())
+                .movsList("[0.7483314773547882, 0.6324555320336759, 0.2]")
+                .player(playerInDB)
+                .build();
 
 
-                newGameDTO.setPlayer(playerInDB);
-                newGameDTO.getPlayer().setRespStatus("OK");
-                newGameDTO.getPlayer().setRespMessage("Juego iniciado correctamente.");
-                this.gameCRUDService.save(this.gameMapper.toEntity(newGameDTO));
-                newGameDTO.getPlayer().softClean();
-            }
+        this.gameCRUDService.save(this.gameMapper.toEntity(newGameDTO));
+        newGameDTO.getPlayer().softClean();
 
         return newGameDTO;
+    }
+
+
+    private GameDTO gameOpenExist(PlayerDTO playerInDB, GameDTO game) {
+        log.debug("Juego abierto encontrado --> " + game.toJavaScript());
+        playerInDB.softClean().setRespStatus("OK").setRespMessage("Juego abierto encontrado.").setGames(null);
+
+        return game.setPlayer(playerInDB);
     }
 }
