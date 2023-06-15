@@ -1,4 +1,4 @@
-package es.upm.etsisi.qhcube.utils.input;
+package es.upm.etsisi.qhcube.utils.action;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
