@@ -1,9 +1,8 @@
 package es.upm.etsisi.qhcube.service.game;
 
 import es.upm.etsisi.qhcube.dto.GameDTO;
-import es.upm.etsisi.qhcube.entity.Game;
 import es.upm.etsisi.qhcube.mapper.GameMapper;
-import es.upm.etsisi.qhcube.utils.action.GameMoves;
+import es.upm.etsisi.qhcube.utils.action.ActionsOfTheGame;
 import es.upm.etsisi.qhcube.utils.input.Input;
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
 import es.upm.etsisi.qhcube.service.player.PlayerCRUDService;
@@ -41,8 +40,8 @@ public class InputServiceImpl implements InputService {
             // chack if exist started game
             if (games != null && games.size() > 0) {
                 for (GameDTO game : games) {
-                    GameMoves gameMoves = new GameMoves(game.getMovsList());
-                    if (gameMoves.isGameOpen()) {
+                    ActionsOfTheGame actionsOfTheGame = new ActionsOfTheGame(game.getMovsList());
+                    if (actionsOfTheGame.isGameOpen()) {
                         log.debug("Juego " + game.getId() + " abierto.");
                     } else {
                         log.debug("Juego " + game.getId() + " cerrado.");
@@ -75,28 +74,4 @@ public class InputServiceImpl implements InputService {
 
         return newGameDTO;
     }
-
-    @Override
-    public GameDTO addMove(String jwttoken, String move) {
-        PlayerDTO playerDTO = this.playerCRUDService.findByJwttoken(jwttoken.substring(7));
-
-        List<GameDTO> games = playerDTO.getGames();
-        for (GameDTO game : games) {
-            GameMoves gameMoves = new GameMoves(game.getMovsList());
-        }
-
-
-        GameDTO gameDTO = playerDTO.getGames().get(0);
-        gameDTO.setMovsList(gameDTO.getMovsList() + "," + move);
-        playerDTO.setGames(null);
-        gameDTO.setPlayer(playerDTO);
-        log.debug("addMove.gameDTO: {}", gameDTO.toJSON());
-
-        Game gameEntity = this.gameMapper.toEntity(gameDTO);
-        log.debug("addMove.gameEntity: {}", gameEntity);
-        this.gameCRUDService.save(gameEntity);
-
-        return gameDTO;
-    }
-
 }
