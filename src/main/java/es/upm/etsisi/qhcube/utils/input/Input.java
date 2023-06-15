@@ -62,6 +62,7 @@ public class Input {
         rowB[3] = new Coordinate(new int[]{0, -1, 3, 4});
     }
 
+    // Permutar(elem, j, k)
     public void permute(int elem, int j, int k) {
         int var_k, var_aux;
         int [][][] var_coor = this.getVarCoordinates();
@@ -91,6 +92,7 @@ public class Input {
         this.setVarCoordinates(var_coor);
     }
 
+    // Intercambiar(elem, j)
     public void exchange(int elem, int j) {
         int var_k, var_aux;
         int [][][] var_coor = this.getVarCoordinates();
@@ -112,6 +114,7 @@ public class Input {
         this.setVarCoordinates(var_coor);
     }
 
+    //Rotar_filas_1_y_2()
     public void rotateRows1and2() {
         int i, x0, y0, x1, y1;
         int[][][] var_coor = this.getVarCoordinates();
@@ -138,6 +141,7 @@ public class Input {
         this.setVarCoordinates(var_coor);
     }
 
+    // Rotar_columnas_1_y_2()
     public void rotateColumns1and2() {
         int i, x0, y0, x1, y1;
         int[][][] var_coor = this.getVarCoordinates();
@@ -164,6 +168,7 @@ public class Input {
         this.setVarCoordinates(var_coor);
     }
 
+    // Rotar(elem, j)
     public void rotate(int elem, int j) {
         if (elem == 1) {
             if (j == 1) {
@@ -212,6 +217,7 @@ public class Input {
         }
     }
 
+    // Reducir(elem)
     public void reduce(int elem) {
         int var_k, x, y;
         int[][][] var_coor = this.getVarCoordinates();
@@ -261,6 +267,7 @@ public class Input {
         this.setVarCoordinates(var_coor);
     }
 
+    // QHCube_reducible()
     public boolean isReductible() {
         int var_j, var_k;
         boolean result = true;
@@ -276,6 +283,7 @@ public class Input {
         return (result);
     }
 
+    // Reducir_nivel()
     public int reduceLevel() {
         int var_j, var_k, x, nivel;
         int[][][] var_coor = this.getVarCoordinates();
@@ -296,6 +304,7 @@ public class Input {
         return (nivel);
     }
 
+    // Calcular_nivel()
     public int getLevel() {
         int i, level = 0;
         int[][][] var_coor = this.getVarCoordinates();
@@ -306,10 +315,12 @@ public class Input {
         return level;
     }
 
+    // Calcular_nivel()
     public int getReducedLevel(int level) {
         return (int) Math.round(Math.log(level) / Math.log(2));
     }
 
+    // Comprobar_final()
     public boolean isSolved() {
         int j, k;
         boolean fin = true;
@@ -328,14 +339,16 @@ public class Input {
         return fin;
     }
 
-    public void Ajustar_nivel() {
+    // Ajustar_nivel()
+    public void fitLevel() {
         boolean reducible = this.isReductible();
         if (reducible) {
             this.reduceLevel();
         }
     }
 
-    public boolean Comprobacion_QHCube() {
+    // Comprobacion_QHCube()
+    public boolean isQHCubeValid() {
 
         String error = "";
         int var_j, var_k, nivel, impares, producto;
@@ -445,6 +458,7 @@ public class Input {
                 }
             }
         }
+        return error.equals("");
     }
 }
 
