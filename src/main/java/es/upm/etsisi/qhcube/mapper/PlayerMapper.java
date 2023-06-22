@@ -17,6 +17,9 @@ public interface PlayerMapper {
     @Named("sinJugadores")
     @Mapping(target = "respStatus", ignore = true)
     @Mapping(target = "respMessage", ignore = true)
+    @Mapping(target="password", ignore = true)
+    @Mapping(target="enabled", ignore = true)
+    @Mapping(target="vericode", ignore = true)
     @Mapping(target = "games", qualifiedByName = "oneLevel")
     PlayerDTO toDTO(Player jugador);
 
@@ -30,5 +33,8 @@ public interface PlayerMapper {
     @Mapping(target = "respStatus", ignore = true)
     @Mapping(target = "respMessage", ignore = true)
     @Mapping(target = "games", ignore = true)
+    @Mapping(target="password", ignore = true)
+    @Mapping(target="enabled", ignore = true)
+    @Mapping(target="vericode", ignore = true)
     PlayerDTO toDTOOneLevel(Player jugador);
 }
