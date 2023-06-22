@@ -52,6 +52,18 @@ public class GamePVTRESTController extends GameRESTController {
         return ResponseEntity.ok(this.inputService.initRegisteredGame(playerDTO));
     }
 
+    @PostMapping(path="/init-registered-game-forced")
+    public ResponseEntity<GameDTO> initGameForced(@RequestBody PlayerDTO playerDTO) {
+        return ResponseEntity.ok(this.inputService.initRegisteredGameForced(playerDTO));
+    }
+
+
+    @PostMapping(path="/init-registered-game-forced-test")
+    public ResponseEntity<String> initGameForced(@RequestBody String playerDTO) {
+        log.info("initGameForced PVT: {}", playerDTO);
+        return ResponseEntity.ok("ok");
+    }
+
     @PostMapping(path="/add-move")
     public ResponseEntity<GameDTO> addMove(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken, @RequestBody String move) {
         return ResponseEntity.ok(this.moveService.addMove(jwttoken, move));
