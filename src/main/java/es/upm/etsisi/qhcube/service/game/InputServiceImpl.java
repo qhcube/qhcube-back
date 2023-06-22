@@ -9,7 +9,6 @@ import es.upm.etsisi.qhcube.service.player.PlayerCRUDService;
 import es.upm.etsisi.qhcube.utils.input.InputManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -49,6 +48,22 @@ public class InputServiceImpl implements InputService {
                 log.debug("Juego abierto.");
                 return this.gameOpenExist(playerInDB, game);
             }
+        }
+    }
+
+    @Override
+    public GameDTO initRegisteredGameForced(PlayerDTO playerDTO) {
+        log.debug("initRegisteredGameForced: {}", playerDTO.toJavaScript());
+
+        PlayerDTO playerInDB = this.playerCRUDService.findByEmail(playerDTO.getEmail());
+
+        if (playerInDB == null || !Objects.equals(playerInDB.getJwttoken(), playerDTO.getJwttoken())) {
+            playerDTO.softClean().setRespStatus("ERROR").setRespMessage("El usuario no existe.");
+            return GameDTO.builder().build().softClean().setPlayer(playerDTO);
+        } else {
+            log.debug("Juego forzado.");
+            //log.debug("ID GAME: " + playerDTO.getGames().get(0).getId());
+            return this.createNewGame(playerInDB);
         }
     }
 
