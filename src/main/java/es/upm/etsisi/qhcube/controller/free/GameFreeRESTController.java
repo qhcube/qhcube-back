@@ -24,5 +24,4 @@ public class GameFreeRESTController extends GameRESTController {
         log.info("testGame: {}", input);
         return ResponseEntity.ok("OK");
     }
-
 }

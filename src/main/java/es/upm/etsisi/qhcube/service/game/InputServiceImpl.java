@@ -37,15 +37,17 @@ public class InputServiceImpl implements InputService {
             return GameDTO.builder().build().softClean().setPlayer(playerDTO);
         } else {
 
-            List<GameDTO> games = playerInDB.getGames().stream()
-                    .filter(game -> new ActionsOfTheGame(game.getMovsList()).isGameOpen()).toList();
+            GameDTO game = playerInDB.getGames().stream()
+                    .filter(aux -> new ActionsOfTheGame(aux.getMovsList()).isGameOpen())
+                    .findFirst()
+                    .orElse(null);
 
-            if (games.size() == 0) {
+            if (game == null) {
                 log.debug("No hay juegos.");
                 return this.createNewGame(playerInDB);
             } else {
                 log.debug("Juego abierto.");
-                return this.gameOpenExist(playerInDB, games.get(0));
+                return this.gameOpenExist(playerInDB, game);
             }
         }
     }
@@ -59,7 +61,7 @@ public class InputServiceImpl implements InputService {
             InputManager.randomExchange(initialInput);
         }
 
-        playerInDB.setRespStatus("OK");
+        playerInDB.setRespStatus("OK 0");
         playerInDB.setRespMessage("Juego iniciado correctamente.");
 
         GameDTO newGameDTO = GameDTO.builder()
@@ -79,7 +81,7 @@ public class InputServiceImpl implements InputService {
 
     private GameDTO gameOpenExist(PlayerDTO playerInDB, GameDTO game) {
         log.debug("Juego abierto encontrado --> " + game.toJavaScript());
-        playerInDB.softClean().setRespStatus("OK").setRespMessage("Juego abierto encontrado.").setGames(null);
+        playerInDB.softClean().setRespStatus("OK 1").setRespMessage("Juego abierto encontrado.").setGames(null);
 
         return game.setPlayer(playerInDB);
     }

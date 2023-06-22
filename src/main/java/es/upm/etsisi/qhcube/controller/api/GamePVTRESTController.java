@@ -7,6 +7,7 @@ import es.upm.etsisi.qhcube.mapper.GameMapper;
 import es.upm.etsisi.qhcube.service.game.GameCRUDService;
 import es.upm.etsisi.qhcube.service.game.InputService;
 import es.upm.etsisi.qhcube.service.game.MoveService;
+import es.upm.etsisi.qhcube.service.player.PlayerCRUDService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +22,13 @@ public class GamePVTRESTController extends GameRESTController {
     private final InputService inputService;
     private final MoveService moveService;
 
-    public GamePVTRESTController(GameCRUDService gameCRUDService, GameMapper gameMapper, InputService inputService, MoveService moveService) {
+    private final PlayerCRUDService playerCRUDService;
+
+    public GamePVTRESTController(GameCRUDService gameCRUDService, GameMapper gameMapper, InputService inputService, MoveService moveService, PlayerCRUDService playerCRUDService) {
         super(gameCRUDService, gameMapper);
         this.inputService = inputService;
         this.moveService = moveService;
+        this.playerCRUDService = playerCRUDService;
     }
 
     @GetMapping(path="/get-all")
@@ -43,7 +47,7 @@ public class GamePVTRESTController extends GameRESTController {
         return ResponseEntity.ok("OK");
     }
 
-    @PostMapping(path="/init-registered-game")
+    @PostMapping(path={"/init-registered-game", "/load-last-registered-game"})
     public ResponseEntity<GameDTO> initGame(@RequestBody PlayerDTO playerDTO) {
         return ResponseEntity.ok(this.inputService.initRegisteredGame(playerDTO));
     }
@@ -51,5 +55,13 @@ public class GamePVTRESTController extends GameRESTController {
     @PostMapping(path="/add-move")
     public ResponseEntity<GameDTO> addMove(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken, @RequestBody String move) {
         return ResponseEntity.ok(this.moveService.addMove(jwttoken, move));
+    }
+
+    @PostMapping(path="/get-games-by-player")
+    public ResponseEntity<List<GameDTO>> getGamesByPlayer(@RequestBody PlayerDTO playerDTO) {
+        return ResponseEntity.ok(this.gameMapper.toDTOsWithoutPlayers(
+                this.gameCRUDService.findAllByPlayerId(
+                        this.playerCRUDService.findByEmail(playerDTO.getEmail()).getId()
+                )));
     }
 }
