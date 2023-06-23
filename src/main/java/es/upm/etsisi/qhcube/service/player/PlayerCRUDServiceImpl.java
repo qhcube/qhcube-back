@@ -32,12 +32,6 @@ public class PlayerCRUDServiceImpl implements PlayerCRUDService {
         return this.setRespToPlayerFound(player);
     }
 
-    @Override
-    public PlayerDTO findByJwttoken(String jwttoken) {
-        Player player = this.playerRepository.findByJwttoken(jwttoken).orElse(null);
-        return this.setRespToPlayerFound(player);
-    }
-
     private PlayerDTO setRespToPlayerFound(Player player) {
         PlayerDTO result;
         if (player != null) {

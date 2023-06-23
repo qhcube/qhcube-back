@@ -2,6 +2,8 @@ package es.upm.etsisi.qhcube.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.Accessors;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -10,6 +12,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Accessors(chain = true)
 @Entity
 @Table(name = "player")
 public class Player {

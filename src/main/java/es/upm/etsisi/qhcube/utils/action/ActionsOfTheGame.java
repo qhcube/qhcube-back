@@ -17,10 +17,13 @@ public class ActionsOfTheGame {
     private List<Action> actions = new ArrayList<>();
 
     public ActionsOfTheGame(String moves) {
+
         Arrays.stream(moves
                 .replaceAll("],", "];")
                 .split(";"))
                 .forEach(move -> this.actions.add(new Action(move)));
+
+        log.debug("ActionsOfTheGame: {}", moves);
     }
 
     public boolean isGameOpen() {

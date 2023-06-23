@@ -1,7 +1,9 @@
 package es.upm.etsisi.qhcube.service.game;
 
 import es.upm.etsisi.qhcube.dto.GameDTO;
+import es.upm.etsisi.qhcube.entity.Game;
 import es.upm.etsisi.qhcube.mapper.GameMapper;
+import es.upm.etsisi.qhcube.utils.action.Action;
 import es.upm.etsisi.qhcube.utils.action.ActionsOfTheGame;
 import es.upm.etsisi.qhcube.utils.input.Input;
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
@@ -9,6 +11,8 @@ import es.upm.etsisi.qhcube.service.player.PlayerCRUDService;
 import es.upm.etsisi.qhcube.utils.input.InputManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -27,11 +31,9 @@ public class InputServiceImpl implements InputService {
 
     @Override
     public GameDTO initRegisteredGame(PlayerDTO playerDTO) {
-        log.debug("initRegisteredGame: {}", playerDTO);
-
         PlayerDTO playerInDB = this.playerCRUDService.findByEmail(playerDTO.getEmail());
 
-        if (playerInDB == null || !Objects.equals(playerInDB.getJwttoken(), playerDTO.getJwttoken())) {
+        if (playerInDB == null) {
             playerDTO.softClean().setRespStatus("ERROR").setRespMessage("El usuario no existe.");
             return GameDTO.builder().build().softClean().setPlayer(playerDTO);
         } else {
@@ -42,10 +44,8 @@ public class InputServiceImpl implements InputService {
                     .orElse(null);
 
             if (game == null) {
-                log.debug("No hay juegos.");
                 return this.createNewGame(playerInDB);
             } else {
-                log.debug("Juego abierto.");
                 return this.gameOpenExist(playerInDB, game);
             }
         }
@@ -82,21 +82,31 @@ public class InputServiceImpl implements InputService {
         GameDTO newGameDTO = GameDTO.builder()
                 .initialTime(new java.sql.Timestamp(System.currentTimeMillis()))
                 .input(initialInput.toString())
-                .movsList("[0.7483314773547882, 0.6324555320336759, 0.2]")
+                .movsList("[4,0.7483314773547882,0.6324555320336759,0.2]")
                 .player(playerInDB)
                 .build();
 
 
-        this.gameCRUDService.save(this.gameMapper.toEntity(newGameDTO));
-        newGameDTO.getPlayer().softClean();
+        Game gameToSave = this.gameMapper.toEntity(newGameDTO);
+        this.gameCRUDService.save(gameToSave);
+
+        newGameDTO.setId(gameToSave.getId()).getPlayer().softClean().setGames(null);
 
         return newGameDTO;
     }
 
 
     private GameDTO gameOpenExist(PlayerDTO playerInDB, GameDTO game) {
-        log.debug("Juego abierto encontrado --> " + game.toJavaScript());
         playerInDB.softClean().setRespStatus("OK 1").setRespMessage("Juego abierto encontrado.").setGames(null);
+
+        log.debug("Existe un juego previo y estos son los mosvimientos: " + game.getMovsList());
+
+        ActionsOfTheGame actions = new ActionsOfTheGame(game.getMovsList());
+        for (Action action : actions.getActions()) {
+            log.debug("action: " + action.toString());
+            // TODO: Modificar aquí el input para que devuelva la partida en el estado que debe estar.
+            //game.setInput(action.getInput().toString());
+        }
 
         return game.setPlayer(playerInDB);
     }
