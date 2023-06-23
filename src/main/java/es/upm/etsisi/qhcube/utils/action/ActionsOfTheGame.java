@@ -22,8 +22,6 @@ public class ActionsOfTheGame {
                 .replaceAll("],", "];")
                 .split(";"))
                 .forEach(move -> this.actions.add(new Action(move)));
-
-        log.debug("ActionsOfTheGame: {}", moves);
     }
 
     public boolean isGameOpen() {

@@ -11,8 +11,6 @@ import es.upm.etsisi.qhcube.service.player.PlayerCRUDService;
 import es.upm.etsisi.qhcube.utils.input.InputManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -100,7 +98,11 @@ public class InputServiceImpl implements InputService {
         playerInDB.softClean().setRespStatus("OK 1").setRespMessage("Juego abierto encontrado.").setGames(null);
 
         log.debug("Existe un juego previo y estos son los mosvimientos: " + game.getMovsList());
+        log.debug("Existe un juego previo y este es el input: " + game.getInput());
 
+        // Ejemplo de input inicial
+        //[[[-6,-1,-3,0],[1,1,-1,1],[0,-2,-1,2],[-1,4,-1,-3]],[[-4,1,-1,0],[-3,-1,7,-1],[1,-2,-1,-7],[0,-6,-1,0]]]
+        // TODO: Ahora habría que crear un objeto input con la inofrmación inicial. Ver cómo hacerlo apoyándose en la clase Coordinate.
         ActionsOfTheGame actions = new ActionsOfTheGame(game.getMovsList());
         for (Action action : actions.getActions()) {
             log.debug("action: " + action.toString());
