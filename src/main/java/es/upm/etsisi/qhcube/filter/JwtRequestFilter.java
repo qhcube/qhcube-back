@@ -1,7 +1,11 @@
 package es.upm.etsisi.qhcube.filter;
 
+import es.upm.etsisi.qhcube.dto.PlayerDTO;
+import es.upm.etsisi.qhcube.mapper.PlayerMapper;
+import es.upm.etsisi.qhcube.service.player.PlayerCRUDService;
 import es.upm.etsisi.qhcube.service.security.JwtUserDetailsService;
 import es.upm.etsisi.qhcube.utils.JwtTokenUtil;
+import es.upm.etsisi.qhcube.utils.QHCubeUserDetails;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,13 +29,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtTokenUtil jwtTokenUtil;
     private final JwtUserDetailsService jwtUserDetailsService;
+    private final PlayerCRUDService playerCRUDService;
 
     @Value("${jwt.refreshLimit}")
     private long refreshLimit;
 
-    public JwtRequestFilter(JwtTokenUtil jwtTokenUtil, JwtUserDetailsService jwtUserDetailsService) {
+    public JwtRequestFilter(JwtTokenUtil jwtTokenUtil, JwtUserDetailsService jwtUserDetailsService, PlayerCRUDService playerCRUDService) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.jwtUserDetailsService = jwtUserDetailsService;
+        this.playerCRUDService = playerCRUDService;
     }
 
     @Override
@@ -80,5 +86,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
         String newToken = this.jwtTokenUtil.generateToken(userDetails);
         response.setHeader("authorization", "Bearer " + newToken);
+        this.playerCRUDService.save(((QHCubeUserDetails) userDetails).getPlayer().setJwttoken(newToken));
     }
 }

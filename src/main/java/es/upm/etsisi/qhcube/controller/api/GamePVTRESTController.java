@@ -49,7 +49,8 @@ public class GamePVTRESTController extends GameRESTController {
 
     @PostMapping(path={"/init-registered-game", "/load-last-registered-game"})
     public ResponseEntity<GameDTO> initGame(@RequestBody PlayerDTO playerDTO) {
-        return ResponseEntity.ok(this.inputService.initRegisteredGame(playerDTO));
+        GameDTO result = this.inputService.initRegisteredGame(playerDTO);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping(path="/init-registered-game-forced")
@@ -66,7 +67,7 @@ public class GamePVTRESTController extends GameRESTController {
 
     @PostMapping(path="/add-move")
     public ResponseEntity<GameDTO> addMove(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken, @RequestBody String move) {
-        return ResponseEntity.ok(this.moveService.addMove(jwttoken, move));
+        return ResponseEntity.ok(this.moveService.addMove(jwttoken, move.replace("\"", "")));
     }
 
     @PostMapping(path="/get-games-by-player")
