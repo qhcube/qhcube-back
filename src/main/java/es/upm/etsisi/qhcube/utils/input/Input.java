@@ -1,5 +1,6 @@
 package es.upm.etsisi.qhcube.utils.input;
 
+import es.upm.etsisi.qhcube.utils.action.Action;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -481,6 +482,16 @@ public class Input {
             }
         }
         return error.equals("");
+    }
+
+    public void executeAction(Action action) {
+        int[] intAct = action.getAction();
+        switch (action.getKindOfAction()) {
+            case Action.PERMUTE -> this.permute(intAct[1], intAct[2], intAct[3]);
+            case Action.EXCHANGE -> this.exchange(intAct[1], intAct[2]);
+            case Action.REDUCE -> this.reduce(intAct[1]);
+            case Action.ROTATE -> this.rotate(intAct[1], intAct[2]);
+        }
     }
 }
 
