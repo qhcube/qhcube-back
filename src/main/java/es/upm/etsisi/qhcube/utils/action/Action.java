@@ -31,6 +31,12 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class Action {
 
+    public static final int PERMUTE = 0;
+    public static final int EXCHANGE = 1;
+    public static final int REDUCE = 2;
+    public static final int ROTATE = 3;
+    public static final int MOVE = 4;
+
     /**
      * This array represents the action taken by the player during a game.
      * <p>
@@ -80,6 +86,18 @@ public class Action {
         this.action[1] = param1;
         this.action[2] = param2;
         this.action[3] = param3;
+    }
+
+    public int[] getAction() {
+        if (this.getKindOfAction() >= 4) {
+            return new int[]{-1, -1, -1, -1};
+        } else {
+            int[] action = new int[4];
+            for (int i = 0; i < 4; i++) {
+                action[i] = (int) this.action[i];
+            }
+            return action;
+        }
     }
 
     @Override
