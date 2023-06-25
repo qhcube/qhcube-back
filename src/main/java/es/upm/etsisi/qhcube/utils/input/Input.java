@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,6 +15,26 @@ public class Input {
     private Coordinate[] rowA = new Coordinate[4];
     private Coordinate[] rowB = new Coordinate[4];
 
+
+    public void setInputFromString(String input) {
+        log.debug("Input: " + input);
+    }
+
+    public Input (String input) {
+        this.setInputFromString(input);
+        input = input.replace("]],[[", "]:[");
+        input = input.replace("[[", "");
+        input = input.replace("]]", "");
+        input = input.replace("],[", "]:[");
+
+        String[] coordinates = input.split(":");
+
+        log.debug("Input Procesado: " + input);
+        for (int i = 0; i < 4; i++) {
+            rowA[i] = new Coordinate(coordinates[i]);
+            rowB[i] = new Coordinate(coordinates[i + 4]);
+        }
+    }
 
     // return "[[[x,y,z,i],[x,y,z,i],[x,y,z,i],[x,y,z,i]],[[x,y,z,i],[x,y,z,i],[x,y,z,i],[x,y,z,i]]]"
     @Override
