@@ -64,31 +64,36 @@ public class InputServiceImpl implements InputService {
     }
 
     private GameDTO createNewGame (PlayerDTO playerInDB) {
-        Input initialInput = new Input();
-        initialInput.setInitialPracticeInput();
+        if (this.gameCRUDService.countByPlayerId(playerInDB.getId()) > 100) {
+            playerInDB.setRespStatus("ERROR").setRespMessage("El usuario ha alcanzado el máximo de juegos.");
+            return GameDTO.builder().build().softClean().setPlayer(playerInDB);
+        } else {
+            Input initialInput = new Input();
+            initialInput.setInitialPracticeInput();
 
-        for (int i = 0; i < 9; i++) {
-            InputManager.randomPermute(initialInput);
-            InputManager.randomExchange(initialInput);
+            for (int i = 0; i < 9; i++) {
+                InputManager.randomPermute(initialInput);
+                InputManager.randomExchange(initialInput);
+            }
+
+            playerInDB.setRespStatus("OK 0");
+            playerInDB.setRespMessage("Juego iniciado correctamente.");
+
+            GameDTO newGameDTO = GameDTO.builder()
+                    .initialTime(new java.sql.Timestamp(System.currentTimeMillis()))
+                    .input(initialInput.toString())
+                    .movsList("[4,0.7483314773547882,0.6324555320336759,0.2]")
+                    .player(playerInDB)
+                    .build();
+
+
+            Game gameToSave = this.gameMapper.toEntity(newGameDTO);
+            this.gameCRUDService.save(gameToSave);
+
+            newGameDTO.setId(gameToSave.getId()).getPlayer().softClean().setGames(null);
+
+            return newGameDTO;
         }
-
-        playerInDB.setRespStatus("OK 0");
-        playerInDB.setRespMessage("Juego iniciado correctamente.");
-
-        GameDTO newGameDTO = GameDTO.builder()
-                .initialTime(new java.sql.Timestamp(System.currentTimeMillis()))
-                .input(initialInput.toString())
-                .movsList("[4,0.7483314773547882,0.6324555320336759,0.2]")
-                .player(playerInDB)
-                .build();
-
-
-        Game gameToSave = this.gameMapper.toEntity(newGameDTO);
-        this.gameCRUDService.save(gameToSave);
-
-        newGameDTO.setId(gameToSave.getId()).getPlayer().softClean().setGames(null);
-
-        return newGameDTO;
     }
 
 
