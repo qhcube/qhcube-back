@@ -28,6 +28,11 @@ public class GameCRUDServiceImpl implements GameCRUDService {
     }
 
     @Override
+    public int countByPlayerId(@NonNull Long playerId) {
+        return this.gameRepository.countByPlayerId(playerId);
+    }
+
+    @Override
     public JpaRepository<Game, Long> getRepository() {
         return this.gameRepository;
     }
