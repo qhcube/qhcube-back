@@ -59,6 +59,9 @@ public class GameDTO {
    }
 
     public Timestamp getTotalGameTime() {
-        return new Timestamp(endTime.getTime() - initialTime.getTime());
+        if (endTime.before(initialTime))
+            return new Timestamp(System.currentTimeMillis() - initialTime.getTime());
+        else
+            return new Timestamp(endTime.getTime() - initialTime.getTime());
     }
 }
