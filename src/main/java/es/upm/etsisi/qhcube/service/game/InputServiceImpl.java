@@ -95,15 +95,18 @@ public class InputServiceImpl implements InputService {
         } else {
             playerInDB.softClean().setRespStatus("OK").setRespMessage("Juego abierto encontrado.").setGames(null);
 
-            Input input = new Input(gameInDB.getInput());
-
-            ActionsOfTheGame actions = new ActionsOfTheGame(gameInDB.getMovsList());
-            for (Action action : actions.getActions()) {
-                input.executeAction(action);
-            }
-            return gameInDB.setPlayer(playerInDB).setInput(input.toString());
+            return gameInDB.setPlayer(playerInDB).setCurrentInput(
+                    (this.getCurrentInput(gameInDB.getInput(), gameInDB.getMovsList())));
 
         }
+    }
 
+    private String getCurrentInput(String input, String movsList) {
+        Input currentInput = new Input(input);
+        ActionsOfTheGame actions = new ActionsOfTheGame(movsList);
+        for (Action action : actions.getActions()) {
+            currentInput.executeAction(action);
+        }
+        return currentInput.toString();
     }
 }

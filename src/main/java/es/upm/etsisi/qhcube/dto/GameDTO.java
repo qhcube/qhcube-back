@@ -21,6 +21,7 @@ public class GameDTO {
     private Timestamp totalGameTime = Timestamp.valueOf("2000-01-01 00:00:00");
     private String movsList;
     private String input;
+    private String currentInput;
 
     private PlayerDTO player;
 
