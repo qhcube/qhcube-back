@@ -12,8 +12,6 @@ import es.upm.etsisi.qhcube.utils.input.InputManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 @Slf4j
 @Service
 public class InputServiceImpl implements InputService {
@@ -31,7 +29,7 @@ public class InputServiceImpl implements InputService {
     public GameDTO createNewGame(PlayerDTO playerDTO) {
         PlayerDTO playerInDB = this.playerCRUDService.findByEmail(playerDTO.getEmail());
 
-        if (playerInDB == null || !Objects.equals(playerInDB.getJwttoken(), playerDTO.getJwttoken())) {
+        if (playerInDB == null) {
             playerDTO.softClean().setRespStatus("ERROR").setRespMessage("El usuario no existe.");
             return GameDTO.builder().build().softClean().setPlayer(playerDTO);
         } else {
