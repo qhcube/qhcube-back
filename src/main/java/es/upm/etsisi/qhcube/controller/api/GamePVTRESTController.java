@@ -81,7 +81,7 @@ public class GamePVTRESTController extends GameRESTController {
     public ResponseEntity<List<GameDTO>> getGamesByPlayer(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
         if (this.checkPlayer(playerDTO, jwttoken) == null) {
             return ResponseEntity.ok(this.gameMapper.toDTOsWithoutPlayers(
-                    this.gameCRUDService.findAllByPlayerId(
+                    this.gameCRUDService.findByPlayerIdOrderByIdDesc(
                             this.playerCRUDService.findByEmail(playerDTO.getEmail()).getId()
                     )));
         } else {
