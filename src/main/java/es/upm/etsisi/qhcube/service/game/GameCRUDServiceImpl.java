@@ -23,8 +23,8 @@ public class GameCRUDServiceImpl implements GameCRUDService {
     }
 
     @Override
-    public List<Game> findAllByPlayerId(@NonNull Long playerId) {
-        return this.gameRepository.findAllByPlayerId(playerId);
+    public List<Game> findByPlayerIdOrderByIdDesc(@NonNull Long playerId) {
+        return this.gameRepository.findByPlayerIdOrderByIdDesc(playerId);
     }
 
     @Override
