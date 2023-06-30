@@ -32,7 +32,6 @@ public class InputServiceImpl implements InputService {
     public GameDTO createNewGame(PlayerDTO playerDTO) {
         PlayerDTO playerInDB = this.playerCRUDService.findByEmail(playerDTO.getEmail());
 
-
         if (playerInDB == null) {
             playerDTO.softClean().setRespStatus("ERROR").setRespMessage("El usuario no existe.");
             return GameDTO.builder().build().softClean().setPlayer(playerDTO);
@@ -72,20 +71,15 @@ public class InputServiceImpl implements InputService {
         }
     }
 
-    public GameDTO getOpenGame(PlayerDTO playerDTO) {
+    public GameDTO getGame(PlayerDTO playerDTO) {
         PlayerDTO playerInDB = this.playerCRUDService.findByEmail(playerDTO.getEmail());
-        GameDTO gameInDB = GameDTO.builder().build().softClean().setPlayer(playerDTO);
         String respMessage = "";
+        GameDTO gameInDB;
 
         if (playerInDB == null) {
-            respMessage = "El usuario no existe.";
-            playerInDB = playerDTO;
-        } else if (playerDTO.getGames() == null) {
-            respMessage = "No se encuentra qué juego abrir.";
-        } else if (playerDTO.getGames().size() != 1) {
-            respMessage = "No se puede abrir más de un juego.";
+            playerDTO.softClean().setRespStatus("ERROR").setRespMessage("El usuario no existe.");
+            return GameDTO.builder().build().softClean().setPlayer(playerDTO);
         } else {
-
             gameInDB = this.gameMapper.toDTO(this.gameCRUDService.findById(playerDTO.getGames().get(0).getId()));
 
             if (gameInDB == null) {
