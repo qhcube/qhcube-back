@@ -36,8 +36,7 @@ public class InputServiceImpl implements InputService {
             playerDTO.softClean().setRespStatus("ERROR").setRespMessage("El usuario no existe.");
             return GameDTO.builder().build().softClean().setPlayer(playerDTO);
         } else {
-            //if (this.gameCRUDService.countByPlayerId(playerInDB.getId()) > this.envUtil.getMaxGamesPerPlayer()) {
-            log.info("OPEN GAMES: " + this.gameCRUDService.countByPlayerIdOpenGames(playerInDB.getId()));
+            playerInDB.softClean().setGames(null);
             if (this.gameCRUDService.countByPlayerIdOpenGames(playerInDB.getId()) > this.envUtil.getMaxGamesPerPlayer()) {
                 playerInDB.setRespStatus("ERROR").setRespMessage("Límite de juegos sin resolver alcanzado.");
                 return GameDTO.builder().build().softClean().setPlayer(playerInDB);
@@ -64,7 +63,7 @@ public class InputServiceImpl implements InputService {
                 Game gameToSave = this.gameMapper.toEntity(newGameDTO);
                 this.gameCRUDService.save(gameToSave);
 
-                newGameDTO.setId(gameToSave.getId()).getPlayer().softClean().setGames(null);
+                newGameDTO.setId(gameToSave.getId());
 
                 return newGameDTO;
             }
