@@ -1,14 +1,14 @@
 package es.upm.etsisi.qhcube.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 import java.sql.Timestamp;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Accessors(chain = true)
 public class GameDTO {
 

@@ -6,6 +6,6 @@ import es.upm.etsisi.qhcube.dto.PlayerDTO;
 public interface InputService {
     GameDTO createNewGame(PlayerDTO playerDTO);
 
-    GameDTO getOpenGame(PlayerDTO playerDTO);
+    GameDTO getGame(PlayerDTO playerDTO);
 
 }
