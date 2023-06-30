@@ -13,5 +13,5 @@ public interface GameCRUDService extends CRUDAbstractService<Game> {
 
     int countByPlayerId(@NonNull Long playerId);
 
-
+    int countByPlayerIdOpenGames(@NonNull Long playerId);
 }

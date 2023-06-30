@@ -3,6 +3,7 @@ package es.upm.etsisi.qhcube.service.game;
 import es.upm.etsisi.qhcube.dto.GameDTO;
 import es.upm.etsisi.qhcube.entity.Game;
 import es.upm.etsisi.qhcube.mapper.GameMapper;
+import es.upm.etsisi.qhcube.utils.EnvUtil;
 import es.upm.etsisi.qhcube.utils.action.Action;
 import es.upm.etsisi.qhcube.utils.action.ActionsOfTheGame;
 import es.upm.etsisi.qhcube.utils.input.Input;
@@ -16,11 +17,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class InputServiceImpl implements InputService {
 
+    private final EnvUtil envUtil;
     private final PlayerCRUDService playerCRUDService;
     private final GameCRUDService gameCRUDService;
     private final GameMapper gameMapper;
 
-    public InputServiceImpl(PlayerCRUDService playerCRUDService, GameCRUDService gameCRUDService, GameMapper gameMapper) {
+    public InputServiceImpl(EnvUtil envUtil, PlayerCRUDService playerCRUDService, GameCRUDService gameCRUDService, GameMapper gameMapper) {
+        this.envUtil = envUtil;
         this.playerCRUDService = playerCRUDService;
         this.gameCRUDService = gameCRUDService;
         this.gameMapper = gameMapper;
@@ -33,8 +36,10 @@ public class InputServiceImpl implements InputService {
             playerDTO.softClean().setRespStatus("ERROR").setRespMessage("El usuario no existe.");
             return GameDTO.builder().build().softClean().setPlayer(playerDTO);
         } else {
-            if (this.gameCRUDService.countByPlayerId(playerInDB.getId()) > 100) {
-                playerInDB.setRespStatus("ERROR").setRespMessage("El usuario ha alcanzado el máximo de juegos.");
+            //if (this.gameCRUDService.countByPlayerId(playerInDB.getId()) > this.envUtil.getMaxGamesPerPlayer()) {
+            log.info("OPEN GAMES: " + this.gameCRUDService.countByPlayerIdOpenGames(playerInDB.getId()));
+            if (this.gameCRUDService.countByPlayerIdOpenGames(playerInDB.getId()) > this.envUtil.getMaxGamesPerPlayer()) {
+                playerInDB.setRespStatus("ERROR").setRespMessage("Límite de juegos sin resolver alcanzado.");
                 return GameDTO.builder().build().softClean().setPlayer(playerInDB);
             } else {
                 Input initialInput = new Input();
