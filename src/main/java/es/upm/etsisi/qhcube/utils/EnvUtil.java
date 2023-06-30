@@ -30,6 +30,7 @@ public class EnvUtil {
     private final String mailTrasnportProtocol;
     private final boolean mailSmtpAuth;
     private final boolean mailSmtpStarttlsEnable;
+    private final int maxGamesPerPlayer;
 
     public EnvUtil(Environment env) {
         this.env = env;
@@ -52,6 +53,8 @@ public class EnvUtil {
         this.mailTrasnportProtocol = env.getProperty("spring.mail.transport.protocol");
         this.mailSmtpAuth = Boolean.parseBoolean(env.getProperty("spring.mail.properties.mail.smtp.auth"));
         this.mailSmtpStarttlsEnable = Boolean.parseBoolean(env.getProperty("spring.mail.properties.mail.smtp.starttls.enable"));
+
+        this.maxGamesPerPlayer = Integer.parseInt(Objects.requireNonNull(env.getProperty("max.games.per.player")));
     }
 
 }
