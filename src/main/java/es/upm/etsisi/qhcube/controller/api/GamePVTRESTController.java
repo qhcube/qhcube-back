@@ -91,7 +91,17 @@ public class GamePVTRESTController extends GameRESTController {
             gameDTOS.add(GameDTO.builder().build().setPlayer(playerDTO));
             return new ResponseEntity<>(gameDTOS, HttpStatus.UNAUTHORIZED);
         }
+    }
 
-
+    @PostMapping(path="/delete")
+    ResponseEntity<GameDTO> delete(@RequestBody GameDTO gameDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
+        if (this.checkPlayer(gameDTO.getPlayer(), jwttoken) == null) {
+            this.gameCRUDService.delete(gameDTO.getId());
+            gameDTO.getPlayer().setRespStatus("OK").setRespMessage("Juego eliminado");
+            return ResponseEntity.ok(gameDTO);
+        } else {
+            gameDTO.getPlayer().setRespStatus("ERROR").setRespMessage("Usuario no autorizado");
+            return new ResponseEntity<>(gameDTO, HttpStatus.UNAUTHORIZED);
+        }
     }
 }
