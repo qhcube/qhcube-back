@@ -16,13 +16,7 @@ public class Input {
     private Coordinate[] rowA = new Coordinate[4];
     private Coordinate[] rowB = new Coordinate[4];
 
-
-    public void setInputFromString(String input) {
-        log.debug("Input: " + input);
-    }
-
     public Input (String input) {
-        this.setInputFromString(input);
         input = input.replace("]],[[", "]:[");
         input = input.replace("[[", "");
         input = input.replace("]]", "");
@@ -30,7 +24,6 @@ public class Input {
 
         String[] coordinates = input.split(":");
 
-        log.debug("Input Procesado: " + input);
         for (int i = 0; i < 4; i++) {
             rowA[i] = new Coordinate(coordinates[i]);
             rowB[i] = new Coordinate(coordinates[i + 4]);
