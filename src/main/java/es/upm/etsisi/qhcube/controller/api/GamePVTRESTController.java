@@ -53,15 +53,6 @@ public class GamePVTRESTController extends GameRESTController {
         return ResponseEntity.ok("OK");
     }
 
-    private ResponseEntity<GameDTO> checkPlayer(PlayerDTO playerDTO, String jwttoken) {
-        if (jwtTokenUtil.getUsernameFromToken(jwttoken.substring(7)).equals(playerDTO.getEmail())) {
-            return null;
-        } else {
-            playerDTO.setRespStatus("ERROR").setRespMessage("Usuario no autorizado");
-            GameDTO gameDTO = GameDTO.builder().build().setPlayer(playerDTO);
-            return new ResponseEntity<>(gameDTO, HttpStatus.UNAUTHORIZED);
-        }
-    }
     @PostMapping(path="/create-new")
     public ResponseEntity<GameDTO>create(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
         return Objects.requireNonNullElseGet(this.checkPlayer(playerDTO, jwttoken), () -> ResponseEntity.ok(this.inputService.createNewGame(playerDTO)));
@@ -94,13 +85,24 @@ public class GamePVTRESTController extends GameRESTController {
     }
 
     @PostMapping(path="/delete")
-    ResponseEntity<GameDTO> delete(@RequestBody GameDTO gameDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
-        if (this.checkPlayer(gameDTO.getPlayer(), jwttoken) == null) {
-            this.gameCRUDService.delete(gameDTO.getId());
+    ResponseEntity<GameDTO> delete(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
+        GameDTO gameDTO = GameDTO.builder().build().setPlayer(playerDTO);
+        if (this.checkPlayer(playerDTO, jwttoken) == null) {
+            this.gameCRUDService.delete(playerDTO.getGames().get(0).getId());
             gameDTO.getPlayer().setRespStatus("OK").setRespMessage("Juego eliminado");
             return ResponseEntity.ok(gameDTO);
         } else {
             gameDTO.getPlayer().setRespStatus("ERROR").setRespMessage("Usuario no autorizado");
+            return new ResponseEntity<>(gameDTO, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    private ResponseEntity<GameDTO> checkPlayer(PlayerDTO playerDTO, String jwttoken) {
+        if (jwtTokenUtil.getUsernameFromToken(jwttoken.substring(7)).equals(playerDTO.getEmail())) {
+            return null;
+        } else {
+            playerDTO.setRespStatus("ERROR").setRespMessage("Usuario no autorizado");
+            GameDTO gameDTO = GameDTO.builder().build().setPlayer(playerDTO);
             return new ResponseEntity<>(gameDTO, HttpStatus.UNAUTHORIZED);
         }
     }
