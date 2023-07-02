@@ -63,6 +63,11 @@ public class GamePVTRESTController extends GameRESTController {
         return Objects.requireNonNullElseGet(this.checkPlayer(playerDTO, jwttoken), () -> ResponseEntity.ok(this.inputService.getGame(playerDTO)));
     }
 
+    @PostMapping(path="/reinit-game")
+    public ResponseEntity<GameDTO> reinitGame(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
+        return Objects.requireNonNullElseGet(this.checkPlayer(playerDTO, jwttoken), () -> ResponseEntity.ok(this.inputService.reinitGame(playerDTO)));
+    }
+
     @PostMapping(path="/add-move")
     public ResponseEntity<GameDTO> addMove(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken, @RequestBody String move) {
         return ResponseEntity.ok(this.moveService.addMove(jwttoken, move.replace("\"", "")));
