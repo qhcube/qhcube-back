@@ -60,7 +60,6 @@ public class GamePVTRESTController extends GameRESTController {
 
     @PostMapping(path="/get-game")
     public ResponseEntity<GameDTO> getOpen(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
-        log.debug("getGame: " + playerDTO.toJavaScript());
         return Objects.requireNonNullElseGet(this.checkPlayer(playerDTO, jwttoken), () -> ResponseEntity.ok(this.inputService.getGame(playerDTO)));
     }
 
