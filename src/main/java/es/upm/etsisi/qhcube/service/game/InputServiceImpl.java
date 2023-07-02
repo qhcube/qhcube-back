@@ -13,6 +13,8 @@ import es.upm.etsisi.qhcube.utils.input.InputManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+
 @Slf4j
 @Service
 public class InputServiceImpl implements InputService {
@@ -92,6 +94,39 @@ public class InputServiceImpl implements InputService {
             return GameDTO.builder().build().softClean().setPlayer(playerInDB);
         } else {
             playerInDB.softClean().setRespStatus("OK").setRespMessage("Juego abierto encontrado.").setGames(null);
+
+            return gameInDB.setPlayer(playerInDB).setCurrentInput(
+                    (this.getCurrentInput(gameInDB.getInput(), gameInDB.getMovsList())));
+
+        }
+    }
+
+    @Override
+    public GameDTO reinitGame(PlayerDTO playerDTO) {
+        PlayerDTO playerInDB = this.playerCRUDService.findByEmail(playerDTO.getEmail());
+        String respMessage = "";
+        GameDTO gameInDB;
+
+        if (playerInDB == null) {
+            playerDTO.softClean().setRespStatus("ERROR").setRespMessage("El usuario no existe.");
+            return GameDTO.builder().build().softClean().setPlayer(playerDTO);
+        } else {
+            gameInDB = this.gameMapper.toDTO(this.gameCRUDService.findById(playerDTO.getGames().get(0).getId()));
+            if (gameInDB == null) {
+                respMessage = "No se encuentra el juego a abrir.";
+            }
+        }
+
+        if (!respMessage.equals("")) {
+            playerInDB.softClean().setRespStatus("ERROR").setRespMessage(respMessage);
+            return GameDTO.builder().build().softClean().setPlayer(playerInDB);
+        } else {
+            gameInDB.setMovsList("[4,0.7483314773547882,0.6324555320336759,0.2]");
+            gameInDB.setInitialTime(new java.sql.Timestamp(System.currentTimeMillis()));
+            gameInDB.setEndTime(Timestamp.valueOf("2000-01-01 00:00:00"));
+            playerInDB.softClean().setRespStatus("OK").setRespMessage("Juego reiniciado.").setGames(null);
+
+            this.gameCRUDService.save(this.gameMapper.toEntity(gameInDB));
 
             return gameInDB.setPlayer(playerInDB).setCurrentInput(
                     (this.getCurrentInput(gameInDB.getInput(), gameInDB.getMovsList())));
