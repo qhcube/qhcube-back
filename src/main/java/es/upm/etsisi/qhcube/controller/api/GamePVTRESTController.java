@@ -47,12 +47,6 @@ public class GamePVTRESTController extends GameRESTController {
         return ResponseEntity.ok(this.gameMapper.toDTO(this.gameCRUDService.findById(id)));
     }
 
-    @PostMapping(path="/test-game")
-    public ResponseEntity<String> testGame(@RequestBody String input) {
-        log.info("testGame PVT: {}", input);
-        return ResponseEntity.ok("OK");
-    }
-
     @PostMapping(path="/create-new")
     public ResponseEntity<GameDTO>create(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
         return Objects.requireNonNullElseGet(this.checkPlayer(playerDTO, jwttoken), () -> ResponseEntity.ok(this.inputService.createNewGame(playerDTO)));

@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -31,12 +32,24 @@ public class InputServiceImpl implements InputService {
         this.gameMapper = gameMapper;
     }
 
-    public GameDTO createNewGame(PlayerDTO playerDTO) {
+    private PlayerDTO getCheckedPlayerDTO (PlayerDTO playerDTO) {
+        List<GameDTO> gamesFromPlayer = playerDTO.getGames();
         PlayerDTO playerInDB = this.playerCRUDService.findByEmail(playerDTO.getEmail());
 
         if (playerInDB == null) {
             playerDTO.softClean().setRespStatus("ERROR").setRespMessage("El usuario no existe.");
-            return GameDTO.builder().build().softClean().setPlayer(playerDTO);
+            return playerDTO;
+        } else {
+            playerInDB.setRespStatus("OK").setGames(gamesFromPlayer);
+            return playerInDB;
+        }
+    }
+
+    public GameDTO createNewGame(PlayerDTO playerDTO) {
+        PlayerDTO playerInDB = this.getCheckedPlayerDTO(playerDTO);
+
+        if (playerInDB.getRespStatus().equals("ERROR")) {
+            return GameDTO.builder().build().softClean().setPlayer(playerInDB);
         } else {
 
             if (this.gameCRUDService.countByPlayerIdOpenGames(playerInDB.getId()) > this.envUtil.getMaxGamesPerPlayer()) {
@@ -52,7 +65,6 @@ public class InputServiceImpl implements InputService {
                     InputManager.randomExchange(initialInput);
                 }
 
-                playerInDB.setRespStatus("OK");
                 playerInDB.setRespMessage("Juego iniciado correctamente.");
 
                 GameDTO newGameDTO = GameDTO.builder()
@@ -73,64 +85,50 @@ public class InputServiceImpl implements InputService {
         }
     }
 
-    public GameDTO getGame(PlayerDTO playerDTO) {
-        PlayerDTO playerInDB = this.playerCRUDService.findByEmail(playerDTO.getEmail());
-        String respMessage = "";
-        GameDTO gameInDB;
-
-        if (playerInDB == null) {
-            playerDTO.softClean().setRespStatus("ERROR").setRespMessage("El usuario no existe.");
+    private GameDTO getGameFromFirstOnList(PlayerDTO playerDTO){
+        GameDTO gameInDB = this.gameMapper.toDTO(this.gameCRUDService.findById(playerDTO.getGames().get(0).getId()));
+        if (gameInDB == null) {
+            playerDTO.softClean().setRespStatus("ERROR").setRespMessage("No se encuentra el juego solicitado.");
             return GameDTO.builder().build().softClean().setPlayer(playerDTO);
         } else {
-            gameInDB = this.gameMapper.toDTO(this.gameCRUDService.findById(playerDTO.getGames().get(0).getId()));
-
-            if (gameInDB == null) {
-                respMessage = "No se encuentra el juego a abrir.";
-            }
+            playerDTO.setRespStatus("OK").setRespMessage("Juego encontrado").setGames(null);
+            return gameInDB.setPlayer(playerDTO).setCurrentInput(
+                    (this.getCurrentInput(gameInDB.getInput(), gameInDB.getMovsList())));
         }
+    }
 
-        if (!respMessage.equals("")) {
-            playerInDB.softClean().setRespStatus("ERROR").setRespMessage(respMessage);
+    public GameDTO getGame(PlayerDTO playerDTO) {
+        PlayerDTO playerInDB = this.getCheckedPlayerDTO(playerDTO);
+
+        if (playerInDB.getRespStatus().equals("ERROR")) {
             return GameDTO.builder().build().softClean().setPlayer(playerInDB);
         } else {
-            playerInDB.softClean().setRespStatus("OK").setRespMessage("Juego abierto encontrado.").setGames(null);
-
-            return gameInDB.setPlayer(playerInDB).setCurrentInput(
-                    (this.getCurrentInput(gameInDB.getInput(), gameInDB.getMovsList())));
-
+            playerInDB.softClean();
+            return this.getGameFromFirstOnList(playerInDB);
         }
     }
 
     @Override
     public GameDTO reinitGame(PlayerDTO playerDTO) {
-        PlayerDTO playerInDB = this.playerCRUDService.findByEmail(playerDTO.getEmail());
-        String respMessage = "";
-        GameDTO gameInDB;
+        PlayerDTO playerInDB = this.getCheckedPlayerDTO(playerDTO);
 
-        if (playerInDB == null) {
-            playerDTO.softClean().setRespStatus("ERROR").setRespMessage("El usuario no existe.");
+        if (playerInDB.getRespStatus().equals("ERROR")) {
             return GameDTO.builder().build().softClean().setPlayer(playerDTO);
         } else {
-            gameInDB = this.gameMapper.toDTO(this.gameCRUDService.findById(playerDTO.getGames().get(0).getId()));
-            if (gameInDB == null) {
-                respMessage = "No se encuentra el juego a abrir.";
+            GameDTO gameInDB = getGameFromFirstOnList(playerInDB);
+
+            if (gameInDB.getPlayer().getRespStatus().equals("OK")) {
+                gameInDB.setMovsList("[4,0.7483314773547882,0.6324555320336759,0.2]");
+                gameInDB.setInitialTime(new java.sql.Timestamp(System.currentTimeMillis()));
+                gameInDB.setEndTime(Timestamp.valueOf("2000-01-01 00:00:00"));
+
+                this.gameCRUDService.save(this.gameMapper.toEntity(gameInDB));
+
+                playerInDB.softClean().setRespMessage("Juego reiniciado");
+                gameInDB.setPlayer(playerInDB).setCurrentInput(
+                        (this.getCurrentInput(gameInDB.getInput(), gameInDB.getMovsList())));
             }
-        }
-
-        if (!respMessage.equals("")) {
-            playerInDB.softClean().setRespStatus("ERROR").setRespMessage(respMessage);
-            return GameDTO.builder().build().softClean().setPlayer(playerInDB);
-        } else {
-            gameInDB.setMovsList("[4,0.7483314773547882,0.6324555320336759,0.2]");
-            gameInDB.setInitialTime(new java.sql.Timestamp(System.currentTimeMillis()));
-            gameInDB.setEndTime(Timestamp.valueOf("2000-01-01 00:00:00"));
-            playerInDB.softClean().setRespStatus("OK").setRespMessage("Juego reiniciado.").setGames(null);
-
-            this.gameCRUDService.save(this.gameMapper.toEntity(gameInDB));
-
-            return gameInDB.setPlayer(playerInDB).setCurrentInput(
-                    (this.getCurrentInput(gameInDB.getInput(), gameInDB.getMovsList())));
-
+            return gameInDB;
         }
     }
 
