@@ -85,6 +85,26 @@ public class InputServiceImpl implements InputService {
         }
     }
 
+    public GameDTO replayGameFromMovsList(GameDTO gameDTO) {
+        GameDTO gameInDB = this.gameMapper.toDTO(this.gameCRUDService.findById(gameDTO.getId()));
+        if (gameInDB == null) {
+            gameDTO.getPlayer().softClean().setRespStatus("ERROR").setRespMessage("No se encuentra el juego a continuar.");
+        } else {
+            String movsFromGameInDB = gameInDB.getMovsList();
+            String movsFromGameDTO = gameDTO.getMovsList();
+            if (movsFromGameDTO.startsWith("[[")) {
+                movsFromGameDTO = movsFromGameDTO.substring(1, movsFromGameDTO.length() - 1);
+            }
+
+            if (movsFromGameInDB.startsWith(movsFromGameDTO)) {
+                gameDTO.getPlayer().setRespStatus("OK").setRespMessage("Juego encontrado para continuar").setGames(null);
+                gameInDB.setMovsList(movsFromGameDTO);
+                this.gameCRUDService.save(this.gameMapper.toEntity(gameInDB));
+            }
+        }
+        return gameDTO;
+    }
+
     private GameDTO getGameFromFirstOnList(PlayerDTO playerDTO){
         GameDTO gameInDB = this.gameMapper.toDTO(this.gameCRUDService.findById(playerDTO.getGames().get(0).getId()));
         if (gameInDB == null) {
