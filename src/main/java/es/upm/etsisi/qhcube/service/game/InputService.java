@@ -9,4 +9,6 @@ public interface InputService {
     GameDTO getGame(PlayerDTO playerDTO);
 
     GameDTO reinitGame(PlayerDTO playerDTO);
+
+    GameDTO replayGameFromMovsList(GameDTO gaeDTO);
 }

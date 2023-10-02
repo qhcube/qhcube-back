@@ -69,9 +69,7 @@ public class GamePVTRESTController extends GameRESTController {
 
     @PostMapping(path="/replay-game-from-movs-list")
     public ResponseEntity<GameDTO> replayGameFromMovsList(@RequestBody GameDTO gameDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
-        log.debug("replayGameFromMovsList: " + gameDTO.getMovsList());
-        return new ResponseEntity<GameDTO>(HttpStatus.NOT_IMPLEMENTED);
-        //return Objects.requireNonNullElseGet(this.checkGame(gameDTO, jwttoken), () -> ResponseEntity.ok(this.moveService.replayGameFromMovsList(gameDTO)));
+        return Objects.requireNonNullElseGet(this.checkPlayer(gameDTO.getPlayer(), jwttoken), () -> ResponseEntity.ok(this.inputService.replayGameFromMovsList(gameDTO)));
     }
 
     @PostMapping(path="/get-games-by-player")
