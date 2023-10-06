@@ -8,6 +8,7 @@ import es.upm.etsisi.qhcube.service.player.PlayerCRUDService;
 import es.upm.etsisi.qhcube.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -25,12 +26,9 @@ public class MoveServiceImpl implements MoveService {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    /**
-     * @param jwttoken JWT token from HTTP request (header) to get the email of the player
-     * @param move     String with the move to add to the game in the format: "[m, p1, p2, p3] gameID"
-     * @return GameDTO with the game updated
-     */
+    //TODO: Hacer esta función transaccional.
     @Override
+    @Transactional
     public GameDTO addMove(String jwttoken, String move) {
 
         String email = jwtTokenUtil.getUsernameFromToken(jwttoken.substring(7));
