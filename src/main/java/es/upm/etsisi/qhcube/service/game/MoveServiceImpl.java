@@ -29,11 +29,11 @@ public class MoveServiceImpl implements MoveService {
     //TODO: Hacer esta función transaccional.
     @Override
     @Transactional
-    public GameDTO addMove(String jwttoken, String move) {
+    public GameDTO addMove(String jwttoken, GameDTO gameDTO) {
 
         String email = jwtTokenUtil.getUsernameFromToken(jwttoken.substring(7));
-        String moveToAdd = move.split(" ")[0];
-        long gameID = Long.parseLong(move.split(" ")[1]);
+        String moveToAdd = gameDTO.getMovsList();
+        long gameID = gameDTO.getId();
 
         PlayerDTO playerDTO = this.playerCRUDService.findByEmail(email);
 
