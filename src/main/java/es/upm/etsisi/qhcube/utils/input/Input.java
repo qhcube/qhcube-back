@@ -358,7 +358,7 @@ public class Input {
     // Ajustar_nivel()
     public void fitLevel() {
         boolean reducible = this.isReductible();
-        if (reducible) {
+        while (this.isReductible()) {
             this.reduceLevel();
         }
     }
