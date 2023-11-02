@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
+
 @Slf4j
 @Getter
 @Setter
@@ -135,6 +137,8 @@ public class Input {
         int i, x0, y0, x1, y1;
         int[][][] var_coor = this.getVarCoordinates();
 
+        log.debug("rotateRows1and2: var_coor = {}", Arrays.deepToString(var_coor));
+
         for (i = 0; i < 4; ++i) {
             x0 = var_coor[0][0][i] + var_coor[0][1][i] - var_coor[1][0][i] + var_coor[1][1][i];
             y0 = var_coor[0][0][i] - var_coor[0][1][i] + var_coor[1][0][i] + var_coor[1][1][i];
@@ -154,7 +158,9 @@ public class Input {
             var_coor[1][3][i] = y1;
         }
 
+        log.debug("rotateRows1and2: var_coor END = {}", Arrays.deepToString(var_coor));
         this.setVarCoordinates(var_coor);
+        log.debug("rotateRows1and2: coordinates END = {}", Arrays.deepToString(this.getVarCoordinates()));
     }
 
     // Rotar_columnas_1_y_2()
@@ -185,7 +191,7 @@ public class Input {
     }
 
     // Rotar(elem, j)
-    public void rotate(int elem, int j) {
+    public void rotate(int elem, int j, int k) {
         if (elem == 1) {
             if (j == 1) {
                 this.permute(1, 0, 1);
@@ -483,7 +489,7 @@ public class Input {
             case Action.PERMUTE -> this.permute(intAct[1], intAct[2], intAct[3]);
             case Action.EXCHANGE -> this.exchange(intAct[1], intAct[2]);
             case Action.REDUCE -> this.reduce(intAct[1]);
-            case Action.ROTATE -> this.rotate(intAct[1], intAct[2]);
+            case Action.ROTATE -> this.rotate(intAct[1], intAct[2], intAct[3]);
         }
     }
 }
