@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
+
 @Slf4j
 @Getter
 @Setter
@@ -185,7 +187,7 @@ public class Input {
     }
 
     // Rotar(elem, j)
-    public void rotate(int elem, int j) {
+    public void rotate(int elem, int j, int k) {
         if (elem == 1) {
             if (j == 1) {
                 this.permute(1, 0, 1);
@@ -231,6 +233,8 @@ public class Input {
                 this.permute(2, 0, 3);
             }
         }
+
+        this.fitLevel();
     }
 
     // Reducir(elem)
@@ -280,6 +284,7 @@ public class Input {
             }
         }
 
+        this.fitLevel();
         this.setVarCoordinates(var_coor);
     }
 
@@ -300,7 +305,7 @@ public class Input {
     }
 
     // Reducir_nivel()
-    public int reduceLevel() {
+    public void reduceLevel() {
         int var_j, var_k, x, nivel;
         int[][][] var_coor = this.getVarCoordinates();
 
@@ -317,7 +322,6 @@ public class Input {
             nivel += var_coor[0][0][var_k] * var_coor[0][0][var_k] + var_coor[1][0][var_k] * var_coor[1][0][var_k];
         }
         this.setVarCoordinates(var_coor);
-        return (nivel);
     }
 
     // Calcular_nivel()
@@ -357,7 +361,6 @@ public class Input {
 
     // Ajustar_nivel()
     public void fitLevel() {
-        boolean reducible = this.isReductible();
         while (this.isReductible()) {
             this.reduceLevel();
         }
@@ -474,7 +477,7 @@ public class Input {
                 }
             }
         }
-        return error.equals("");
+        return error.isEmpty();
     }
 
     public void executeAction(Action action) {
@@ -483,7 +486,7 @@ public class Input {
             case Action.PERMUTE -> this.permute(intAct[1], intAct[2], intAct[3]);
             case Action.EXCHANGE -> this.exchange(intAct[1], intAct[2]);
             case Action.REDUCE -> this.reduce(intAct[1]);
-            case Action.ROTATE -> this.rotate(intAct[1], intAct[2]);
+            case Action.ROTATE -> this.rotate(intAct[1], intAct[2], intAct[3]);
         }
     }
 }
