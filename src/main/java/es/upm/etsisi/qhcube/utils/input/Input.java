@@ -137,8 +137,6 @@ public class Input {
         int i, x0, y0, x1, y1;
         int[][][] var_coor = this.getVarCoordinates();
 
-        log.debug("rotateRows1and2: var_coor = {}", Arrays.deepToString(var_coor));
-
         for (i = 0; i < 4; ++i) {
             x0 = var_coor[0][0][i] + var_coor[0][1][i] - var_coor[1][0][i] + var_coor[1][1][i];
             y0 = var_coor[0][0][i] - var_coor[0][1][i] + var_coor[1][0][i] + var_coor[1][1][i];
@@ -158,9 +156,7 @@ public class Input {
             var_coor[1][3][i] = y1;
         }
 
-        log.debug("rotateRows1and2: var_coor END = {}", Arrays.deepToString(var_coor));
         this.setVarCoordinates(var_coor);
-        log.debug("rotateRows1and2: coordinates END = {}", Arrays.deepToString(this.getVarCoordinates()));
     }
 
     // Rotar_columnas_1_y_2()
@@ -288,6 +284,7 @@ public class Input {
             }
         }
 
+        this.fitLevel();
         this.setVarCoordinates(var_coor);
     }
 
