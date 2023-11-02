@@ -237,6 +237,8 @@ public class Input {
                 this.permute(2, 0, 3);
             }
         }
+
+        this.fitLevel();
     }
 
     // Reducir(elem)
@@ -306,7 +308,7 @@ public class Input {
     }
 
     // Reducir_nivel()
-    public int reduceLevel() {
+    public void reduceLevel() {
         int var_j, var_k, x, nivel;
         int[][][] var_coor = this.getVarCoordinates();
 
@@ -323,7 +325,6 @@ public class Input {
             nivel += var_coor[0][0][var_k] * var_coor[0][0][var_k] + var_coor[1][0][var_k] * var_coor[1][0][var_k];
         }
         this.setVarCoordinates(var_coor);
-        return (nivel);
     }
 
     // Calcular_nivel()
@@ -363,7 +364,6 @@ public class Input {
 
     // Ajustar_nivel()
     public void fitLevel() {
-        boolean reducible = this.isReductible();
         while (this.isReductible()) {
             this.reduceLevel();
         }
