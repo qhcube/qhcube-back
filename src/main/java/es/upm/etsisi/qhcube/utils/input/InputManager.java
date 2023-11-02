@@ -33,6 +33,6 @@ public class InputManager {
     }
 
     public static void randomRotate(Input input) {
-        input.rotate((int) (Math.random() * 2), (int) (Math.random() * 4));
+        input.rotate((int) (Math.random() * 2), (int) (Math.random() * 4), (int) (Math.random() * 4));
     }
 }
