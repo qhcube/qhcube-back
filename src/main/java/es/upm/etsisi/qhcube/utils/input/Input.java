@@ -474,7 +474,7 @@ public class Input {
                 }
             }
         }
-        return error.equals("");
+        return error.isEmpty();
     }
 
     public void executeAction(Action action) {
