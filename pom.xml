@@ -175,6 +175,13 @@
                                 <compilerArg>
                                     -Amapstruct.suppressGeneratorTimestamp=true
                                 </compilerArg>
+                                <compilerArg>-parameters</compilerArg>
+                                <compilerArg>
+                                    -Amapstruct.defaultComponentModel=spring
+                                </compilerArg>
+                                <compilerArg>
+                                    -Amapstruct.suppressGeneratorTimestamp=true
+                                </compilerArg>
                             </compilerArgs>
                         </configuration>
                     </execution>
