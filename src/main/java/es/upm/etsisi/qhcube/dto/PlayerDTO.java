@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter @ Setter
+@Getter @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
