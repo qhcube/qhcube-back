@@ -12,7 +12,6 @@ target/
 .settings
 .springBeans
 .sts4-cache
-.claude
 
 ### IntelliJ IDEA ###
 .idea
@@ -32,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Claude ###
+.claude/
+
+### Seguridad ###
+keystore.p12
