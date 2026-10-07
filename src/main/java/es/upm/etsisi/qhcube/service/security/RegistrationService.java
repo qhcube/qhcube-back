@@ -54,7 +54,7 @@ public class RegistrationService {
     public PlayerDTO register(PlayerDTO player) {
         String checkPlayer = checkPlayerToRegister(player);
 
-        if (checkPlayer.equals("OK")) {
+        if ("OK".equals(checkPlayer)) {
             player.setPassword(new BCryptPasswordEncoder().encode(player.getPassword()));
             player.setVericode(RandomStringUtil.getAlphaNumericString(64));
             this.playerRepository.save(this.playerMapper.toEntity(player));
