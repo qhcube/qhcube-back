@@ -28,6 +28,11 @@ public class JwtAuthenticationRESTController {
         return ResponseEntity.ok(this.loginService.login(player));
     }
 
+    @PostMapping(value = "${apiFreePrefix}/resend-email")
+    public ResponseEntity<PlayerDTO> reenviarEmail (@RequestBody PlayerDTO player) {
+        return ResponseEntity.ok(this.registrationService.resendVerificationEmail(player));
+    }
+
     @PostMapping(value = "${apiFreePrefix}/register")
     public ResponseEntity<PlayerDTO> registrarJugadorNuevo (@RequestBody PlayerDTO player) {
         return ResponseEntity.ok(this.registrationService.register(player));

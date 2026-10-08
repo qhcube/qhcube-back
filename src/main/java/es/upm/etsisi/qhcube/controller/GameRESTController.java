@@ -1,17 +1,17 @@
 package es.upm.etsisi.qhcube.controller;
 
 import es.upm.etsisi.qhcube.mapper.GameMapper;
-import es.upm.etsisi.qhcube.service.game.GameService;
+import es.upm.etsisi.qhcube.service.game.GameCRUDService;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class GameRESTController {
 
-    protected final GameService gameService;
+    protected final GameCRUDService gameCRUDService;
     protected final GameMapper gameMapper;
 
-    public GameRESTController(GameService gameService, GameMapper gameMapper){
-        this.gameService = gameService;
+    public GameRESTController(GameCRUDService gameCRUDService, GameMapper gameMapper){
+        this.gameCRUDService = gameCRUDService;
         this.gameMapper = gameMapper;
     }
 }

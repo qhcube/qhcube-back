@@ -29,11 +29,32 @@ public class RegistrationService {
         this.emailUtil = emailUtil;
     }
 
+    public PlayerDTO resendVerificationEmail(PlayerDTO player) {
+        Player playerEntity = this.playerRepository.findByEmail(player.getEmail()).orElse(null);
+
+        if (playerEntity != null) {
+            player.setVericode(playerEntity.getVericode());
+
+            try {
+                this.emailUtil.sendVerificationEmail(player);
+                player.setRespStatus("OK");
+                player.setRespMessage("E-mail de verificación reenviado correctamente.");
+            } catch (MessagingException | UnsupportedEncodingException e) {
+                player.setRespStatus("ERROR");
+                player.setRespMessage("No se ha podido enviar el e-mail de verificación.");
+            }
+        } else {
+            player.setRespStatus("ERROR");
+            player.setRespMessage("No se ha encontrado ningún jugador con ese e-mail.");
+        }
+
+        return player;
+    }
 
     public PlayerDTO register(PlayerDTO player) {
         String checkPlayer = checkPlayerToRegister(player);
 
-        if (checkPlayer.equals("OK")) {
+        if ("OK".equals(checkPlayer)) {
             player.setPassword(new BCryptPasswordEncoder().encode(player.getPassword()));
             player.setVericode(RandomStringUtil.getAlphaNumericString(64));
             this.playerRepository.save(this.playerMapper.toEntity(player));

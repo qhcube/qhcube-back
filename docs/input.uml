@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>es.upm.etsisi.qhcube.utils.input</OriginalElement>
+  <nodes>
+    <node x="-78.0" y="-13.5">es.upm.etsisi.qhcube.utils.input.Input</node>
+    <node x="-61.5" y="536.0">es.upm.etsisi.qhcube.utils.input.Coordinate</node>
+    <node x="238.0" y="-12.0">es.upm.etsisi.qhcube.utils.input.InputManager</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="es.upm.etsisi.qhcube.utils.input.Input" target="es.upm.etsisi.qhcube.utils.input.Coordinate" relationship="TO_MANY">
+      <point x="-5.0" y="239.5" />
+      <point x="-5.0" y="-90.0" />
+    </edge>
+    <edge source="es.upm.etsisi.qhcube.utils.input.Input" target="es.upm.etsisi.qhcube.utils.input.Coordinate" relationship="CREATE">
+      <point x="5.0" y="-0.0" />
+      <point x="5.0" y="-90.0" />
+    </edge>
+  </edges>
+  <settings layout="Orthogonal Groups" zoom="1.5" showDependencies="true" x="204.0" y="361.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
