@@ -2,6 +2,8 @@ package es.upm.etsisi.qhcube.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.Accessors;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -10,13 +12,14 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Accessors(chain = true)
 @Entity
 @Table(name = "player")
 public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Basic
     @Column(name = "nombre")
@@ -66,7 +69,7 @@ public class Player {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = Long.valueOf(id).intValue();
         result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
         result = 31 * result + (apellidos != null ? apellidos.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);

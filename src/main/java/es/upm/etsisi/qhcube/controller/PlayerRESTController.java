@@ -1,15 +1,15 @@
 package es.upm.etsisi.qhcube.controller;
 
 import es.upm.etsisi.qhcube.mapper.PlayerMapper;
-import es.upm.etsisi.qhcube.service.player.PlayerService;
+import es.upm.etsisi.qhcube.service.player.PlayerCRUDService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PlayerRESTController {
-    protected final PlayerService playerService;
+    protected final PlayerCRUDService playerCRUDService;
     protected final PlayerMapper playerMapper;
-    public PlayerRESTController(PlayerService playerService, PlayerMapper playerMapper){
-        this.playerService = playerService;
+    public PlayerRESTController(PlayerCRUDService playerCRUDService, PlayerMapper playerMapper){
+        this.playerCRUDService = playerCRUDService;
         this.playerMapper = playerMapper;
     }
 }

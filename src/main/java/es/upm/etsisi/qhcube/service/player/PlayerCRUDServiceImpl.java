@@ -7,15 +7,16 @@ import es.upm.etsisi.qhcube.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-public class PlayerServiceImpl implements PlayerService {
+public class PlayerCRUDServiceImpl implements PlayerCRUDService {
 
     private final PlayerRepository playerRepository;
     private final PlayerMapper playerMapper;
 
-    public PlayerServiceImpl(PlayerRepository playerRepository, PlayerMapper playerMapper) {
+    public PlayerCRUDServiceImpl(PlayerRepository playerRepository, PlayerMapper playerMapper) {
         this.playerRepository = playerRepository;
         this.playerMapper = playerMapper;
     }
@@ -26,10 +27,15 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
 
+    @Transactional(readOnly = true)
     @Override
     public PlayerDTO findByEmail(String email) {
-        PlayerDTO result;
         Player player = this.playerRepository.findByEmail(email).orElse(null);
+        return this.setRespToPlayerFound(player);
+    }
+
+    private PlayerDTO setRespToPlayerFound(Player player) {
+        PlayerDTO result;
         if (player != null) {
             result = this.playerMapper.toDTO(player);
             result.setRespStatus("OK");
@@ -37,11 +43,9 @@ public class PlayerServiceImpl implements PlayerService {
         } else {
             result = PlayerDTO.builder()
                     .respStatus("ERROR")
-                    .respMessage("No se ha encontrado ningún jugador con ese e-mail.")
+                    .respMessage("No se ha encontrado ningún jugador con ese token.")
                     .build();
         }
         return result;
     }
-
-
 }

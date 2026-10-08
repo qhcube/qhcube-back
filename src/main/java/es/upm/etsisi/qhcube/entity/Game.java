@@ -18,7 +18,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "initial_time")
@@ -29,7 +29,7 @@ public class Game {
     private Timestamp endTime;
 
     @Basic
-    @Column(name = "movs_list")
+    @Column(name = "movs_list", columnDefinition = "LONGTEXT")
     private String movsList;
 
     @Basic

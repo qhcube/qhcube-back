@@ -19,7 +19,7 @@ package es.upm.etsisi.qhcube.service.security;
 
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
 import es.upm.etsisi.qhcube.mapper.PlayerMapper;
-import es.upm.etsisi.qhcube.service.player.PlayerService;
+import es.upm.etsisi.qhcube.service.player.PlayerCRUDService;
 import es.upm.etsisi.qhcube.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +27,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -35,18 +36,18 @@ public class LoginService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
     private final JwtUserDetailsService userDetailsService;
-    private final PlayerService playerService;
+    private final PlayerCRUDService playerCRUDService;
     private final PlayerMapper playerMapper;
 
     public LoginService(AuthenticationManager authenticationManager,
                         JwtTokenUtil jwtTokenUtil,
                         JwtUserDetailsService userDetailsService,
-                        PlayerService playerService,
+                        PlayerCRUDService playerCRUDService,
                         PlayerMapper playerMapper) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
-        this.playerService = playerService;
+        this.playerCRUDService = playerCRUDService;
         this.playerMapper = playerMapper;
     }
 
@@ -59,18 +60,26 @@ public class LoginService {
                     player.getEmail(), player.getPassword()));
             final UserDetails userDetails = this.userDetailsService.loadUserByUsername(player.getEmail());
             final String token = this.jwtTokenUtil.generateToken(userDetails);
-            result = this.playerService.findByEmail(player.getEmail())
+            result = this.playerCRUDService.findByEmail(player.getEmail())
                     .setJwttoken(token);
-            this.playerService.save(this.playerMapper.toEntity(result));
+            this.playerCRUDService.save(this.playerMapper.toEntity(result));
             authStatus = "OK";
-            result = this.playerService.findByEmail(player.getEmail());
+            result = this.playerCRUDService.findByEmail(player.getEmail());
             result.setJwttoken(token).setPassword(null);
-        } catch (DisabledException e) {
-            authMessage = "Usuario no activado.";
         } catch (BadCredentialsException e) {
             authMessage = "Credenciales incorrectas.";
+        } catch (DisabledException e) {
+            if (this.passwordIsCorrect(player))
+                authMessage = "Usuario no activado.";
+            else
+                authMessage = "Credenciales incorrectas.";
         }
-
         return result.setRespStatus(authStatus).setRespMessage(authMessage);
+    }
+
+    private boolean passwordIsCorrect(PlayerDTO player) {
+        String hashedPassword = this.playerCRUDService.findByEmail(player.getEmail()).getPassword();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.matches(player.getPassword(), hashedPassword);
     }
 }
