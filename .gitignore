@@ -38,3 +38,5 @@ build/
 
 ### Seguridad ###
 keystore.p12
+# Variables de entorno locales (secretos). Ver .env.example
+.env
