@@ -7,6 +7,7 @@ import es.upm.etsisi.qhcube.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -26,6 +27,7 @@ public class PlayerCRUDServiceImpl implements PlayerCRUDService {
     }
 
 
+    @Transactional(readOnly = true)
     @Override
     public PlayerDTO findByEmail(String email) {
         Player player = this.playerRepository.findByEmail(email).orElse(null);
