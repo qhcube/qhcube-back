@@ -10,7 +10,7 @@
     </parent>
     <groupId>es.upm.etsisi</groupId>
     <artifactId>qhcube-back</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <name>qhcube-back</name>
     <description>qhcube-back</description>
     <properties>
