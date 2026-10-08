@@ -29,7 +29,7 @@ public class Game {
     private Timestamp endTime;
 
     @Basic
-    @Column(name = "movs_list")
+    @Column(name = "movs_list", columnDefinition = "LONGTEXT")
     private String movsList;
 
     @Basic
