@@ -37,16 +37,6 @@ public class GamePVTRESTController extends GameRESTController {
         this.playerCRUDService = playerCRUDService;
     }
 
-    @GetMapping(path="/get-all")
-    public ResponseEntity<List<GameDTO>> getAll(){
-        return ResponseEntity.ok(this.gameMapper.toDTOs(this.gameCRUDService.findAll()));
-    }
-
-    @GetMapping(path="/get-by-id/{id}")
-    public ResponseEntity<GameDTO> getById(@PathVariable("id") int id){
-        return ResponseEntity.ok(this.gameMapper.toDTO(this.gameCRUDService.findById(id)));
-    }
-
     @PostMapping(path="/create-new")
     public ResponseEntity<GameDTO>create(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
         return Objects.requireNonNullElseGet(this.checkPlayer(playerDTO, jwttoken), () -> ResponseEntity.ok(this.inputService.createNewGame(playerDTO)));
