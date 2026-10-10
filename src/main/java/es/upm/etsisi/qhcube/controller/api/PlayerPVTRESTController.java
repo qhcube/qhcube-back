@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("${apiPrefix}/player")
@@ -28,10 +27,5 @@ public class PlayerPVTRESTController extends PlayerRESTController {
             result = "ERROR";
         }
         return ResponseEntity.ok(result);
-    }
-
-    @GetMapping(path="/get-all")
-    public ResponseEntity<List<PlayerDTO>> getAll(){
-        return ResponseEntity.ok(this.playerMapper.toDTOs(this.playerCRUDService.findAll()));
     }
 }
