@@ -1,5 +1,6 @@
 package es.upm.etsisi.qhcube.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.Accessors;
 import java.sql.Timestamp;
@@ -23,6 +24,8 @@ public class GameDTO {
     private String input;
     private String currentInput;
 
+    // El token del jugador solo se devuelve en el login, nunca dentro de una partida.
+    @JsonIgnoreProperties(value = "jwttoken", allowSetters = true)
     private PlayerDTO player;
 
     public GameDTO softClean() {

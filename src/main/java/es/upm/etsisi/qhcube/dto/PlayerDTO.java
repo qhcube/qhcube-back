@@ -1,5 +1,7 @@
 package es.upm.etsisi.qhcube.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
@@ -17,9 +19,13 @@ public class PlayerDTO implements Serializable {
     private String nombre;
     private String apellidos;
     private String email;
+    // Se recibe en login y registro, pero nunca se devuelve en las respuestas.
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String jwttoken;
     private boolean enabled;
+    // Solo se usa internamente (email de verificación); nunca entra ni sale por la API.
+    @JsonIgnore
     private String vericode;
 
     private List<GameDTO> games;
