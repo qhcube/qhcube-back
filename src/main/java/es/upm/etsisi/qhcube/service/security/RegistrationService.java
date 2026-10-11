@@ -1,6 +1,7 @@
 package es.upm.etsisi.qhcube.service.security;
 
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
+import es.upm.etsisi.qhcube.dto.RegisterRequestDTO;
 import es.upm.etsisi.qhcube.entity.Player;
 import es.upm.etsisi.qhcube.mapper.PlayerMapper;
 import es.upm.etsisi.qhcube.repository.PlayerRepository;
@@ -51,7 +52,13 @@ public class RegistrationService {
         return player;
     }
 
-    public PlayerDTO register(PlayerDTO player) {
+    public PlayerDTO register(RegisterRequestDTO registerRequest) {
+        PlayerDTO player = new PlayerDTO()
+                .setNombre(registerRequest.getNombre())
+                .setEmail(registerRequest.getEmail())
+                .setApellidos(registerRequest.getApellidos())
+                .setPassword(registerRequest.getPassword());
+
         String checkPlayer = checkPlayerToRegister(player);
 
         if ("OK".equals(checkPlayer)) {
