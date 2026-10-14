@@ -1,6 +1,7 @@
 package es.upm.etsisi.qhcube.controller;
 
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
+import es.upm.etsisi.qhcube.dto.RegisterRequestDTO;
 import es.upm.etsisi.qhcube.service.security.LoginService;
 import es.upm.etsisi.qhcube.service.security.RegistrationService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +35,8 @@ public class JwtAuthenticationRESTController {
     }
 
     @PostMapping(value = "${apiFreePrefix}/register")
-    public ResponseEntity<PlayerDTO> registrarJugadorNuevo (@RequestBody PlayerDTO player) {
-        return ResponseEntity.ok(this.registrationService.register(player));
+    public ResponseEntity<PlayerDTO> registrarJugadorNuevo (@RequestBody RegisterRequestDTO registerRequest) {
+        return ResponseEntity.ok(this.registrationService.register(registerRequest));
     }
 
     @PostMapping(value = "${apiFreePrefix}/emailvalidation")

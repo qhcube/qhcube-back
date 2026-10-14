@@ -86,7 +86,8 @@ public class InputServiceImpl implements InputService {
     }
 
     public GameDTO replayGameFromMovsList(GameDTO gameDTO) {
-        GameDTO gameInDB = this.gameMapper.toDTO(this.gameCRUDService.findById(gameDTO.getId()));
+        PlayerDTO playerDTO = gameDTO.getPlayer();
+        GameDTO gameInDB = this.gameMapper.toDTO(this.gameCRUDService.findGameByIdAndPlayerEmail(gameDTO.getId(), playerDTO.getEmail()));
         if (gameInDB == null) {
             gameDTO.getPlayer().softClean().setRespStatus("ERROR").setRespMessage("No se encuentra el juego a continuar.");
         } else {
@@ -106,7 +107,7 @@ public class InputServiceImpl implements InputService {
     }
 
     private GameDTO getGameFromFirstOnList(PlayerDTO playerDTO){
-        GameDTO gameInDB = this.gameMapper.toDTO(this.gameCRUDService.findById(playerDTO.getGames().get(0).getId()));
+        GameDTO gameInDB = this.gameMapper.toDTO(this.gameCRUDService.findGameByIdAndPlayerEmail(playerDTO.getGames().get(0).getId(), playerDTO.getEmail()));
         if (gameInDB == null) {
             playerDTO.softClean().setRespStatus("ERROR").setRespMessage("No se encuentra el juego solicitado.");
             return GameDTO.builder().build().softClean().setPlayer(playerDTO);

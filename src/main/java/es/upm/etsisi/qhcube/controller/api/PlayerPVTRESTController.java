@@ -6,9 +6,9 @@ import es.upm.etsisi.qhcube.mapper.PlayerMapper;
 import es.upm.etsisi.qhcube.service.player.PlayerCRUDService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("${apiPrefix}/player")
@@ -19,19 +19,14 @@ public class PlayerPVTRESTController extends PlayerRESTController {
     }
 
     @PostMapping(path="/delete")
-    public ResponseEntity<String> deletePlayer (@RequestBody PlayerDTO player) {
+    public ResponseEntity<String> deletePlayer (Authentication authentication) {
         String result = "OK";
-        player = this.playerCRUDService.findByEmail(player.getEmail());
+        PlayerDTO player = this.playerCRUDService.findByEmail(authentication.getName());
         if (player != null) {
             this.playerCRUDService.delete(player.getId());
         } else {
             result = "ERROR";
         }
         return ResponseEntity.ok(result);
-    }
-
-    @GetMapping(path="/get-all")
-    public ResponseEntity<List<PlayerDTO>> getAll(){
-        return ResponseEntity.ok(this.playerMapper.toDTOs(this.playerCRUDService.findAll()));
     }
 }
