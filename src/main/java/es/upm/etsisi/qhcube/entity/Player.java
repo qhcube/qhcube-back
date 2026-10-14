@@ -49,7 +49,7 @@ public class Player {
     @Column(name = "vericode")
     private String vericode;
 
-    @OneToMany(mappedBy = "player")
+    @OneToMany(mappedBy = "player", cascade = CascadeType.REMOVE)
     private List<Game> games;
 
     @Override
