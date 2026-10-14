@@ -64,6 +64,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/free/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         // Descomentando la siguiente línea se obvia la autorización y funciona webflux.
                         //.requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()

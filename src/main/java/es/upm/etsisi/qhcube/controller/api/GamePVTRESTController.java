@@ -3,6 +3,7 @@ package es.upm.etsisi.qhcube.controller.api;
 import es.upm.etsisi.qhcube.controller.GameRESTController;
 import es.upm.etsisi.qhcube.dto.GameDTO;
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
+import es.upm.etsisi.qhcube.entity.Game;
 import es.upm.etsisi.qhcube.mapper.GameMapper;
 import es.upm.etsisi.qhcube.service.game.GameCRUDService;
 import es.upm.etsisi.qhcube.service.game.InputService;
@@ -35,16 +36,6 @@ public class GamePVTRESTController extends GameRESTController {
         this.moveService = moveService;
         this.jwtTokenUtil = jwtTokenUtil;
         this.playerCRUDService = playerCRUDService;
-    }
-
-    @GetMapping(path="/get-all")
-    public ResponseEntity<List<GameDTO>> getAll(){
-        return ResponseEntity.ok(this.gameMapper.toDTOs(this.gameCRUDService.findAll()));
-    }
-
-    @GetMapping(path="/get-by-id/{id}")
-    public ResponseEntity<GameDTO> getById(@PathVariable("id") int id){
-        return ResponseEntity.ok(this.gameMapper.toDTO(this.gameCRUDService.findById(id)));
     }
 
     @PostMapping(path="/create-new")
@@ -91,11 +82,16 @@ public class GamePVTRESTController extends GameRESTController {
     ResponseEntity<GameDTO> delete(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
         GameDTO gameDTO = GameDTO.builder().build().setPlayer(playerDTO);
         if (this.checkPlayer(playerDTO, jwttoken) == null) {
-            this.gameCRUDService.delete(playerDTO.getGames().get(0).getId());
-            gameDTO.getPlayer().setRespStatus("OK").setRespMessage("Juego eliminado");
+            Game game = this.gameCRUDService.findGameByIdAndPlayerEmail(playerDTO.getGames().get(0).getId(), playerDTO.getEmail());
+            if (game == null) {
+                gameDTO.getPlayer().setRespStatus("ERROR").setRespMessage("No se encuentra el juego solicitado.");
+            } else {
+                this.gameCRUDService.delete(game.getId());
+                gameDTO.getPlayer().setRespStatus("OK").setRespMessage("Juego eliminado.");
+            }
             return ResponseEntity.ok(gameDTO);
         } else {
-            gameDTO.getPlayer().setRespStatus("ERROR").setRespMessage("Usuario no autorizado");
+            gameDTO.getPlayer().setRespStatus("ERROR").setRespMessage("Usuario no autorizado.");
             return new ResponseEntity<>(gameDTO, HttpStatus.UNAUTHORIZED);
         }
     }
