@@ -9,6 +9,8 @@ import java.util.List;
 public interface GameCRUDService extends CRUDAbstractService<Game> {
     Game findById(long id);
 
+    Game findGameByIdAndPlayerEmail(long id, String email);
+
     List<Game> findByPlayerIdOrderByIdDesc(@NonNull Long playerId);
 
     int countByPlayerId(@NonNull Long playerId);
