@@ -10,7 +10,7 @@ import org.mapstruct.Named;
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {
-        GameMapper.class
+    GameMapper.class
 })
 public interface PlayerMapper {
 

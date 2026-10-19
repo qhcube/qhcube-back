@@ -42,9 +42,9 @@ public class PlayerCRUDServiceImpl implements PlayerCRUDService {
             result.setRespMessage("Jugador encontrado.");
         } else {
             result = PlayerDTO.builder()
-                    .respStatus("ERROR")
-                    .respMessage("No se ha encontrado ningún jugador con ese token.")
-                    .build();
+                .respStatus("ERROR")
+                .respMessage("No se ha encontrado ningún jugador con ese token.")
+                .build();
         }
         return result;
     }

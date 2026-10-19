@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter @Setter
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,33 +44,33 @@ public class PlayerDTO implements Serializable {
 
     public String toJSON() {
         return "{" +
-                "\"id\": " + id +
-                ", \"nombre\": \"" + nombre + "\"" +
-                ", \"apellidos\": \"" + apellidos + "\"" +
-                ", \"email\": \"" + email + "\"" +
-                ", \"password\": \"" + password + "\"" +
-                ", \"jwttoken\": \"" + jwttoken + "\"" +
-                ", \"enabled\": " + enabled +
-                ", \"vericode\": \"" + vericode + "\"" +
-                ", \"games\": " + ((games ==null) ? "\"\"" : games.stream().map(GameDTO::toJSON).collect(Collectors.joining(", ", "[", "]")).replaceAll("\"player\": \"\"", "\"player\": " + this.id)) +
-                ", \"respStatus\": \"" + respStatus + "\"" +
-                ", \"respMessage\": \"" + respMessage + "\"" +
-                "}";
+            "\"id\": " + id +
+            ", \"nombre\": \"" + nombre + "\"" +
+            ", \"apellidos\": \"" + apellidos + "\"" +
+            ", \"email\": \"" + email + "\"" +
+            ", \"password\": \"" + password + "\"" +
+            ", \"jwttoken\": \"" + jwttoken + "\"" +
+            ", \"enabled\": " + enabled +
+            ", \"vericode\": \"" + vericode + "\"" +
+            ", \"games\": " + ((games == null) ? "\"\"" : games.stream().map(GameDTO::toJSON).collect(Collectors.joining(", ", "[", "]")).replaceAll("\"player\": \"\"", "\"player\": " + this.id)) +
+            ", \"respStatus\": \"" + respStatus + "\"" +
+            ", \"respMessage\": \"" + respMessage + "\"" +
+            "}";
     }
 
     public String toJavaScript() {
         return "{" +
-                "id: " + id +
-                ", nombre: '" + nombre + "'" +
-                ", apellidos: '" + apellidos + "'" +
-                ", email: '" + email + "'" +
-                ", password: '" + password + "'" +
-                ", jwttoken: '" + jwttoken + "'" +
-                ", enabled: " + enabled +
-                ", vericode: '" + vericode + "'" +
-                ", games: " + ((games ==null) ? "''" : games.stream().map(GameDTO::toJavaScript).collect(Collectors.joining(", ", "{", "}")).replaceAll("player: ''", "player: " + this.id)) +
-                ", respStatus: '" + respStatus + "'" +
-                ", respMessage: '" + respMessage + "'" +
-                "}";
+            "id: " + id +
+            ", nombre: '" + nombre + "'" +
+            ", apellidos: '" + apellidos + "'" +
+            ", email: '" + email + "'" +
+            ", password: '" + password + "'" +
+            ", jwttoken: '" + jwttoken + "'" +
+            ", enabled: " + enabled +
+            ", vericode: '" + vericode + "'" +
+            ", games: " + ((games == null) ? "''" : games.stream().map(GameDTO::toJavaScript).collect(Collectors.joining(", ", "{", "}")).replaceAll("player: ''", "player: " + this.id)) +
+            ", respStatus: '" + respStatus + "'" +
+            ", respMessage: '" + respMessage + "'" +
+            "}";
     }
 }

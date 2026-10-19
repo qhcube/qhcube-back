@@ -38,9 +38,9 @@ public class MoveServiceImpl implements MoveService {
         PlayerDTO playerDTO = this.playerCRUDService.findByEmail(email);
 
         GameDTO gameIdFromPlayer = playerDTO.getGames().stream()
-                .filter(aux -> aux.getId() == gameID)
-                .findFirst()
-                .orElse(null);
+            .filter(aux -> aux.getId() == gameID)
+            .findFirst()
+            .orElse(null);
 
         if (gameIdFromPlayer == null) {
             // Game ID from request does not match with any game from the player. ERROR.
@@ -51,7 +51,7 @@ public class MoveServiceImpl implements MoveService {
             gameTUpdate.setMovsList(gameTUpdate.getMovsList() + "," + moveToAdd);
             this.gameCRUDService.save(gameTUpdate);
             playerDTO.softClean().setRespStatus("OK").setRespMessage("Movimiento añadido correctamente.")
-                    .setGames(null);
+                .setGames(null);
             return this.gameMapper.toDTO(gameTUpdate).setPlayer(playerDTO).setMovsList(null);
         }
     }

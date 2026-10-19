@@ -15,7 +15,7 @@ public class VersionRESTController {
 
     private final String version;
 
-    public VersionRESTController(Optional<BuildProperties> buildProperties){
+    public VersionRESTController(Optional<BuildProperties> buildProperties) {
         if (buildProperties.isPresent()) {
             this.version = buildProperties.get().getVersion();
         } else {
