@@ -10,7 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 public class ActionsOfTheGame {
 
@@ -21,7 +22,7 @@ public class ActionsOfTheGame {
         Arrays.stream(moves
                 .replaceAll("],", "];")
                 .split(";"))
-                .forEach(move -> this.actions.add(new Action(move)));
+            .forEach(move -> this.actions.add(new Action(move)));
     }
 
     public boolean isGameOpen() {

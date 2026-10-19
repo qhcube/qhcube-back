@@ -57,11 +57,11 @@ public class LoginService {
         String authMessage = "Login correcto.";
         try {
             this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    player.getEmail(), player.getPassword()));
+                player.getEmail(), player.getPassword()));
             final UserDetails userDetails = this.userDetailsService.loadUserByUsername(player.getEmail());
             final String token = this.jwtTokenUtil.generateToken(userDetails);
             result = this.playerCRUDService.findByEmail(player.getEmail())
-                    .setJwttoken(token);
+                .setJwttoken(token);
             this.playerCRUDService.save(this.playerMapper.toEntity(result));
             authStatus = "OK";
             result = this.playerCRUDService.findByEmail(player.getEmail());

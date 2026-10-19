@@ -18,7 +18,7 @@ public class Input {
     private Coordinate[] rowA = new Coordinate[4];
     private Coordinate[] rowB = new Coordinate[4];
 
-    public Input (String input) {
+    public Input(String input) {
         input = input.replace("]],[[", "]:[");
         input = input.replace("[[", "");
         input = input.replace("]]", "");
@@ -83,7 +83,7 @@ public class Input {
     // Permutar(elem, j, k)
     public void permute(int elem, int j, int k) {
         int var_k, var_aux;
-        int [][][] var_coor = this.getVarCoordinates();
+        int[][][] var_coor = this.getVarCoordinates();
 
         if (elem == 1) {
             for (var_k = 0; var_k < 4; ++var_k) {
@@ -113,7 +113,7 @@ public class Input {
     // Intercambiar(elem, j)
     public void exchange(int elem, int j) {
         int var_k, var_aux;
-        int [][][] var_coor = this.getVarCoordinates();
+        int[][][] var_coor = this.getVarCoordinates();
 
         if (elem == 1) {
             for (var_k = 0; var_k < 4; ++var_k) {
@@ -329,8 +329,8 @@ public class Input {
         int i, level = 0;
         int[][][] var_coor = this.getVarCoordinates();
 
-        for(i=0; i<4; ++i) {
-            level += var_coor[0][0][i]*var_coor[0][0][i] + var_coor[1][0][i]*var_coor[1][0][i];
+        for (i = 0; i < 4; ++i) {
+            level += var_coor[0][0][i] * var_coor[0][0][i] + var_coor[1][0][i] * var_coor[1][0][i];
         }
         return level;
     }

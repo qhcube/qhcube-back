@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,38 +39,38 @@ public class GamePVTRESTController extends GameRESTController {
         this.playerCRUDService = playerCRUDService;
     }
 
-    @PostMapping(path="/create-new")
-    public ResponseEntity<GameDTO>create(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
+    @PostMapping(path = "/create-new")
+    public ResponseEntity<GameDTO> create(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
         return Objects.requireNonNullElseGet(this.checkPlayer(playerDTO, jwttoken), () -> ResponseEntity.ok(this.inputService.createNewGame(playerDTO)));
     }
 
-    @PostMapping(path="/get-game")
+    @PostMapping(path = "/get-game")
     public ResponseEntity<GameDTO> getOpen(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
         return Objects.requireNonNullElseGet(this.checkPlayerAndGameNotOpened(playerDTO, jwttoken), () -> ResponseEntity.ok(this.inputService.getGame(playerDTO)));
     }
 
-    @PostMapping(path="/reinit-game")
+    @PostMapping(path = "/reinit-game")
     public ResponseEntity<GameDTO> reinitGame(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
         return Objects.requireNonNullElseGet(this.checkPlayer(playerDTO, jwttoken), () -> ResponseEntity.ok(this.inputService.reinitGame(playerDTO)));
     }
 
-    @PostMapping(path="/add-move")
+    @PostMapping(path = "/add-move")
     public ResponseEntity<GameDTO> addMove(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken, @RequestBody GameDTO gameDTO) {
         return Objects.requireNonNullElseGet(this.checkPlayerAndGameNotOpened(gameDTO.getPlayer(), jwttoken), () -> ResponseEntity.ok(this.moveService.addMove(jwttoken, gameDTO)));
     }
 
-    @PostMapping(path="/replay-game-from-movs-list")
+    @PostMapping(path = "/replay-game-from-movs-list")
     public ResponseEntity<GameDTO> replayGameFromMovsList(@RequestBody GameDTO gameDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
         return Objects.requireNonNullElseGet(this.checkPlayer(gameDTO.getPlayer(), jwttoken), () -> ResponseEntity.ok(this.inputService.replayGameFromMovsList(gameDTO)));
     }
 
-    @PostMapping(path="/get-games-by-player")
+    @PostMapping(path = "/get-games-by-player")
     public ResponseEntity<List<GameDTO>> getGamesByPlayer(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
         if (this.checkPlayer(playerDTO, jwttoken) == null) {
             return ResponseEntity.ok(this.gameMapper.toDTOsWithoutPlayers(
-                    this.gameCRUDService.findByPlayerIdOrderByIdDesc(
-                            this.playerCRUDService.findByEmail(playerDTO.getEmail()).getId()
-                    )));
+                this.gameCRUDService.findByPlayerIdOrderByIdDesc(
+                    this.playerCRUDService.findByEmail(playerDTO.getEmail()).getId()
+                )));
         } else {
             playerDTO.setRespStatus("ERROR").setRespMessage("Usuario no autorizado");
             ArrayList<GameDTO> gameDTOS = new ArrayList<>();
@@ -78,7 +79,7 @@ public class GamePVTRESTController extends GameRESTController {
         }
     }
 
-    @PostMapping(path="/delete")
+    @PostMapping(path = "/delete")
     ResponseEntity<GameDTO> delete(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
         GameDTO gameDTO = GameDTO.builder().build().setPlayer(playerDTO);
         if (this.checkPlayer(playerDTO, jwttoken) == null) {

@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.*;
 public class PlayerRESTController {
     protected final PlayerCRUDService playerCRUDService;
     protected final PlayerMapper playerMapper;
-    public PlayerRESTController(PlayerCRUDService playerCRUDService, PlayerMapper playerMapper){
+
+    public PlayerRESTController(PlayerCRUDService playerCRUDService, PlayerMapper playerMapper) {
         this.playerCRUDService = playerCRUDService;
         this.playerMapper = playerMapper;
     }

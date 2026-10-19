@@ -25,22 +25,22 @@ public class JwtAuthenticationRESTController {
     }
 
     @PostMapping(value = "${apiFreePrefix}/login")
-    public ResponseEntity<PlayerDTO> loginJugador (@RequestBody PlayerDTO player) {
+    public ResponseEntity<PlayerDTO> loginJugador(@RequestBody PlayerDTO player) {
         return ResponseEntity.ok(this.loginService.login(player));
     }
 
     @PostMapping(value = "${apiFreePrefix}/resend-email")
-    public ResponseEntity<PlayerDTO> reenviarEmail (@RequestBody PlayerDTO player) {
+    public ResponseEntity<PlayerDTO> reenviarEmail(@RequestBody PlayerDTO player) {
         return ResponseEntity.ok(this.registrationService.resendVerificationEmail(player));
     }
 
     @PostMapping(value = "${apiFreePrefix}/register")
-    public ResponseEntity<PlayerDTO> registrarJugadorNuevo (@RequestBody RegisterRequestDTO registerRequest) {
+    public ResponseEntity<PlayerDTO> registrarJugadorNuevo(@RequestBody RegisterRequestDTO registerRequest) {
         return ResponseEntity.ok(this.registrationService.register(registerRequest));
     }
 
     @PostMapping(value = "${apiFreePrefix}/emailvalidation")
-    public ResponseEntity<PlayerDTO> validarEmail (@RequestBody Map<String, String> params) {
+    public ResponseEntity<PlayerDTO> validarEmail(@RequestBody Map<String, String> params) {
         return ResponseEntity.ok(this.registrationService.validateEmail(params.get("code"), params.get("email")));
     }
 }

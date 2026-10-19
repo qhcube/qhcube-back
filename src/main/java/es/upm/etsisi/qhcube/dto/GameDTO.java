@@ -3,6 +3,7 @@ package es.upm.etsisi.qhcube.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.Accessors;
+
 import java.sql.Timestamp;
 
 @Getter
@@ -38,29 +39,29 @@ public class GameDTO {
         return this;
     }
 
-   public String toJSON() {
-               return "{" +
-               "\"id\": " + id +
-               ", \"initialTime\": \"" + initialTime + "\"" +
-               ", \"endTime\": \"" + endTime + "\"" +
-               ", \"totalGameTime\": \"" + totalGameTime + "\"" +
-               ", \"movsList\": \"" + movsList + "\"" +
-               ", \"input\": \"" + input + "\"" +
-               ", \"player\": " + (player == null ? "\"\"" : player.getId()) +
-               "}";
-   }
+    public String toJSON() {
+        return "{" +
+            "\"id\": " + id +
+            ", \"initialTime\": \"" + initialTime + "\"" +
+            ", \"endTime\": \"" + endTime + "\"" +
+            ", \"totalGameTime\": \"" + totalGameTime + "\"" +
+            ", \"movsList\": \"" + movsList + "\"" +
+            ", \"input\": \"" + input + "\"" +
+            ", \"player\": " + (player == null ? "\"\"" : player.getId()) +
+            "}";
+    }
 
-   public String toJavaScript() {
-               return "{" +
-               "id: " + id +
-               ", initialTime: '" + initialTime + "'" +
-               ", endTime: '" + endTime + "'" +
-               ", totalGameTime: '" + totalGameTime + "'" +
-               ", movsList: '" + movsList + "'" +
-               ", input: '" + input + "'" +
-               ", player: " + (player == null ? "''" : player.getId()) +
-               "}";
-   }
+    public String toJavaScript() {
+        return "{" +
+            "id: " + id +
+            ", initialTime: '" + initialTime + "'" +
+            ", endTime: '" + endTime + "'" +
+            ", totalGameTime: '" + totalGameTime + "'" +
+            ", movsList: '" + movsList + "'" +
+            ", input: '" + input + "'" +
+            ", player: " + (player == null ? "''" : player.getId()) +
+            "}";
+    }
 
     public Timestamp getTotalGameTime() {
         if (endTime.before(initialTime))
