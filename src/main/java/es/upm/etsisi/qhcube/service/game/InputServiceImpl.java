@@ -52,7 +52,7 @@ public class InputServiceImpl implements InputService {
             return GameDTO.builder().build().softClean().setPlayer(playerInDB);
         } else {
 
-            if (this.gameCRUDService.countByPlayerIdOpenGames(playerInDB.getId()) > this.envUtil.getMaxGamesPerPlayer()) {
+            if (this.gameCRUDService.countByPlayerIdOpenGames(playerInDB.getId()) >= this.envUtil.getMaxGamesPerPlayer()) {
                 playerInDB.softClean().setGames(null);
                 playerInDB.setRespStatus("ERROR").setRespMessage("Límite de juegos sin resolver alcanzado.");
                 return GameDTO.builder().build().softClean().setPlayer(playerInDB);
