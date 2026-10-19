@@ -93,14 +93,20 @@ public class InputServiceImpl implements InputService {
         } else {
             String movsFromGameInDB = gameInDB.getMovsList();
             String movsFromGameDTO = gameDTO.getMovsList();
+
             if (movsFromGameDTO.startsWith("[[")) {
                 movsFromGameDTO = movsFromGameDTO.substring(1, movsFromGameDTO.length() - 1);
             }
 
-            if (movsFromGameInDB.startsWith(movsFromGameDTO)) {
+            boolean corteValido = movsFromGameDTO.endsWith("]")
+                && (movsFromGameInDB.equals(movsFromGameDTO) || movsFromGameInDB.startsWith(movsFromGameDTO + ",["));
+
+            if (corteValido) {
                 gameDTO.getPlayer().setRespStatus("OK").setRespMessage("Juego encontrado para continuar").setGames(null);
                 gameInDB.setMovsList(movsFromGameDTO);
                 this.gameCRUDService.save(this.gameMapper.toEntity(gameInDB));
+            } else {
+                gameDTO.getPlayer().softClean().setRespStatus("ERROR").setRespMessage("Lista de movimientos no válida.");
             }
         }
         return gameDTO;
