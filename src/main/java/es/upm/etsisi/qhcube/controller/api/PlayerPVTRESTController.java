@@ -18,8 +18,8 @@ public class PlayerPVTRESTController extends PlayerRESTController {
         super(jugadorService, jugadorMapper);
     }
 
-    @PostMapping(path="/delete")
-    public ResponseEntity<String> deletePlayer (Authentication authentication) {
+    @PostMapping(path = "/delete")
+    public ResponseEntity<String> deletePlayer(Authentication authentication) {
         String result = "OK";
         PlayerDTO player = this.playerCRUDService.findByEmail(authentication.getName());
         if (player != null) {

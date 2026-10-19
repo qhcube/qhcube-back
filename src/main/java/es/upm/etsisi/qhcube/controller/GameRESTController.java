@@ -10,7 +10,7 @@ public class GameRESTController {
     protected final GameCRUDService gameCRUDService;
     protected final GameMapper gameMapper;
 
-    public GameRESTController(GameCRUDService gameCRUDService, GameMapper gameMapper){
+    public GameRESTController(GameCRUDService gameCRUDService, GameMapper gameMapper) {
         this.gameCRUDService = gameCRUDService;
         this.gameMapper = gameMapper;
     }

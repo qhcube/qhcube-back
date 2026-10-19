@@ -19,7 +19,7 @@ public class GameFreeRESTController extends GameRESTController {
         super(gameCRUDService, gameMapper);
     }
 
-    @PostMapping(path="/test-game")
+    @PostMapping(path = "/test-game")
     public ResponseEntity<String> testGame(@RequestBody String input) {
         log.info("testGame: {}", input);
         return ResponseEntity.ok("OK");

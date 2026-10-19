@@ -23,7 +23,9 @@ public class GameCRUDServiceImpl implements GameCRUDService {
     }
 
     @Override
-    public Game findGameByIdAndPlayerEmail(long id, String email) {return this.gameRepository.findGameByIdAndPlayerEmail(id, email);}
+    public Game findGameByIdAndPlayerEmail(long id, String email) {
+        return this.gameRepository.findGameByIdAndPlayerEmail(id, email);
+    }
 
     @Override
     public List<Game> findByPlayerIdOrderByIdDesc(@NonNull Long playerId) {

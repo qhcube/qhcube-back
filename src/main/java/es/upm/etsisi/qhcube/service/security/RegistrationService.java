@@ -54,10 +54,10 @@ public class RegistrationService {
 
     public PlayerDTO register(RegisterRequestDTO registerRequest) {
         PlayerDTO player = new PlayerDTO()
-                .setNombre(registerRequest.getNombre())
-                .setEmail(registerRequest.getEmail())
-                .setApellidos(registerRequest.getApellidos())
-                .setPassword(registerRequest.getPassword());
+            .setNombre(registerRequest.getNombre())
+            .setEmail(registerRequest.getEmail())
+            .setApellidos(registerRequest.getApellidos())
+            .setPassword(registerRequest.getPassword());
 
         String checkPlayer = checkPlayerToRegister(player);
 
@@ -91,7 +91,8 @@ public class RegistrationService {
         else if (player.getPassword().isEmpty()) result = "La contraseña no puede estar vacía.";
         else if (player.getPassword().length() < 6) result = "La contraseña debe tener al menos 6 caracteres.";
         else if (!EmailValidator.getInstance().isValid(player.getEmail())) result = "El e-mail no es válido.";
-        else if (this.playerRepository.findByEmail(player.getEmail()).isPresent()) result = "Ya existe un jugador con ese e-mail.";
+        else if (this.playerRepository.findByEmail(player.getEmail()).isPresent())
+            result = "Ya existe un jugador con ese e-mail.";
 
         return result;
     }
