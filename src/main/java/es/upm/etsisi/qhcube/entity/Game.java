@@ -46,11 +46,11 @@ public class Game {
         if (o == null || getClass() != o.getClass()) return false;
         Game that = (Game) o;
         return id == that.id
-                && player.getId() == that.player.getId()
-                && Objects.equals(initialTime, that.initialTime)
-                && Objects.equals(endTime, that.endTime)
-                && Objects.equals(movsList, that.movsList)
-                && Objects.equals(input, that.input);
+            && player.getId() == that.player.getId()
+            && Objects.equals(initialTime, that.initialTime)
+            && Objects.equals(endTime, that.endTime)
+            && Objects.equals(movsList, that.movsList)
+            && Objects.equals(input, that.input);
     }
 
     @Override
