@@ -32,7 +32,7 @@ public class InputServiceImpl implements InputService {
         this.gameMapper = gameMapper;
     }
 
-    private PlayerDTO getCheckedPlayerDTO (PlayerDTO playerDTO) {
+    private PlayerDTO getCheckedPlayerDTO(PlayerDTO playerDTO) {
         List<GameDTO> gamesFromPlayer = playerDTO.getGames();
         PlayerDTO playerInDB = this.playerCRUDService.findByEmail(playerDTO.getEmail());
 
@@ -52,7 +52,7 @@ public class InputServiceImpl implements InputService {
             return GameDTO.builder().build().softClean().setPlayer(playerInDB);
         } else {
 
-            if (this.gameCRUDService.countByPlayerIdOpenGames(playerInDB.getId()) > this.envUtil.getMaxGamesPerPlayer()) {
+            if (this.gameCRUDService.countByPlayerIdOpenGames(playerInDB.getId()) >= this.envUtil.getMaxGamesPerPlayer()) {
                 playerInDB.softClean().setGames(null);
                 playerInDB.setRespStatus("ERROR").setRespMessage("Límite de juegos sin resolver alcanzado.");
                 return GameDTO.builder().build().softClean().setPlayer(playerInDB);
@@ -68,11 +68,11 @@ public class InputServiceImpl implements InputService {
                 playerInDB.setRespMessage("Juego iniciado correctamente.");
 
                 GameDTO newGameDTO = GameDTO.builder()
-                        .initialTime(new java.sql.Timestamp(System.currentTimeMillis()))
-                        .input(initialInput.toString())
-                        .movsList("[4,0.7483314773547882,0.6324555320336759,0.2]")
-                        .player(playerInDB)
-                        .build();
+                    .initialTime(new java.sql.Timestamp(System.currentTimeMillis()))
+                    .input(initialInput.toString())
+                    .movsList("[4,0.7483314773547882,0.6324555320336759,0.2]")
+                    .player(playerInDB)
+                    .build();
 
 
                 Game gameToSave = this.gameMapper.toEntity(newGameDTO);
@@ -93,20 +93,26 @@ public class InputServiceImpl implements InputService {
         } else {
             String movsFromGameInDB = gameInDB.getMovsList();
             String movsFromGameDTO = gameDTO.getMovsList();
+
             if (movsFromGameDTO.startsWith("[[")) {
                 movsFromGameDTO = movsFromGameDTO.substring(1, movsFromGameDTO.length() - 1);
             }
 
-            if (movsFromGameInDB.startsWith(movsFromGameDTO)) {
+            boolean corteValido = movsFromGameDTO.endsWith("]")
+                && (movsFromGameInDB.equals(movsFromGameDTO) || movsFromGameInDB.startsWith(movsFromGameDTO + ",["));
+
+            if (corteValido) {
                 gameDTO.getPlayer().setRespStatus("OK").setRespMessage("Juego encontrado para continuar").setGames(null);
                 gameInDB.setMovsList(movsFromGameDTO);
                 this.gameCRUDService.save(this.gameMapper.toEntity(gameInDB));
+            } else {
+                gameDTO.getPlayer().softClean().setRespStatus("ERROR").setRespMessage("Lista de movimientos no válida.");
             }
         }
         return gameDTO;
     }
 
-    private GameDTO getGameFromFirstOnList(PlayerDTO playerDTO){
+    private GameDTO getGameFromFirstOnList(PlayerDTO playerDTO) {
         GameDTO gameInDB = this.gameMapper.toDTO(this.gameCRUDService.findGameByIdAndPlayerEmail(playerDTO.getGames().get(0).getId(), playerDTO.getEmail()));
         if (gameInDB == null) {
             playerDTO.softClean().setRespStatus("ERROR").setRespMessage("No se encuentra el juego solicitado.");
@@ -114,7 +120,7 @@ public class InputServiceImpl implements InputService {
         } else {
             playerDTO.setRespStatus("OK").setRespMessage("Juego encontrado").setGames(null);
             return gameInDB.setPlayer(playerDTO).setCurrentInput(
-                    (this.getCurrentInput(gameInDB.getInput(), gameInDB.getMovsList())));
+                (this.getCurrentInput(gameInDB.getInput(), gameInDB.getMovsList())));
         }
     }
 
@@ -147,7 +153,7 @@ public class InputServiceImpl implements InputService {
 
                 playerInDB.softClean().setRespMessage("Juego reiniciado");
                 gameInDB.setPlayer(playerInDB).setCurrentInput(
-                        (this.getCurrentInput(gameInDB.getInput(), gameInDB.getMovsList())));
+                    (this.getCurrentInput(gameInDB.getInput(), gameInDB.getMovsList())));
             }
             return gameInDB;
         }

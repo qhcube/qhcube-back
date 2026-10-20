@@ -81,11 +81,11 @@ public class Player {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
-                "nombre = " + nombre + ", " +
-                "apellidos = " + apellidos + ", " +
-                "email = " + email + ", " +
-                "password = " + password + ", " +
-                "jwttoken = " + jwttoken  + ", " +
-                "vericode = " + vericode + ")";
+            "nombre = " + nombre + ", " +
+            "apellidos = " + apellidos + ", " +
+            "email = " + email + ", " +
+            "password = " + password + ", " +
+            "jwttoken = " + jwttoken + ", " +
+            "vericode = " + vericode + ")";
     }
 }
