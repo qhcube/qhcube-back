@@ -2,6 +2,7 @@ package es.upm.etsisi.qhcube.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+
 import java.io.Serializable;
 
 @Getter

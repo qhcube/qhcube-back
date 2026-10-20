@@ -19,14 +19,15 @@ import lombok.extern.slf4j.Slf4j;
  *          <li>function Rotar(elem, j) { [...] }</li>
  *      </ul>
  * </p>
- *
+ * <p>
  * In addition, everytime the player change the cube position in its canvas, the javascript code will
  * send a request to the server with the new position of the cube so it can be replayed later.
  *
  * @see this.move
  */
 @Slf4j
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Action {
@@ -40,12 +41,12 @@ public class Action {
     /**
      * This array represents the action taken by the player during a game.
      * <p>
-     *     The format of this array is the following: <b>[m, p1, p2, p3]</b>, where 'm' stands for kind
-     *     of action taken by the player, and 'p1', 'p2' and 'p3' stands for the parameters of the action.
+     * The format of this array is the following: <b>[m, p1, p2, p3]</b>, where 'm' stands for kind
+     * of action taken by the player, and 'p1', 'p2' and 'p3' stands for the parameters of the action.
      * </p>
      *
      * <p>
-     *     Possible values for 'm' are:
+     * Possible values for 'm' are:
      *     <ul>
      *         <li>0: Permutar</li>
      *         <li>1: Intercambiar</li>
@@ -63,7 +64,9 @@ public class Action {
      */
     private double[] action = new double[4];
 
-    /** This constructor is used to create a Move object from a string.
+    /**
+     * This constructor is used to create a Move object from a string.
+     *
      * @param action String representing the move in the format [m, p1, p2, p3]
      */
     public Action(String action) {

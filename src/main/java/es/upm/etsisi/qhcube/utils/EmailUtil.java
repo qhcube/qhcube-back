@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+
 import java.io.UnsupportedEncodingException;
 
 @Slf4j
@@ -23,7 +24,7 @@ public class EmailUtil {
     }
 
     public void sendVerificationEmail(PlayerDTO player)
-            throws MessagingException, UnsupportedEncodingException {
+        throws MessagingException, UnsupportedEncodingException {
 
         JavaMailSender emailSender = this.mailSenderConfig.getJavaMailSender();
 
@@ -32,12 +33,12 @@ public class EmailUtil {
         String subject = "Por favor, verifica tu registro";
 
         String content = "Estimado <b>" + player.getNombre() + " " + player.getApellidos() + "</b>,<br/><br/>"
-                + "Haz click en el enlace de abajo para verificar tu registro:<br>"
-                + "<h3><a href=\"[[URL]]\" target='_self'>VERIFICAR</a></h3><br/>"
-                + "También puedes copiar y pegar el siguiente enlace en tu navegador:<br/><br/>"
-                + "[[URL]]<br/><br/><br/>"
-                + "¡GRACIAS!<br/><br/>"
-                + "QHCube by Jesús Lacalle.";
+            + "Haz click en el enlace de abajo para verificar tu registro:<br>"
+            + "<h3><a href=\"[[URL]]\" target='_self'>VERIFICAR</a></h3><br/>"
+            + "También puedes copiar y pegar el siguiente enlace en tu navegador:<br/><br/>"
+            + "[[URL]]<br/><br/><br/>"
+            + "¡GRACIAS!<br/><br/>"
+            + "QHCube by Jesús Lacalle.";
 
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -48,8 +49,8 @@ public class EmailUtil {
         helper.setReplyTo(fromAddress, senderName);
 
         String verifyURL = this.envUtil.getServerUrl()
-                + "/email-validation?code=" + player.getVericode()
-                + "&email=" + player.getEmail();
+            + "/email-validation?code=" + player.getVericode()
+            + "&email=" + player.getEmail();
 
         content = content.replace("[[URL]]", verifyURL);
 

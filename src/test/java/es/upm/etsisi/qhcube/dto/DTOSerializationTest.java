@@ -11,10 +11,10 @@ class DTOSerializationTest {
 
     private PlayerDTO player() {
         return new PlayerDTO()
-                .setEmail("jugador@upm.es")
-                .setPassword("hash-de-la-password")
-                .setJwttoken("token-del-jugador")
-                .setVericode("codigo-de-verificacion");
+            .setEmail("jugador@upm.es")
+            .setPassword("hash-de-la-password")
+            .setJwttoken("token-del-jugador")
+            .setVericode("codigo-de-verificacion");
     }
 
     @Test
@@ -28,7 +28,7 @@ class DTOSerializationTest {
     @Test
     void playerPasswordIsStillAcceptedInRequests() throws Exception {
         PlayerDTO player = this.mapper.readValue(
-                "{\"email\":\"jugador@upm.es\",\"password\":\"secreta\",\"vericode\":\"intento\"}", PlayerDTO.class);
+            "{\"email\":\"jugador@upm.es\",\"password\":\"secreta\",\"vericode\":\"intento\"}", PlayerDTO.class);
         assertEquals("secreta", player.getPassword());
         assertNotEquals("intento", player.getVericode());
     }

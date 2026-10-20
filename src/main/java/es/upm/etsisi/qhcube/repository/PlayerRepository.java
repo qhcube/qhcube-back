@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface PlayerRepository extends JpaRepository<Player, Long> {
 
-    Optional<Player> findByEmail (String email);
+    Optional<Player> findByEmail(String email);
 
-    Optional<Player> findByJwttoken (String jwttoken);
+    Optional<Player> findByJwttoken(String jwttoken);
 }
