@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [dev, main]
+
+jobs:
+  tests:
+    name: tests
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0.33              # la misma versión que en producción
+        env:                             # crea la base de datos y el usuario al arrancar
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: qhcube_db
+          MYSQL_USER: qhcube_usr
+          MYSQL_PASSWORD: test
+        ports:
+          - 3307:3306                    # el 3306 del contenedor, visible como 3307 (lo que espera el perfil dev)
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    env:
+      DB_PASSWORD: test                 # la misma que MYSQL_PASSWORD del servicio
+      JWT_SECRET: clave-solo-para-tests
+      MAIL_PASSWORD: no-se-usa-en-tests
+
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Instalar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin       # la misma familia de Java que usa producción (eclipse-temurin)
+          java-version: 17
+          cache: maven                # guarda las dependencias de Maven entre ejecuciones
+
+      - name: Tests
+        run: ./mvnw -B test
