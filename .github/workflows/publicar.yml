@@ -63,7 +63,7 @@ jobs:
 
       - name: Crear la release (borrador)
         env:
-        GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
           gh release create "$GITHUB_REF_NAME" \
