@@ -16,7 +16,7 @@ class MoveValidatorTest {
 
     @Test
     void tooLongText() {
-        assertTrue(MoveValidator.isValidMove("[4," + "1".repeat(150) + ",0,0]"));
+        assertFalse(MoveValidator.isValidMove("[4," + "1".repeat(150) + ",0,0]"));
     }
 
     @ParameterizedTest
