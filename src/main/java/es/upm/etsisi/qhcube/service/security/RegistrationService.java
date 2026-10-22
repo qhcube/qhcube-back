@@ -34,10 +34,10 @@ public class RegistrationService {
         Player playerEntity = this.playerRepository.findByEmail(player.getEmail()).orElse(null);
 
         if (playerEntity != null) {
-            player.setVericode(playerEntity.getVericode());
+            PlayerDTO playerInDB = this.playerMapper.toDTOOneLevel(playerEntity);
 
             try {
-                this.emailUtil.sendVerificationEmail(player);
+                this.emailUtil.sendVerificationEmail(playerInDB);
                 player.setRespStatus("OK");
                 player.setRespMessage("E-mail de verificación reenviado correctamente.");
             } catch (MessagingException | UnsupportedEncodingException e) {
