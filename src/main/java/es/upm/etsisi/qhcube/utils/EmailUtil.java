@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.HtmlUtils;
 
 import java.io.UnsupportedEncodingException;
 
@@ -32,14 +33,6 @@ public class EmailUtil {
         String senderName = envUtil.getMailSenderName();
         String subject = "Por favor, verifica tu registro";
 
-        String content = "Estimado <b>" + player.getNombre() + " " + player.getApellidos() + "</b>,<br/><br/>"
-            + "Haz click en el enlace de abajo para verificar tu registro:<br>"
-            + "<h3><a href=\"[[URL]]\" target='_self'>VERIFICAR</a></h3><br/>"
-            + "También puedes copiar y pegar el siguiente enlace en tu navegador:<br/><br/>"
-            + "[[URL]]<br/><br/><br/>"
-            + "¡GRACIAS!<br/><br/>"
-            + "QHCube by Jesús Lacalle.";
-
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
@@ -52,10 +45,24 @@ public class EmailUtil {
             + "/email-validation?code=" + player.getVericode()
             + "&email=" + player.getEmail();
 
-        content = content.replace("[[URL]]", verifyURL);
-
-        helper.setText(content, true);
+        helper.setText(buildVerificationContent(player, verifyURL), true);
 
         emailSender.send(message);
+    }
+
+    static String buildVerificationContent(PlayerDTO player, String verifyURL) {
+        String fullName = HtmlUtils.htmlEscape(player.getNombre() + " " + player.getApellidos());
+
+        String content = "Estimado <b>" + fullName + "</b>,<br/><br/>"
+            + "Haz click en el enlace de abajo para verificar tu registro:<br>"
+            + "<h3><a href=\"[[URL]]\" target='_self'>VERIFICAR</a></h3><br/>"
+            + "También puedes copiar y pegar el siguiente enlace en tu navegador:<br/><br/>"
+            + "[[URL]]<br/><br/><br/>"
+            + "¡GRACIAS!<br/><br/>"
+            + "QHCube by Jesús Lacalle.";
+
+        content = content.replace("[[URL]]", verifyURL);
+
+        return content;
     }
 }
