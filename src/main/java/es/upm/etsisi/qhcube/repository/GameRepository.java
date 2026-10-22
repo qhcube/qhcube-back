@@ -17,6 +17,6 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     int countByPlayerId(@NonNull Long playerId);
 
-    @Query(value = "select count(player_id) from game where player_id = ?1 and NOT REGEXP_LIKE(movs_list, '\\\\[5,1,1,1]\\\\]$')", nativeQuery = true)
+    @Query(value = "select count(player_id) from game where player_id = ?1 and NOT REGEXP_LIKE(movs_list, '\\\\[5,1,1,1\\\\]$')", nativeQuery = true)
     int countByPlayerIdOpenGames(@NonNull Long playerId);
 }

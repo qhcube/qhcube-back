@@ -1,13 +1,14 @@
 package es.upm.etsisi.qhcube.utils.input;
 
 import es.upm.etsisi.qhcube.utils.action.Action;
+import es.upm.etsisi.qhcube.utils.action.ActionsOfTheGame;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Getter
@@ -78,6 +79,27 @@ public class Input {
         rowB[1] = new Coordinate(new int[]{0, 4, 1, -1});
         rowB[2] = new Coordinate(new int[]{-1, 1, 1, 3});
         rowB[3] = new Coordinate(new int[]{0, -1, 3, 4});
+    }
+
+    /**
+     * Estado inicial a un solo movimiento de la solución, solo para desarrollo, pruebas y demostraciones
+     * (se activa con la propiedad {@code qhcube.dev.almost-solved-game}).
+     * <p>
+     * Parte de la matriz identidad (el estado resuelto) y permuta las filas 1 y 2. Para resolverla basta con
+     * volver a permutar las filas 1 y 2 o permutar las columnas 1 y 2 (matemáticamente da el mismo resultado
+     * en este caso).
+     */
+    public void setNearSolvedInput() {
+        rowA[0] = new Coordinate(new int[]{1, 0, 0, 0});
+        rowA[1] = new Coordinate(new int[]{0, 1, 0, 0});
+        rowA[2] = new Coordinate(new int[]{0, 0, 1, 0});
+        rowA[3] = new Coordinate(new int[]{0, 0, 0, 1});
+        rowB[0] = new Coordinate(new int[]{0, 0, 0, 0});
+        rowB[1] = new Coordinate(new int[]{0, 0, 0, 0});
+        rowB[2] = new Coordinate(new int[]{0, 0, 0, 0});
+        rowB[3] = new Coordinate(new int[]{0, 0, 0, 0});
+
+        this.permute(1, 0, 1);
     }
 
     // Permutar(elem, j, k)
@@ -487,6 +509,14 @@ public class Input {
             case Action.EXCHANGE -> this.exchange(intAct[1], intAct[2]);
             case Action.REDUCE -> this.reduce(intAct[1]);
             case Action.ROTATE -> this.rotate(intAct[1], intAct[2], intAct[3]);
+        }
+    }
+
+    /** Aplica sobre el estado actual todos los movimientos de una lista ("[m,a,b,c],[m,a,b,c],..."). */
+    public void executeActions(String movsList) {
+        List<Action> actions = new ActionsOfTheGame(movsList).getActions();
+        for (Action action : actions) {
+            this.executeAction(action);
         }
     }
 }

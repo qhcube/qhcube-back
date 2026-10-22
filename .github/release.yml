@@ -1,0 +1,24 @@
+# Agrupación de las notas generadas con "Generate release notes".
+# Se basa en las etiquetas de los PRs (no en el tipo de los issues).
+changelog:
+  exclude:
+    labels:
+      - duplicate
+      - invalid
+      - wontfix
+  categories:
+    - title: Seguridad
+      labels:
+        - security
+    - title: Regresiones corregidas
+      labels:
+        - regression
+    - title: Documentación
+      labels:
+        - documentation
+    - title: Refactorización
+      labels:
+        - refactor
+    - title: Cambios
+      labels:
+        - "*"

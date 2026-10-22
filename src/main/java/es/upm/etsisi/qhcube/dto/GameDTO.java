@@ -24,6 +24,7 @@ public class GameDTO {
     private String movsList;
     private String input;
     private String currentInput;
+    private boolean solved;
 
     // El token del jugador solo se devuelve en el login, nunca dentro de una partida.
     @JsonIgnoreProperties(value = "jwttoken", allowSetters = true)
@@ -36,6 +37,7 @@ public class GameDTO {
         this.totalGameTime = Timestamp.valueOf("2000-01-01 00:00:00");
         this.movsList = "";
         this.input = "";
+        this.solved = false;
         return this;
     }
 
@@ -48,6 +50,7 @@ public class GameDTO {
             ", \"movsList\": \"" + movsList + "\"" +
             ", \"input\": \"" + input + "\"" +
             ", \"player\": " + (player == null ? "\"\"" : player.getId()) +
+            ", \"solved\": \" + solved + \"" +
             "}";
     }
 
@@ -60,6 +63,7 @@ public class GameDTO {
             ", movsList: '" + movsList + "'" +
             ", input: '" + input + "'" +
             ", player: " + (player == null ? "''" : player.getId()) +
+            ", solved: '" + solved + "'" +
             "}";
     }
 
