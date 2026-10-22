@@ -1,13 +1,14 @@
 package es.upm.etsisi.qhcube.utils.input;
 
 import es.upm.etsisi.qhcube.utils.action.Action;
+import es.upm.etsisi.qhcube.utils.action.ActionsOfTheGame;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Getter
@@ -508,6 +509,14 @@ public class Input {
             case Action.EXCHANGE -> this.exchange(intAct[1], intAct[2]);
             case Action.REDUCE -> this.reduce(intAct[1]);
             case Action.ROTATE -> this.rotate(intAct[1], intAct[2], intAct[3]);
+        }
+    }
+
+    /** Aplica sobre el estado actual todos los movimientos de una lista ("[m,a,b,c],[m,a,b,c],..."). */
+    public void executeActions(String movsList) {
+        List<Action> actions = new ActionsOfTheGame(movsList).getActions();
+        for (Action action : actions) {
+            this.executeAction(action);
         }
     }
 }
