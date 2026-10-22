@@ -4,7 +4,6 @@ import es.upm.etsisi.qhcube.dto.GameDTO;
 import es.upm.etsisi.qhcube.entity.Game;
 import es.upm.etsisi.qhcube.mapper.GameMapper;
 import es.upm.etsisi.qhcube.utils.EnvUtil;
-import es.upm.etsisi.qhcube.utils.action.Action;
 import es.upm.etsisi.qhcube.utils.action.ActionsOfTheGame;
 import es.upm.etsisi.qhcube.utils.input.Input;
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
@@ -98,6 +97,11 @@ public class InputServiceImpl implements InputService {
             String movsFromGameInDB = gameInDB.getMovsList();
             String movsFromGameDTO = gameDTO.getMovsList();
 
+            if (!new ActionsOfTheGame(gameInDB.getMovsList()).isGameOpen()) {
+                gameDTO.getPlayer().softClean().setRespStatus("ERROR").setRespMessage("La partida ya ha terminado.");
+                return gameDTO;
+            }
+            
             if (movsFromGameDTO.startsWith("[[")) {
                 movsFromGameDTO = movsFromGameDTO.substring(1, movsFromGameDTO.length() - 1);
             }
@@ -165,10 +169,7 @@ public class InputServiceImpl implements InputService {
 
     private String getCurrentInput(String input, String movsList) {
         Input currentInput = new Input(input);
-        ActionsOfTheGame actions = new ActionsOfTheGame(movsList);
-        for (Action action : actions.getActions()) {
-            currentInput.executeAction(action);
-        }
+        currentInput.executeActions(movsList);
         return currentInput.toString();
     }
 }
