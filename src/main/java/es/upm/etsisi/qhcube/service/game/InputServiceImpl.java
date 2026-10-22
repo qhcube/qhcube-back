@@ -58,11 +58,15 @@ public class InputServiceImpl implements InputService {
                 return GameDTO.builder().build().softClean().setPlayer(playerInDB);
             } else {
                 Input initialInput = new Input();
-                initialInput.setInitialPracticeInput();
+                if (envUtil.isAlmostSolvedGame()) {
+                    initialInput.setNearSolvedInput();
+                } else {
+                    initialInput.setInitialPracticeInput();
 
-                for (int i = 0; i < 9; i++) {
-                    InputManager.randomPermute(initialInput);
-                    InputManager.randomExchange(initialInput);
+                    for (int i = 0; i < 9; i++) {
+                        InputManager.randomPermute(initialInput);
+                        InputManager.randomExchange(initialInput);
+                    }
                 }
 
                 playerInDB.setRespMessage("Juego iniciado correctamente.");
