@@ -27,7 +27,6 @@ public class RegistrationService {
     private final PlayerMapper playerMapper;
     private final EmailUtil emailUtil;
 
-
     public RegistrationService(PlayerRepository playerRepository, PlayerMapper playerMapper, EmailUtil emailUtil) {
         this.playerRepository = playerRepository;
         this.playerMapper = playerMapper;
@@ -37,7 +36,13 @@ public class RegistrationService {
     public PlayerDTO resendVerificationEmail(PlayerDTO player) {
         Player playerEntity = this.playerRepository.findByEmail(player.getEmail()).orElse(null);
 
-        if (playerEntity != null) {
+        if (playerEntity == null) {
+            player.setRespStatus("ERROR");
+            player.setRespMessage("No se ha encontrado ningún jugador con ese e-mail.");
+        } else if (playerEntity.isEnabled()) {
+            player.setRespStatus("ERROR");
+            player.setRespMessage("La cuenta ya está verificada. Puedes iniciar sesión.");
+        } else {
             PlayerDTO playerInDB = this.playerMapper.toDTOOneLevel(playerEntity);
 
             try {
@@ -49,9 +54,6 @@ public class RegistrationService {
                 player.setRespStatus("ERROR");
                 player.setRespMessage(this.emailErrorMessage(e));
             }
-        } else {
-            player.setRespStatus("ERROR");
-            player.setRespMessage("No se ha encontrado ningún jugador con ese e-mail.");
         }
 
         return player;
@@ -108,7 +110,10 @@ public class RegistrationService {
         Player player = this.playerRepository.findByEmail(email).orElse(null);
         PlayerDTO result = new PlayerDTO();
         if (player != null) {
-            if (player.getVericode().equals(validationCode)) {
+            if (player.isEnabled()) {
+                result.setRespStatus("OK");
+                result.setRespMessage("La cuenta ya está verificada.");
+            } else if (validationCode != null && validationCode.equals(player.getVericode())) {
                 player.setVericode(null);
                 player.setEnabled(true);
                 this.playerRepository.save(player);
