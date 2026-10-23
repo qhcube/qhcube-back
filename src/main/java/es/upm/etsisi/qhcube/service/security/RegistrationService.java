@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 
@@ -85,10 +86,10 @@ public class RegistrationService {
     private String checkPlayerToRegister(PlayerDTO player) {
         String result = "OK";
 
-        if (player.getNombre().isEmpty()) result = "El nombre no puede estar vacío.";
-        else if (player.getApellidos().isEmpty()) result = "Los apellidos no pueden estar vacíos.";
-        else if (player.getEmail().isEmpty()) result = "El e-mail no puede estar vacío.";
-        else if (player.getPassword().isEmpty()) result = "La contraseña no puede estar vacía.";
+        if (!StringUtils.hasText(player.getNombre())) result = "El nombre no puede estar vacío.";
+        else if (!StringUtils.hasText(player.getApellidos())) result = "Los apellidos no pueden estar vacíos.";
+        else if (!StringUtils.hasText(player.getEmail())) result = "El e-mail no puede estar vacío.";
+        else if (!StringUtils.hasText(player.getPassword())) result = "La contraseña no puede estar vacía.";
         else if (player.getPassword().length() < 6) result = "La contraseña debe tener al menos 6 caracteres.";
         else if (!EmailValidator.getInstance().isValid(player.getEmail())) result = "El e-mail no es válido.";
         else if (this.playerRepository.findByEmail(player.getEmail()).isPresent())
