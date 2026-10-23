@@ -3,7 +3,9 @@ package es.upm.etsisi.qhcube.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
@@ -48,6 +50,10 @@ public class Player {
     @Basic
     @Column(name = "vericode")
     private String vericode;
+
+    @CreationTimestamp
+    @Column(name = "registered_at", updatable = false)
+    private Timestamp registeredAt;
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.REMOVE)
     private List<Game> games;
