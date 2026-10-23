@@ -8,8 +8,11 @@ import es.upm.etsisi.qhcube.repository.PlayerRepository;
 import es.upm.etsisi.qhcube.utils.EmailUtil;
 import es.upm.etsisi.qhcube.utils.RandomStringUtil;
 import jakarta.mail.MessagingException;
+import jakarta.mail.SendFailedException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.EmailValidator;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSendException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -41,9 +44,10 @@ public class RegistrationService {
                 this.emailUtil.sendVerificationEmail(playerInDB);
                 player.setRespStatus("OK");
                 player.setRespMessage("E-mail de verificación reenviado correctamente.");
-            } catch (MessagingException | UnsupportedEncodingException e) {
+            } catch (MessagingException | UnsupportedEncodingException | MailException e) {
+                log.error("No se pudo enviar el email de verificación a {}", player.getEmail(), e);
                 player.setRespStatus("ERROR");
-                player.setRespMessage("No se ha podido enviar el e-mail de verificación.");
+                player.setRespMessage(this.emailErrorMessage(e));
             }
         } else {
             player.setRespStatus("ERROR");
@@ -65,15 +69,17 @@ public class RegistrationService {
         if ("OK".equals(checkPlayer)) {
             player.setPassword(new BCryptPasswordEncoder().encode(player.getPassword()));
             player.setVericode(RandomStringUtil.getAlphaNumericString(64));
-            this.playerRepository.save(this.playerMapper.toEntity(player));
+            Player savedPlayer = this.playerRepository.save(this.playerMapper.toEntity(player));
             player.setRespStatus("OK");
             player.setRespMessage("Jugador registrado correctamente.");
 
             try {
                 this.emailUtil.sendVerificationEmail(player);
-            } catch (MessagingException | UnsupportedEncodingException e) {
+            } catch (MessagingException | UnsupportedEncodingException | MailException e) {
+                log.error("No se pudo enviar el email de verificación a {}", player.getEmail(), e);
+                this.playerRepository.delete(savedPlayer);
                 player.setRespStatus("ERROR");
-                player.setRespMessage("No se ha podido enviar el e-mail de verificación.");
+                player.setRespMessage(this.emailErrorMessage(e));
             }
         } else {
             player.setRespStatus("ERROR");
@@ -118,5 +124,16 @@ public class RegistrationService {
         }
 
         return result;
+    }
+
+    private String emailErrorMessage(Exception e) {
+        if (e instanceof MailSendException mailSendException) {
+            for (Exception cause : mailSendException.getMessageExceptions()) {
+                if (cause instanceof SendFailedException) {
+                    return "El servidor de correo ha rechazado la dirección. Revisa que el e-mail sea correcto.";
+                }
+            }
+        }
+        return "No se ha podido enviar el e-mail de verificación. Inténtalo de nuevo más tarde.";
     }
 }
