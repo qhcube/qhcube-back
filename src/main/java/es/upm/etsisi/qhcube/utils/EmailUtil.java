@@ -45,19 +45,21 @@ public class EmailUtil {
             + "/email-validation?code=" + player.getVericode()
             + "&email=" + player.getEmail();
 
-        helper.setText(buildVerificationContent(player, verifyURL), true);
+        helper.setText(buildVerificationContent(player, verifyURL, envUtil.getUnverifiedAccountsMaxDays()), true);
 
         emailSender.send(message);
     }
 
-    static String buildVerificationContent(PlayerDTO player, String verifyURL) {
+    static String buildVerificationContent(PlayerDTO player, String verifyURL, long maxDays) {
         String fullName = HtmlUtils.htmlEscape(player.getNombre() + " " + player.getApellidos());
 
         String content = "Estimado <b>" + fullName + "</b>,<br/><br/>"
             + "Haz click en el enlace de abajo para verificar tu registro:<br>"
             + "<h3><a href=\"[[URL]]\" target='_self'>VERIFICAR</a></h3><br/>"
             + "También puedes copiar y pegar el siguiente enlace en tu navegador:<br/><br/>"
-            + "[[URL]]<br/><br/><br/>"
+            + "[[URL]]<br/><br/>"
+            + "Tienes " + maxDays + " días desde el registro para activar tu cuenta. "
+            + "Pasado ese plazo, se borrarán tus datos y tendrás que registrarte de nuevo.<br/><br/><br/>"
             + "¡GRACIAS!<br/><br/>"
             + "QHCube by Jesús Lacalle.";
 

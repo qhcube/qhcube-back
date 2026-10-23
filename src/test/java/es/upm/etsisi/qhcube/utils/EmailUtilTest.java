@@ -16,7 +16,7 @@ class EmailUtilTest {
             .setNombre("<a href=\"http://malo\">Pulsa</a>")
             .setApellidos("<b>X</b>");
 
-        String content = EmailUtil.buildVerificationContent(player, VERIFY_URL);
+        String content = EmailUtil.buildVerificationContent(player, VERIFY_URL, 3);
 
         assertFalse(content.contains("<a href=\"http://malo\">"), "El enlace malicioso no debe llegar como HTML.");
         assertFalse(content.contains("<b>X</b>"));
@@ -27,8 +27,8 @@ class EmailUtilTest {
     void normalNameAndVerifyUrlAreIncluded() {
         PlayerDTO player = new PlayerDTO().setNombre("Ana").setApellidos("Gomez");
 
-        String content = EmailUtil.buildVerificationContent(player, VERIFY_URL);
-
+        String content = EmailUtil.buildVerificationContent(player, VERIFY_URL, 3);
+        assertTrue(content.contains("3 días"));
         assertTrue(content.contains("Estimado <b>Ana Gomez</b>"));
         assertTrue(content.contains(VERIFY_URL));
     }
