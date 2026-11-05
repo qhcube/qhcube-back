@@ -33,6 +33,7 @@ public class EnvUtil {
     private final int maxGamesPerPlayer;
     private final int maxMovesPerGame;
     private final boolean almostSolvedGame;
+    private final long unverifiedAccountsMaxDays;
 
     public EnvUtil(Environment env) {
         this.env = env;
@@ -59,5 +60,6 @@ public class EnvUtil {
         this.maxGamesPerPlayer = Integer.parseInt(Objects.requireNonNull(env.getProperty("max.games.per.player")));
         this.maxMovesPerGame = Integer.parseInt(Objects.requireNonNull(env.getProperty("max.moves.per.game")));
         this.almostSolvedGame = Boolean.parseBoolean(env.getProperty("qhcube.dev.almost-solved-game", "false"));
+        this.unverifiedAccountsMaxDays = Long.parseLong(Objects.requireNonNull(env.getProperty("qhcube.unverified-accounts.max-days")));
     }
 }
