@@ -20,11 +20,9 @@ public class Game {
     @Column(name = "id")
     private long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "initial_time")
     private Timestamp initialTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "end_time")
     private Timestamp endTime;
 
