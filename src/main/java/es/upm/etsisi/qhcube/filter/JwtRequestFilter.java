@@ -1,12 +1,11 @@
 package es.upm.etsisi.qhcube.filter;
 
-import es.upm.etsisi.qhcube.dto.PlayerDTO;
-import es.upm.etsisi.qhcube.mapper.PlayerMapper;
 import es.upm.etsisi.qhcube.service.player.PlayerCRUDService;
 import es.upm.etsisi.qhcube.service.security.JwtUserDetailsService;
 import es.upm.etsisi.qhcube.utils.JwtTokenUtil;
 import es.upm.etsisi.qhcube.utils.QHCubeUserDetails;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,6 +33,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Value("${jwt.refreshLimit}")
     private long refreshLimit;
 
+    @Value("${jwt.maxSession}")
+    private long maxSession;
+
+    @Value("${jwt.expiration}")
+    private long tokenDuration;
+
     public JwtRequestFilter(JwtTokenUtil jwtTokenUtil, JwtUserDetailsService jwtUserDetailsService, PlayerCRUDService playerCRUDService) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.jwtUserDetailsService = jwtUserDetailsService;
@@ -53,12 +58,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
                 String jwtToken = authorization.substring(7);
                 String username = this.jwtTokenUtil.getUsernameFromToken(jwtToken);
-
+                Date issuedAt = this.jwtTokenUtil.getIssuedAtDateFromToken(jwtToken);
                 Date expiration = this.jwtTokenUtil.getExpirationDateFromToken(jwtToken);
-                long diffTime = expiration.getTime() - new Date().getTime();
+                long now = System.currentTimeMillis();
+                boolean expiresSoon = expiration.getTime() - now < this.refreshLimit;
+                boolean fitsInSession = now + this.tokenDuration <= issuedAt.getTime() + this.maxSession;
 
-                if (diffTime < this.refreshLimit) {
-                    this.refreshToken(response, username);
+                if (expiresSoon && fitsInSession) {
+                    this.refreshToken(response, username, issuedAt);
                 }
 
                 if (SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -73,18 +80,23 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
 
         } catch (ExpiredJwtException e) {
-            log.debug("Recieved EXPIRED JWT token");
+            log.debug("Received EXPIRED JWT token");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Token expired");
+            return;
+        } catch (JwtException | IllegalArgumentException e) {
+            log.debug("Invalid JWT token: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Invalid token");
             return;
         }
 
         filterChain.doFilter(request, response);
     }
 
-    private void refreshToken(HttpServletResponse response, String username) {
+    private void refreshToken(HttpServletResponse response, String username, Date issuedAt) {
         UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
-        String newToken = this.jwtTokenUtil.generateToken(userDetails);
+        String newToken = this.jwtTokenUtil.generateToken(userDetails, issuedAt);
         response.setHeader("authorization", "Bearer " + newToken);
         this.playerCRUDService.save(((QHCubeUserDetails) userDetails).getPlayer().setJwttoken(newToken));
     }
