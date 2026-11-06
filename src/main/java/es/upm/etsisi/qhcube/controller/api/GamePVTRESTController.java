@@ -111,7 +111,7 @@ public class GamePVTRESTController extends GameRESTController {
         ResponseEntity<GameDTO> result = this.checkPlayer(playerDTO, jwttoken);
         if (result == null) {
             playerDTO = this.playerCRUDService.findByEmail(playerDTO.getEmail());
-            if (!playerDTO.getJwttoken().equals(jwttoken.substring(7))) {
+            if (!this.jwtTokenUtil.isSameSession(playerDTO.getJwttoken(), jwttoken.substring(7))) {
                 playerDTO.setRespStatus("ERROR").setRespMessage("Juego abierto en otra sesión.");
                 GameDTO gameDTO = GameDTO.builder().build().setPlayer(playerDTO);
                 result = new ResponseEntity<>(gameDTO, HttpStatus.UNAUTHORIZED);
