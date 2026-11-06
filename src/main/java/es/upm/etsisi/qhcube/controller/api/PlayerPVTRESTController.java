@@ -29,4 +29,10 @@ public class PlayerPVTRESTController extends PlayerRESTController {
         }
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping(path = "/logout")
+    public ResponseEntity<Void> logout(Authentication authentication) {
+        this.playerCRUDService.logout(authentication.getName());
+        return ResponseEntity.noContent().build();
+    }
 }
