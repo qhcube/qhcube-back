@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -63,13 +64,21 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 long now = System.currentTimeMillis();
                 boolean expiresSoon = expiration.getTime() - now < this.refreshLimit;
                 boolean fitsInSession = now + this.tokenDuration <= issuedAt.getTime() + this.maxSession;
+                UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
+                String storedToken = ((QHCubeUserDetails) userDetails).getPlayer().getJwttoken();
+
+                if (storedToken == null || !this.jwtTokenUtil.isSameSession(storedToken, jwtToken)) {
+                    log.debug("Error 401. Session closed.");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("Session closed");
+                    return;
+                }
 
                 if (expiresSoon && fitsInSession) {
-                    this.refreshToken(response, username, issuedAt);
+                    this.refreshToken(response, userDetails, issuedAt);
                 }
 
                 if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
                     if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
                         UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(userDetails,
@@ -84,7 +93,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Token expired");
             return;
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (JwtException | IllegalArgumentException | UsernameNotFoundException e) {
             log.debug("Invalid JWT token: {}", e.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Invalid token");
@@ -94,8 +103,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void refreshToken(HttpServletResponse response, String username, Date issuedAt) {
-        UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
+    private void refreshToken(HttpServletResponse response, UserDetails userDetails, Date issuedAt) {
         String newToken = this.jwtTokenUtil.generateToken(userDetails, issuedAt);
         response.setHeader("authorization", "Bearer " + newToken);
         this.playerCRUDService.save(((QHCubeUserDetails) userDetails).getPlayer().setJwttoken(newToken));
