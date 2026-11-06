@@ -48,4 +48,11 @@ public class PlayerCRUDServiceImpl implements PlayerCRUDService {
         }
         return result;
     }
+
+    @Transactional
+    @Override
+    public void logout(String email) {
+        this.playerRepository.findByEmail(email)
+            .ifPresent(player -> this.playerRepository.save(player.setJwttoken(null)));
+    }
 }

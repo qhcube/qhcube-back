@@ -46,7 +46,7 @@ public class GamePVTRESTController extends GameRESTController {
 
     @PostMapping(path = "/get-game")
     public ResponseEntity<GameDTO> getOpen(@RequestBody PlayerDTO playerDTO, @RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken) {
-        return Objects.requireNonNullElseGet(this.checkPlayerAndGameNotOpened(playerDTO, jwttoken), () -> ResponseEntity.ok(this.inputService.getGame(playerDTO)));
+        return Objects.requireNonNullElseGet(this.checkPlayer(playerDTO, jwttoken), () -> ResponseEntity.ok(this.inputService.getGame(playerDTO)));
     }
 
     @PostMapping(path = "/reinit-game")
@@ -56,7 +56,7 @@ public class GamePVTRESTController extends GameRESTController {
 
     @PostMapping(path = "/add-move")
     public ResponseEntity<GameDTO> addMove(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwttoken, @RequestBody GameDTO gameDTO) {
-        return Objects.requireNonNullElseGet(this.checkPlayerAndGameNotOpened(gameDTO.getPlayer(), jwttoken), () -> ResponseEntity.ok(this.moveService.addMove(jwttoken, gameDTO)));
+        return Objects.requireNonNullElseGet(this.checkPlayer(gameDTO.getPlayer(), jwttoken), () -> ResponseEntity.ok(this.moveService.addMove(jwttoken, gameDTO)));
     }
 
     @PostMapping(path = "/replay-game-from-movs-list")
@@ -105,18 +105,5 @@ public class GamePVTRESTController extends GameRESTController {
             GameDTO gameDTO = GameDTO.builder().build().setPlayer(playerDTO);
             return new ResponseEntity<>(gameDTO, HttpStatus.UNAUTHORIZED);
         }
-    }
-
-    private ResponseEntity<GameDTO> checkPlayerAndGameNotOpened(PlayerDTO playerDTO, String jwttoken) {
-        ResponseEntity<GameDTO> result = this.checkPlayer(playerDTO, jwttoken);
-        if (result == null) {
-            playerDTO = this.playerCRUDService.findByEmail(playerDTO.getEmail());
-            if (!this.jwtTokenUtil.isSameSession(playerDTO.getJwttoken(), jwttoken.substring(7))) {
-                playerDTO.setRespStatus("ERROR").setRespMessage("Juego abierto en otra sesión.");
-                GameDTO gameDTO = GameDTO.builder().build().setPlayer(playerDTO);
-                result = new ResponseEntity<>(gameDTO, HttpStatus.UNAUTHORIZED);
-            }
-        }
-        return result;
     }
 }
