@@ -7,6 +7,7 @@ import es.upm.etsisi.qhcube.service.security.JwtUserDetailsService;
 import es.upm.etsisi.qhcube.utils.JwtTokenUtil;
 import es.upm.etsisi.qhcube.utils.QHCubeUserDetails;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -73,9 +74,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
 
         } catch (ExpiredJwtException e) {
-            log.debug("Recieved EXPIRED JWT token");
+            log.debug("Received EXPIRED JWT token");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Token expired");
+            return;
+        } catch (JwtException | IllegalArgumentException e) {
+            log.debug("Invalid JWT token: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Invalid token");
             return;
         }
 
