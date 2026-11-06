@@ -27,6 +27,7 @@ class PlayerCRUDServiceImplTest {
     @Test
     void logoutClearsStoredToken() {
         Player player = new Player();
+        player.setJwttoken("token-de-la-sesion");
         when(this.repository.findByEmail("ana@upm.es")).thenReturn(Optional.of(player));
 
         this.playerCRUDService.logout("ana@upm.es");
