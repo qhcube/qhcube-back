@@ -36,6 +36,10 @@ public class JwtTokenUtil implements Serializable {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
+    public boolean isSameSession(String token, String otherToken) {
+        return this.getIssuedAtDateFromToken(token).equals(this.getIssuedAtDateFromToken(otherToken));
+    }
+
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
@@ -43,6 +47,10 @@ public class JwtTokenUtil implements Serializable {
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
+    }
+
+    public Date getIssuedAtDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getIssuedAt);
     }
 
     private Claims getAllClaimsFromToken(String token) {
@@ -57,16 +65,21 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername());
+        // login: la sesión empieza ahora
+        return generateToken(userDetails, new Date());
     }
 
-    private String doGenerateToken(Map<String, Object> claims, String subject) {
+    public String generateToken(UserDetails userDetails, Date issuedAt) {
+        Map<String, Object> claims = new HashMap<>();
+        return doGenerateToken(claims, userDetails.getUsername(), issuedAt);
+    }
+
+    private String doGenerateToken(Map<String, Object> claims, String subject, Date issuedAt) {
         return Jwts
             .builder()
             .claims(claims)
             .subject(subject)
-            .issuedAt(new Date(System.currentTimeMillis()))
+            .issuedAt(issuedAt)
             .expiration(new Date(System.currentTimeMillis() + this.expiration))
             .signWith(this.key)
             .compact();
