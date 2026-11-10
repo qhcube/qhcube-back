@@ -28,7 +28,7 @@ jobs:
 
     env:
       DB_PASSWORD: test                 # la misma que MYSQL_PASSWORD del servicio
-      JWT_SECRET: clave-solo-para-tests
+      JWT_SECRET: clave-solo-para-tests-de-32-caracteres-o-mas
       MAIL_PASSWORD: no-se-usa-en-tests
 
     steps:

@@ -7,4 +7,7 @@ import es.upm.etsisi.qhcube.service.CRUDAbstractService;
 public interface PlayerCRUDService extends CRUDAbstractService<Player> {
     PlayerDTO findByEmail(String email);
 
+    void logout(String email);
+
+    void updateToken(String email, String token);
 }
