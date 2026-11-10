@@ -18,9 +18,10 @@ along with Gadis.  If not, see <http://www.gnu.org/licenses/>.
 package es.upm.etsisi.qhcube.service.security;
 
 import es.upm.etsisi.qhcube.dto.PlayerDTO;
-import es.upm.etsisi.qhcube.mapper.PlayerMapper;
+import es.upm.etsisi.qhcube.entity.Player;
 import es.upm.etsisi.qhcube.service.player.PlayerCRUDService;
 import es.upm.etsisi.qhcube.utils.JwtTokenUtil;
+import es.upm.etsisi.qhcube.utils.QHCubeUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -37,39 +38,36 @@ public class LoginService {
     private final JwtTokenUtil jwtTokenUtil;
     private final JwtUserDetailsService userDetailsService;
     private final PlayerCRUDService playerCRUDService;
-    private final PlayerMapper playerMapper;
 
     public LoginService(AuthenticationManager authenticationManager,
                         JwtTokenUtil jwtTokenUtil,
                         JwtUserDetailsService userDetailsService,
-                        PlayerCRUDService playerCRUDService,
-                        PlayerMapper playerMapper) {
+                        PlayerCRUDService playerCRUDService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
         this.playerCRUDService = playerCRUDService;
-        this.playerMapper = playerMapper;
     }
 
-    public PlayerDTO login(PlayerDTO player) {
-        PlayerDTO result = new PlayerDTO().setEmail(player.getEmail());
+    public PlayerDTO login(PlayerDTO playerDTO) {
+        PlayerDTO result = new PlayerDTO().setEmail(playerDTO.getEmail());
         String authStatus = "ERROR";
         String authMessage = "Login correcto.";
         try {
             this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                player.getEmail(), player.getPassword()));
-            final UserDetails userDetails = this.userDetailsService.loadUserByUsername(player.getEmail());
+                playerDTO.getEmail(), playerDTO.getPassword()));
+            final UserDetails userDetails = this.userDetailsService.loadUserByUsername(playerDTO.getEmail());
             final String token = this.jwtTokenUtil.generateToken(userDetails);
-            result = this.playerCRUDService.findByEmail(player.getEmail())
+            Player playerEntity = ((QHCubeUserDetails) userDetails).getPlayer();
+            this.playerCRUDService.updateToken(playerEntity.getEmail(), token);
+            result.setNombre(playerEntity.getNombre())
+                .setApellidos(playerEntity.getApellidos())
                 .setJwttoken(token);
-            this.playerCRUDService.save(this.playerMapper.toEntity(result));
             authStatus = "OK";
-            result = this.playerCRUDService.findByEmail(player.getEmail());
-            result.setJwttoken(token).setPassword(null);
         } catch (BadCredentialsException e) {
             authMessage = "Credenciales incorrectas.";
         } catch (DisabledException e) {
-            if (this.passwordIsCorrect(player))
+            if (this.passwordIsCorrect(playerDTO))
                 authMessage = "Usuario no activado.";
             else
                 authMessage = "Credenciales incorrectas.";
@@ -78,7 +76,7 @@ public class LoginService {
     }
 
     private boolean passwordIsCorrect(PlayerDTO player) {
-        String hashedPassword = this.playerCRUDService.findByEmail(player.getEmail()).getPassword();
+        String hashedPassword = this.userDetailsService.loadUserByUsername(player.getEmail()).getPassword();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.matches(player.getPassword(), hashedPassword);
     }
