@@ -35,7 +35,6 @@ public class MoveServiceImpl implements MoveService {
         this.envUtil = envUtil;
     }
 
-    //TODO: Hacer esta función transaccional.
     @Override
     @Transactional
     public GameDTO addMove(String jwttoken, GameDTO gameDTO) {
