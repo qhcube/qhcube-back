@@ -106,6 +106,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private void refreshToken(HttpServletResponse response, UserDetails userDetails, Date issuedAt) {
         String newToken = this.jwtTokenUtil.generateToken(userDetails, issuedAt);
         response.setHeader("authorization", "Bearer " + newToken);
-        this.playerCRUDService.save(((QHCubeUserDetails) userDetails).getPlayer().setJwttoken(newToken));
+        this.playerCRUDService.updateToken(userDetails.getUsername(), newToken);
     }
 }
