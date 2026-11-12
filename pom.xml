@@ -10,7 +10,7 @@
     </parent>
     <groupId>es.upm.etsisi</groupId>
     <artifactId>qhcube-back</artifactId>
-    <version>0.6.0</version>
+    <version>1.0.0</version>
     <name>qhcube-back</name>
     <description>qhcube-back</description>
     <properties>
@@ -113,12 +113,6 @@
             <id>prod</id>
             <properties>
                 <activatedProperties>prod</activatedProperties>
-            </properties>
-        </profile>
-        <profile>
-            <id>test</id>
-            <properties>
-                <activatedProperties>test</activatedProperties>
             </properties>
         </profile>
     </profiles>
